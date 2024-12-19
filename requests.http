@@ -1,0 +1,23 @@
+### List all
+
+GET http://localhost:3000/laptops
+
+### Get laptop
+
+GET http://localhost:3000/laptops/80
+
+### Create new laptop
+
+POST http://localhost:3000/laptops/
+content-type: application/json
+
+{
+    "title": "Asus Zephyrus",
+    "price": 20
+}
+    
+### Search for laptops
+
+GET http://localhost:3000/laptops/search?term=asus
+
+
