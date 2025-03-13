@@ -1,30 +1,44 @@
-import { Injectable } from '@nestjs/common';
-import { LaptopsRepository } from './laptops.repository';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { updateLaptopDto } from './dtos/update-laptop.dto';
+import { Laptop } from './laptop.entity';
+
 @Injectable()
 export class LaptopsService {
-  constructor(public laptopsRepo: LaptopsRepository) {}
+  constructor(@InjectRepository(Laptop) private repo: Repository<Laptop>) {}
 
-  findOne(id: string) {
-    return this.laptopsRepo.findOne(id);
+  findOne(id: number) {
+    return this.repo.findOneBy({ id });
   }
 
   findAll() {
-    return this.laptopsRepo.findAll();
+    return this.repo.find();
   }
-  create(title: string, price: number) {
-    return this.laptopsRepo.create(title, price);
+
+  async create(title: string, price: number) {
+    const laptop = this.repo.create({ title, price });
+    return await this.repo.save(laptop);
   }
 
   findByTerm(term: string) {
-    return this.laptopsRepo.findByTerm(term);
+    return this.repo.find({ where: { title: term } });
   }
 
-  remove(id: number) {
-    return this.laptopsRepo.remove(id);
+  async remove(id: number) {
+    const laptop = await this.findOne(id);
+    if (!laptop) {
+      throw new NotFoundException('Laptop not found');
+    }
+    return this.repo.remove(laptop);
   }
 
-  update(id: number, body: updateLaptopDto) {
-    return this.laptopsRepo.update(id, body);
+  async update(id: number, attrs: Partial<Laptop>) {
+    const laptop = await this.findOne(id);
+    if (!laptop) {
+      throw new NotFoundException('user not found');
+    }
+    Object.assign(laptop, attrs);
+    return this.repo.save(laptop);
   }
 }

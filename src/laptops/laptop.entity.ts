@@ -6,7 +6,7 @@ export class Laptop {
   id: number;
 
   @Column()
-  name: string;
+  title: string;
 
   @Column()
   price: number;
