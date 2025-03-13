@@ -2,17 +2,17 @@
 
 GET http://localhost:3000/auth
 
-### Get laptop
+### Get user
 
 GET http://localhost:3000/auth/2
 
-### Create new laptop
+### Create new user
 
 POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "big@balls.com",
+    "email": "bigbig1@balls.com",
     "password": "heheasdfasdf"
 }
     
@@ -20,14 +20,23 @@ content-type: application/json
 
 GET http://localhost:3000/auth/search?term=big
 
-### Delete laptop
-DELETE http://localhost:3000/auth/1
+### Delete user
+DELETE http://localhost:3000/auth/3
 
-### Update laptop
+### Update user
 PATCH http://localhost:3000/auth/1
 content-type: application/json
 
 {
     "email": "big@balls1.com",
     "password": "heheasdfasdffff"
+}
+
+### Sign in
+POST http://localhost:3000/auth/signin
+content-type: application/json
+
+{
+    "email": "bigbig1@balls.com",
+    "password": "heheasdfasdf"
 }
