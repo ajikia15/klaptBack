@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { readFile, writeFile } from 'fs/promises';
 import { LaptopT } from './dtos/LaptopT';
 import { updateLaptopDto } from './dtos/update-laptop.dto';
+
 @Injectable()
 export class LaptopsRepository {
   async findOne(id: string) {
