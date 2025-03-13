@@ -5,11 +5,13 @@ import {
   Get,
   NotFoundException,
   Param,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
 import { createLaptopDto } from './dtos/create-laptop.dto';
 import { LaptopsService } from './laptops.service';
+import { updateLaptopDto } from './dtos/update-laptop.dto';
 @Controller('laptops')
 export class LaptopsController {
   constructor(public laptopsService: LaptopsService) {}
@@ -37,6 +39,19 @@ export class LaptopsController {
     return laptop;
   }
 
-  @Delete()
-  async removeLaptop() {}
+  @Delete('/:id')
+  async removeLaptop(@Param('id') id: string) {
+    const laptop = await this.laptopsService.findOne(id);
+    if (!laptop) throw new NotFoundException('No laptop found with such id');
+    await this.laptopsService.remove(parseInt(id));
+    return laptop;
+  }
+
+  @Patch('/:id')
+  async updateLaptop(@Param('id') id: string, @Body() body: updateLaptopDto) {
+    const laptop = await this.laptopsService.findOne(id);
+    if (!laptop) throw new NotFoundException('No laptop found with such id');
+    await this.laptopsService.update(parseInt(id), body);
+    return laptop;
+  }
 }

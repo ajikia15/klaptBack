@@ -4,7 +4,7 @@ GET http://localhost:3000/laptops
 
 ### Get laptop
 
-GET http://localhost:3000/laptops/80
+GET http://localhost:3000/laptops/308
 
 ### Create new laptop
 
@@ -20,4 +20,14 @@ content-type: application/json
 
 GET http://localhost:3000/laptops/search?term=asus
 
+### Delete laptop
+DELETE http://localhost:3000/laptops/276
 
+### Update laptop
+PATCH http://localhost:3000/laptops/308
+content-type: application/json
+
+{
+    "title": "Asus Zephyrus",
+    "price": 20
+}

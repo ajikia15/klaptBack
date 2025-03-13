@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { LaptopsRepository } from './laptops.repository';
+import { updateLaptopDto } from './dtos/update-laptop.dto';
 @Injectable()
 export class LaptopsService {
   constructor(public laptopsRepo: LaptopsRepository) {}
@@ -17,5 +18,13 @@ export class LaptopsService {
 
   findByTerm(term: string) {
     return this.laptopsRepo.findByTerm(term);
+  }
+
+  remove(id: number) {
+    return this.laptopsRepo.remove(id);
+  }
+
+  update(id: number, body: updateLaptopDto) {
+    return this.laptopsRepo.update(id, body);
   }
 }
