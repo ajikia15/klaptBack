@@ -1,0 +1,33 @@
+### List all
+
+GET http://localhost:3000/auth
+
+### Get laptop
+
+GET http://localhost:3000/auth/2
+
+### Create new laptop
+
+POST http://localhost:3000/auth/signup
+content-type: application/json
+
+{
+    "email": "big@balls.com",
+    "password": "heheasdfasdf"
+}
+    
+### Search for laptops
+
+GET http://localhost:3000/auth/search?term=big
+
+### Delete laptop
+DELETE http://localhost:3000/auth/1
+
+### Update laptop
+PATCH http://localhost:3000/auth/1
+content-type: application/json
+
+{
+    "email": "big@balls1.com",
+    "password": "heheasdfasdffff"
+}

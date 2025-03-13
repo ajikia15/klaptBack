@@ -28,7 +28,7 @@ export class LaptopsController {
 
   @Get('/:id')
   async getLaptop(@Param('id') id: string) {
-    const laptop = await this.laptopsService.findOne(id);
+    const laptop = await this.laptopsService.findOne(parseInt(id));
     if (!laptop) throw new NotFoundException('No laptop found with such id');
     return laptop;
   }
@@ -41,7 +41,7 @@ export class LaptopsController {
 
   @Delete('/:id')
   async removeLaptop(@Param('id') id: string) {
-    const laptop = await this.laptopsService.findOne(id);
+    const laptop = await this.laptopsService.findOne(parseInt(id));
     if (!laptop) throw new NotFoundException('No laptop found with such id');
     await this.laptopsService.remove(parseInt(id));
     return laptop;
@@ -49,7 +49,7 @@ export class LaptopsController {
 
   @Patch('/:id')
   async updateLaptop(@Param('id') id: string, @Body() body: updateLaptopDto) {
-    const laptop = await this.laptopsService.findOne(id);
+    const laptop = await this.laptopsService.findOne(parseInt(id));
     if (!laptop) throw new NotFoundException('No laptop found with such id');
     await this.laptopsService.update(parseInt(id), body);
     return laptop;
