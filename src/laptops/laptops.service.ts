@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { updateLaptopDto } from './dtos/update-laptop.dto';
+import { UpdateLaptopDto } from './dtos/update-laptop.dto';
 import { Laptop } from './laptop.entity';
+import { CreateLaptopDto } from './dtos/create-laptop.dto';
 
 @Injectable()
 export class LaptopsService {
@@ -16,8 +17,8 @@ export class LaptopsService {
     return this.repo.find();
   }
 
-  async create(title: string, price: number) {
-    const laptop = this.repo.create({ title, price });
+  async create(laptopDto: CreateLaptopDto) {
+    const laptop = this.repo.create(laptopDto);
     return await this.repo.save(laptop);
   }
 

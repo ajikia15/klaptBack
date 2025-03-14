@@ -8,10 +8,12 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { createLaptopDto } from './dtos/create-laptop.dto';
+import { CreateLaptopDto } from './dtos/create-laptop.dto';
 import { LaptopsService } from './laptops.service';
-import { updateLaptopDto } from './dtos/update-laptop.dto';
+import { UpdateLaptopDto } from './dtos/update-laptop.dto';
+import { AuthGuard } from 'src/auth.guard';
 @Controller('laptops')
 export class LaptopsController {
   constructor(public laptopsService: LaptopsService) {}
@@ -34,8 +36,9 @@ export class LaptopsController {
   }
 
   @Post()
-  async createLaptop(@Body() body: createLaptopDto) {
-    const laptop = await this.laptopsService.create(body.title, body.price);
+  @UseGuards(AuthGuard)
+  async createLaptop(@Body() body: CreateLaptopDto) {
+    const laptop = await this.laptopsService.create(body);
     return laptop;
   }
 
@@ -48,7 +51,7 @@ export class LaptopsController {
   }
 
   @Patch('/:id')
-  async updateLaptop(@Param('id') id: string, @Body() body: updateLaptopDto) {
+  async updateLaptop(@Param('id') id: string, @Body() body: UpdateLaptopDto) {
     const laptop = await this.laptopsService.findOne(parseInt(id));
     if (!laptop) throw new NotFoundException('No laptop found with such id');
     await this.laptopsService.update(parseInt(id), body);

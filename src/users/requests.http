@@ -4,7 +4,7 @@ GET http://localhost:3000/auth
 
 ### Get user
 
-GET http://localhost:3000/auth/2
+GET http://localhost:3000/auth/1
 
 ### Create new user / Sign up
 

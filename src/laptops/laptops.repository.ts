@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { readFile, writeFile } from 'fs/promises';
 import { LaptopT } from './dtos/LaptopT';
-import { updateLaptopDto } from './dtos/update-laptop.dto';
+import { UpdateLaptopDto } from './dtos/update-laptop.dto';
 
 @Injectable()
 export class LaptopsRepository {
@@ -46,7 +46,7 @@ export class LaptopsRepository {
     await writeFile('laptops.json', JSON.stringify(laptops));
   }
 
-  async update(id: number, body: updateLaptopDto) {
+  async update(id: number, body: UpdateLaptopDto) {
     const contents = await readFile('laptops.json', 'utf8');
     const laptops = JSON.parse(contents);
 

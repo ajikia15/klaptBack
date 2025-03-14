@@ -12,8 +12,30 @@ POST http://localhost:3000/laptops/
 content-type: application/json
 
 {
-    "title": "Asus Zephyrus",
-    "price": 20
+    "title": "Asus Zephyrus G14 (2023)",
+    "price": 3799,
+    "brand": "Asus",
+    "model": "Zephyrus G14",
+    "gpuBrand": "Nvidia",
+    "gpuModel": "RTX 4060",
+    "vram": "8GB",
+    "backlightType": "rgb",
+    "processorBrand": "AMD",
+    "processorModel": "Ryzen 9 7940HS",
+    "cores": 8,
+    "threads": 16,
+    "ram": "16GB",
+    "ramType": "DDR5",
+    "storageType": "SSD",
+    "storageCapacity": "1TB",
+    "screenSize": "14.0",
+    "screenResolution": "2560x1600",
+    "refreshRate": 165,
+    "year": 2023,
+    "weight": "1.65kg",
+    "description": "Compact yet powerful gaming laptop with excellent build quality and Anime Matrix display",
+    "images": ["zephyrus1.jpg", "zephyrus2.jpg"],
+    "stockStatus": "in stock"
 }
     
 ### Search for laptops
@@ -21,7 +43,7 @@ content-type: application/json
 GET http://localhost:3000/laptops/search?term=asus
 
 ### Delete laptop
-DELETE http://localhost:3000/laptops/276
+DELETE http://localhost:3000/laptops/10
 
 ### Update laptop
 PATCH http://localhost:3000/laptops/308
@@ -30,4 +52,13 @@ content-type: application/json
 {
     "title": "Asus Zephyrus",
     "price": 20
+}
+
+### Sign in
+POST http://localhost:3000/auth/signin
+content-type: application/json
+
+{
+    "email": "bigbig111@balls.com",
+    "password": "heheasdfasdf"
 }
