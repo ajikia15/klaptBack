@@ -103,4 +103,8 @@ export class UpdateLaptopDto {
   @IsOptional()
   @IsEnum(['reserved', 'sold', 'in stock'])
   stockStatus?: 'reserved' | 'sold' | 'in stock';
+
+  @IsOptional()
+  @IsEnum(['approved ', 'pending', 'rejected', 'archived'])
+  postStatus?: 'approved ' | 'pending' | 'rejected' | 'archived';
 }

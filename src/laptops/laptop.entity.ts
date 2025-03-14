@@ -78,4 +78,7 @@ export class Laptop {
 
   @Column()
   stockStatus: 'reserved' | 'sold' | 'in stock';
+
+  @Column()
+  postStatus: 'approved ' | 'pending' | 'rejected' | 'archived';
 }
