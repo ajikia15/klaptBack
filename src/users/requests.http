@@ -6,17 +6,32 @@ GET http://localhost:3000/auth
 
 GET http://localhost:3000/auth/2
 
-### Create new user
+### Create new user / Sign up
 
 POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "bigbig1@balls.com",
+    "email": "bigbig111@balls.com",
     "password": "heheasdfasdf"
 }
     
-### Search for laptops
+### Sign in
+POST http://localhost:3000/auth/signin
+content-type: application/json
+
+{
+    "email": "bigbig111@balls.com",
+    "password": "heheasdfasdf"
+}
+
+### Sign out
+POST http://localhost:3000/auth/signout
+
+### Who am I
+GET http://localhost:3000/auth/whoami
+
+### Search for users
 
 GET http://localhost:3000/auth/search?term=big
 
