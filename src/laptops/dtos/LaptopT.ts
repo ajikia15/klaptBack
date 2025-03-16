@@ -24,5 +24,5 @@ export type LaptopT = {
   description: string;
   images: string[];
   stockStatus: 'reserved' | 'sold' | 'in stock';
-  postStatus: 'approved' | 'pending' | 'rejected' | 'archived';
+  status: 'approved' | 'pending' | 'rejected' | 'archived';
 };

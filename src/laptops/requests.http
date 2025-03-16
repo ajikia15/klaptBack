@@ -62,3 +62,12 @@ content-type: application/json
     "email": "bigbig111@balls.com",
     "password": "heheasdfasdf"
 }
+
+### Change laptop status
+
+PATCH http://localhost:3000/laptops/6
+content-type: application/json
+
+{
+    "status": "approved"
+}

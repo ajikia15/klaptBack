@@ -43,4 +43,16 @@ export class LaptopsService {
     Object.assign(laptop, attrs);
     return this.repo.save(laptop);
   }
+
+  async changeStatus(
+    id: number,
+    status: 'approved' | 'pending' | 'rejected' | 'archived',
+  ) {
+    const laptop = await this.findOne(id);
+    if (!laptop) {
+      throw new NotFoundException('user not found');
+    }
+    laptop.status = status;
+    return this.repo.save(laptop);
+  }
 }

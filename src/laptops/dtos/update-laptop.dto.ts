@@ -106,5 +106,5 @@ export class UpdateLaptopDto {
 
   @IsOptional()
   @IsEnum(['approved', 'pending', 'rejected', 'archived'])
-  postStatus?: 'approved' | 'pending' | 'rejected' | 'archived' = 'pending';
+  status?: 'approved' | 'pending' | 'rejected' | 'archived' = 'pending';
 }

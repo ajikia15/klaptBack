@@ -18,6 +18,7 @@ import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/user.entity';
 import { LaptopDto } from './dtos/laptop.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { ApproveLaptopDto } from './dtos/approve-laptop.dto';
 @Controller('laptops')
 export class LaptopsController {
   constructor(public laptopsService: LaptopsService) {}
@@ -48,10 +49,16 @@ export class LaptopsController {
 
   @Delete('/:id')
   async removeLaptop(@Param('id') id: string) {
+    // TODO: un-async
     const laptop = await this.laptopsService.findOne(parseInt(id));
     if (!laptop) throw new NotFoundException('No laptop found with such id');
     await this.laptopsService.remove(parseInt(id));
     return laptop;
+  }
+
+  @Patch('/:id') // ???
+  approveLaptop(@Param('id') id: string, @Body() body: ApproveLaptopDto) {
+    return this.laptopsService.changeStatus(parseInt(id), body.status);
   }
 
   // @Patch('/:id')

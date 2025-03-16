@@ -77,9 +77,9 @@ export class LaptopDto {
   stockStatus: 'reserved' | 'sold' | 'in stock';
 
   @Expose()
-  postStatus: 'approved' | 'pending' | 'rejected' | 'archived';
+  status: 'approved' | 'pending' | 'rejected' | 'archived';
 
-  @Transform(({ obj }) => obj.user.id)
+  @Transform(({ obj }) => obj.id)
   @Expose()
   userId: number;
 }

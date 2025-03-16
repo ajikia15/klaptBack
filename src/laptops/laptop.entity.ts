@@ -13,6 +13,9 @@ export class Laptop {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ default: 'pending' })
+  status: 'approved' | 'pending' | 'rejected' | 'archived';
+
   @Column()
   title: string;
 
@@ -88,7 +91,4 @@ export class Laptop {
 
   @Column({ default: 'in stock' })
   stockStatus: 'reserved' | 'sold' | 'in stock';
-
-  @Column({ default: 'pending' })
-  postStatus: 'approved' | 'pending' | 'rejected' | 'archived';
 }

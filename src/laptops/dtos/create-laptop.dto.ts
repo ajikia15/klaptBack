@@ -82,5 +82,5 @@ export class CreateLaptopDto {
   stockStatus: 'reserved' | 'sold' | 'in stock' = 'in stock';
 
   @IsEnum(['approved', 'pending', 'rejected', 'archived'])
-  postStatus: 'approved' | 'pending' | 'rejected' | 'archived' = 'pending';
+  status: 'approved' | 'pending' | 'rejected' | 'archived' = 'pending';
 }
