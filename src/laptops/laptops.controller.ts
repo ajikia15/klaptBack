@@ -16,6 +16,8 @@ import { UpdateLaptopDto } from './dtos/update-laptop.dto';
 import { AuthGuard } from 'src/auth.guard';
 import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/user.entity';
+import { LaptopDto } from './dtos/laptop.dto';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
 @Controller('laptops')
 export class LaptopsController {
   constructor(public laptopsService: LaptopsService) {}
@@ -39,6 +41,7 @@ export class LaptopsController {
 
   @Post()
   @UseGuards(AuthGuard)
+  @Serialize(LaptopDto)
   createLaptop(@Body() body: CreateLaptopDto, @CurrentUser() user: User) {
     return this.laptopsService.create(body, user);
   }
