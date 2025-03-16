@@ -79,8 +79,8 @@ export class CreateLaptopDto {
   images: string[];
 
   @IsEnum(['reserved', 'sold', 'in stock'])
-  stockStatus: 'reserved' | 'sold' | 'in stock';
+  stockStatus: 'reserved' | 'sold' | 'in stock' = 'in stock';
 
   @IsEnum(['approved', 'pending', 'rejected', 'archived'])
-  postStatus: 'approved' | 'pending' | 'rejected' | 'archived';
+  postStatus: 'approved' | 'pending' | 'rejected' | 'archived' = 'pending';
 }

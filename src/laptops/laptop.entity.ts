@@ -76,9 +76,9 @@ export class Laptop {
   @Column({ type: 'simple-array' })
   images: string[];
 
-  @Column()
+  @Column({ default: 'in stock' })
   stockStatus: 'reserved' | 'sold' | 'in stock';
 
-  @Column()
-  postStatus: 'approved ' | 'pending' | 'rejected' | 'archived';
+  @Column({ default: 'pending' })
+  postStatus: 'approved' | 'pending' | 'rejected' | 'archived';
 }

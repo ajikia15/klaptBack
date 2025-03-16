@@ -4,7 +4,7 @@ GET http://localhost:3000/laptops
 
 ### Get laptop
 
-GET http://localhost:3000/laptops/308
+GET http://localhost:3000/laptops/1
 
 ### Create new laptop
 
