@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { UpdateLaptopDto } from './dtos/update-laptop.dto';
 import { Laptop } from './laptop.entity';
 import { CreateLaptopDto } from './dtos/create-laptop.dto';
-
+import { User } from 'src/users/user.entity';
 @Injectable()
 export class LaptopsService {
   constructor(@InjectRepository(Laptop) private repo: Repository<Laptop>) {}
@@ -17,9 +17,11 @@ export class LaptopsService {
     return this.repo.find();
   }
 
-  async create(laptopDto: CreateLaptopDto) {
+  async create(laptopDto: CreateLaptopDto, user: User) {
     const laptop = this.repo.create(laptopDto);
-    return await this.repo.save(laptop);
+    laptop.user = user;
+    console.log(user);
+    return this.repo.save(laptop);
   }
 
   findByTerm(term: string) {
