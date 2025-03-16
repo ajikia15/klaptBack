@@ -16,6 +16,9 @@ export class Laptop {
   @Column()
   title: string;
 
+  @ManyToOne(() => User, (user) => user.laptops)
+  user: User;
+
   @Column()
   price: number;
 
@@ -88,7 +91,4 @@ export class Laptop {
 
   @Column({ default: 'pending' })
   postStatus: 'approved' | 'pending' | 'rejected' | 'archived';
-
-  @ManyToOne(() => User, (user) => user.laptops)
-  user: User;
 }

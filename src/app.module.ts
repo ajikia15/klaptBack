@@ -15,7 +15,7 @@ import { User } from './users/user.entity';
       database: 'db.sqlite',
       entities: [Laptop, User],
       synchronize: true,
-      logging: true,
+      // logging: true,
     }),
   ],
   controllers: [AppController],

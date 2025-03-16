@@ -18,12 +18,10 @@ export class LaptopsService {
   }
 
   async create(laptopDto: CreateLaptopDto, user: User) {
-    const laptop = this.repo.create({
-      ...laptopDto,
-      user: user,
-    });
-
-    return await this.repo.save(laptop);
+    const laptop = this.repo.create(laptopDto);
+    laptop.user = user;
+    console.log(user);
+    return this.repo.save(laptop);
   }
 
   findByTerm(term: string) {
