@@ -40,7 +40,7 @@ content-type: application/json
     
 ### Search for laptops
 
-GET http://localhost:3000/laptops/search?term=asus
+GET http://localhost:3000/laptops/search?term=Lenovo
 
 ### Delete laptop
 DELETE http://localhost:3000/laptops/10

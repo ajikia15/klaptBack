@@ -14,6 +14,8 @@ import { CreateLaptopDto } from './dtos/create-laptop.dto';
 import { LaptopsService } from './laptops.service';
 import { UpdateLaptopDto } from './dtos/update-laptop.dto';
 import { AuthGuard } from 'src/auth.guard';
+import { CurrentUser } from 'src/users/decorators/current-user.decorator';
+import { User } from 'src/users/user.entity';
 @Controller('laptops')
 export class LaptopsController {
   constructor(public laptopsService: LaptopsService) {}
@@ -37,9 +39,8 @@ export class LaptopsController {
 
   @Post()
   @UseGuards(AuthGuard)
-  async createLaptop(@Body() body: CreateLaptopDto) {
-    const laptop = await this.laptopsService.create(body);
-    return laptop;
+  createLaptop(@Body() body: CreateLaptopDto, @CurrentUser() user: User) {
+    return this.laptopsService.create(body, user);
   }
 
   @Delete('/:id')
@@ -50,11 +51,11 @@ export class LaptopsController {
     return laptop;
   }
 
-  @Patch('/:id')
-  async updateLaptop(@Param('id') id: string, @Body() body: UpdateLaptopDto) {
-    const laptop = await this.laptopsService.findOne(parseInt(id));
-    if (!laptop) throw new NotFoundException('No laptop found with such id');
-    await this.laptopsService.update(parseInt(id), body);
-    return laptop;
-  }
+  // @Patch('/:id')
+  // async updateLaptop(@Param('id') id: string, @Body() body: UpdateLaptopDto) {
+  //   const laptop = await this.laptopsService.findOne(parseInt(id));
+  //   if (!laptop) throw new NotFoundException('No laptop found with such id');
+  //   await this.laptopsService.update(parseInt(id), body);
+  //   return laptop;
+  // }
 }

@@ -1,5 +1,12 @@
 import { IsOptional } from 'class-validator';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/user.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  ManyToOne,
+} from 'typeorm';
 
 @Entity()
 export class Laptop {
@@ -81,4 +88,7 @@ export class Laptop {
 
   @Column({ default: 'pending' })
   postStatus: 'approved' | 'pending' | 'rejected' | 'archived';
+
+  @ManyToOne(() => User, (user) => user.laptops)
+  user: User;
 }
