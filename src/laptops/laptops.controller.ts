@@ -13,12 +13,14 @@ import {
 import { CreateLaptopDto } from './dtos/create-laptop.dto';
 import { LaptopsService } from './laptops.service';
 import { UpdateLaptopDto } from './dtos/update-laptop.dto';
-import { AuthGuard } from 'src/auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/user.entity';
 import { LaptopDto } from './dtos/laptop.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { ApproveLaptopDto } from './dtos/approve-laptop.dto';
+import { AdminGuard } from 'src/guards/admin.guard';
+
 @Controller('laptops')
 export class LaptopsController {
   constructor(public laptopsService: LaptopsService) {}
@@ -57,6 +59,7 @@ export class LaptopsController {
   }
 
   @Patch('/:id') // ???
+  @UseGuards(AdminGuard)
   approveLaptop(@Param('id') id: string, @Body() body: ApproveLaptopDto) {
     return this.laptopsService.changeStatus(parseInt(id), body.status);
   }

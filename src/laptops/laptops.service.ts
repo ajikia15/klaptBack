@@ -48,7 +48,8 @@ export class LaptopsService {
     id: number,
     status: 'approved' | 'pending' | 'rejected' | 'archived',
   ) {
-    const laptop = await this.findOne(id);
+    // ???
+    const laptop = await this.repo.findOne({ where: { id: id } });
     if (!laptop) {
       throw new NotFoundException('user not found');
     }

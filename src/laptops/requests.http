@@ -65,7 +65,7 @@ content-type: application/json
 
 ### Change laptop status
 
-PATCH http://localhost:3000/laptops/6
+PATCH http://localhost:3000/laptops/7
 content-type: application/json
 
 {

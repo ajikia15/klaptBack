@@ -7,7 +7,6 @@ import {
   AfterUpdate,
   AfterRemove,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
 import { Laptop } from 'src/laptops/laptop.entity';
 @Entity()
 export class User {
@@ -16,6 +15,9 @@ export class User {
 
   @Column()
   email: string;
+
+  @Column({ default: true })
+  admin: boolean;
 
   @Column()
   password: string;
