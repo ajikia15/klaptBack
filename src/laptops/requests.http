@@ -12,7 +12,7 @@ POST http://localhost:3000/laptops/
 content-type: application/json
 
 {
-    "title": "Asus Zephyrus G14 (2023)",
+    "title": "Gaypherus Zephyrus G14 (2023)",
     "price": 3799,
     "brand": "Asus",
     "model": "Zephyrus G14",
@@ -40,7 +40,7 @@ content-type: application/json
     
 ### Search for laptops
 
-GET http://localhost:3000/laptops/search?term=Lenovo
+GET http://localhost:3000/laptops/search?term=Gay
 
 ### Delete laptop
 DELETE http://localhost:3000/laptops/10

@@ -24,7 +24,10 @@ export class LaptopsService {
   }
 
   findByTerm(term: string) {
-    return this.repo.find({ where: { title: term } });
+    return this.repo
+      .createQueryBuilder('laptop')
+      .where('LOWER(laptop.title) LIKE LOWER(:term)', { term: `%${term}%` })
+      .getMany();
   }
 
   async remove(id: number) {
