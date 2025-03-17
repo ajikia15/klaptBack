@@ -31,7 +31,7 @@ content-type: application/json
     "year": 2023,
     "weight": "1.65kg",
     "description": "Compact yet powerful gaming laptop with excellent build quality and Anime Matrix display",
-    "images": ["zephyrus1.jpg", "zephyrus2.jpg"],
+    "images": ["https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpisces.bbystatic.com%2Fimage2%2FBestBuy_US%2Fimages%2Fproducts%2F6535%2F6535495cv15d.jpg&f=1&nofb=1&ipt=0e331a97eb7bc066dbcd0b860b6cfb5eddef8e3654e5ae86f127f18f2387f864&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages-cdn.ubuy.co.in%2F645cc339bbf29658085b9bdb-excaliberpc-2023-asus-rog-zephyrus-g14.jpg&f=1&nofb=1&ipt=c2ce5a8b6a3210d75848a62263669c48a3d6f3c629fbc5a477bc31079bc8080d&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.evetech.co.za%2Frepository%2Fmobile%2FLaptop%2FProImages%2Fasus-rog-zephyrus-g14-rtx-4060-ryzen-9-gaming-laptop-1000px-v1-0003.jpg&f=1&nofb=1&ipt=17c6b8c0e618e5105d9bcde10b7daed1d1f659876fc47607ae1c9f3575b52998&ipo=images"],
     "stockStatus": "in stock"
 }
     
@@ -43,7 +43,7 @@ GET http://localhost:3000/laptops/search?brand=asus&minPrice=2000&maxPrice=3000&
 
 
 ### Delete laptop
-DELETE http://localhost:3000/laptops/10
+DELETE http://localhost:3000/laptops/1
 
 ### Update laptop
 PATCH http://localhost:3000/laptops/308
