@@ -5,6 +5,7 @@ import { UpdateLaptopDto } from './dtos/update-laptop.dto';
 import { Laptop } from './laptop.entity';
 import { CreateLaptopDto } from './dtos/create-laptop.dto';
 import { User } from 'src/users/user.entity';
+import { SearchLaptopDto } from './dtos/search-laptop.dto';
 @Injectable()
 export class LaptopsService {
   constructor(@InjectRepository(Laptop) private repo: Repository<Laptop>) {}
@@ -30,6 +31,93 @@ export class LaptopsService {
       .getMany();
   }
 
+  findWithFilters(filters: SearchLaptopDto) {
+    const query = this.repo.createQueryBuilder('laptop');
+
+    // Search by title
+    if (filters.term) {
+      query.andWhere('LOWER(laptop.title) LIKE LOWER(:term)', {
+        term: `%${filters.term}%`,
+      });
+    }
+
+    // Filter by brand
+    if (filters.brand) {
+      query.andWhere('LOWER(laptop.brand) LIKE LOWER(:brand)', {
+        brand: `%${filters.brand}%`,
+      });
+    }
+
+    // Filter by model
+    if (filters.model) {
+      query.andWhere('LOWER(laptop.model) LIKE LOWER(:model)', {
+        model: `%${filters.model}%`,
+      });
+    }
+
+    // Filter by price range
+    if (filters.minPrice !== undefined) {
+      query.andWhere('laptop.price >= :minPrice', {
+        minPrice: filters.minPrice,
+      });
+    }
+
+    if (filters.maxPrice !== undefined) {
+      query.andWhere('laptop.price <= :maxPrice', {
+        maxPrice: filters.maxPrice,
+      });
+    }
+
+    // Filter by GPU brand
+    if (filters.gpuBrand) {
+      query.andWhere('LOWER(laptop.gpuBrand) LIKE LOWER(:gpuBrand)', {
+        gpuBrand: `%${filters.gpuBrand}%`,
+      });
+    }
+
+    // Filter by GPU model
+    if (filters.gpuModel) {
+      query.andWhere('LOWER(laptop.gpuModel) LIKE LOWER(:gpuModel)', {
+        gpuModel: `%${filters.gpuModel}%`,
+      });
+    }
+
+    if (filters.processorBrand) {
+      query.andWhere('laptop.processorBrand = :processorBrand', {
+        processorBrand: filters.processorBrand,
+      });
+    }
+
+    // Filter by RAM type
+    if (filters.ramType) {
+      query.andWhere('laptop.ramType = :ramType', {
+        ramType: filters.ramType,
+      });
+    }
+
+    // Filter by storage type
+    if (filters.storageType) {
+      query.andWhere('laptop.storageType = :storageType', {
+        storageType: filters.storageType,
+      });
+    }
+
+    // Filter by year
+    if (filters.year) {
+      query.andWhere('laptop.year = :year', {
+        year: filters.year,
+      });
+    }
+
+    // Filter by stock status
+    if (filters.stockStatus) {
+      query.andWhere('laptop.stockStatus = :stockStatus', {
+        stockStatus: filters.stockStatus,
+      });
+    }
+
+    return query.getMany();
+  }
   async remove(id: number) {
     const laptop = await this.findOne(id);
     if (!laptop) {

@@ -1,19 +1,16 @@
 ### List all
-
 GET http://localhost:3000/laptops
 
 ### Get laptop
-
 GET http://localhost:3000/laptops/1
 
 ### Create new laptop
-
 POST http://localhost:3000/laptops/
 content-type: application/json
 
 {
     "title": "Gaypherus Zephyrus G14 (2023)",
-    "price": 3799,
+    "price": 2799,
     "brand": "Asus",
     "model": "Zephyrus G14",
     "gpuBrand": "Nvidia",
@@ -39,8 +36,11 @@ content-type: application/json
 }
     
 ### Search for laptops
-
 GET http://localhost:3000/laptops/search?term=Gay
+
+### Advanced search
+GET http://localhost:3000/laptops/search?brand=asus&minPrice=2000&maxPrice=3000&processorBrand=AMD&ramType=DDR5
+
 
 ### Delete laptop
 DELETE http://localhost:3000/laptops/10
@@ -63,9 +63,8 @@ content-type: application/json
     "password": "heheasdfasdf"
 }
 
-### Change laptop status
-
-PATCH http://localhost:3000/laptops/7
+### Approve laptop status
+PATCH http://localhost:3000/laptops/9
 content-type: application/json
 
 {

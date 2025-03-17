@@ -20,6 +20,7 @@ import { LaptopDto } from './dtos/laptop.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { ApproveLaptopDto } from './dtos/approve-laptop.dto';
 import { AdminGuard } from 'src/guards/admin.guard';
+import { SearchLaptopDto } from './dtos/search-laptop.dto';
 
 @Controller('laptops')
 export class LaptopsController {
@@ -31,10 +32,9 @@ export class LaptopsController {
   }
 
   @Get('search')
-  findByTerm(@Query('term') term: string) {
-    return this.laptopsService.findByTerm(term);
+  findByTerm(@Query() searchDto: SearchLaptopDto) {
+    return this.laptopsService.findWithFilters(searchDto);
   }
-
   @Get('/:id')
   async getLaptop(@Param('id') id: string) {
     const laptop = await this.laptopsService.findOne(parseInt(id));
