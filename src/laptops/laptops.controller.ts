@@ -27,8 +27,8 @@ export class LaptopsController {
   constructor(public laptopsService: LaptopsService) {}
 
   @Get()
-  async listLaptops() {
-    return await this.laptopsService.findAll();
+  listLaptops() {
+    return this.laptopsService.findAll();
   }
 
   @Get('search')
@@ -36,7 +36,7 @@ export class LaptopsController {
     return this.laptopsService.findWithFilters(searchDto);
   }
   @Get('/:id')
-  async getLaptop(@Param('id') id: string) {
+  getLaptop(@Param('id') id: string) {
     return this.laptopsService.findOne(parseInt(id));
   }
 
@@ -49,7 +49,6 @@ export class LaptopsController {
 
   @Delete('/:id')
   removeLaptop(@Param('id') id: string) {
-    // TODO: un-async
     return this.laptopsService.remove(parseInt(id));
   }
 
@@ -67,3 +66,6 @@ export class LaptopsController {
   //   return laptop;
   // }
 }
+
+// TODO : Get amount of laptops
+// Get random laptop by title
