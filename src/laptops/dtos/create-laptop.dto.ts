@@ -14,6 +14,9 @@ export class CreateLaptopDto {
   price: number;
 
   @IsString()
+  shortDesc: string;
+
+  @IsString()
   brand: string;
 
   @IsString()

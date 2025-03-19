@@ -8,6 +8,9 @@ export class LaptopDto {
   title: string;
 
   @Expose()
+  shortDesc: string;
+
+  @Expose()
   price: number;
 
   @Expose()
