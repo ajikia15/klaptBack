@@ -148,21 +148,19 @@ export class LaptopsService {
     return this.repo.save(laptop);
   }
 
-  async getRandomName() {
+  async getRandomLaptopTitle() {
+    // Using database's random selection capability with ORDER BY RANDOM() LIMIT 1
     const laptop = await this.repo
       .createQueryBuilder('laptop')
-      .where('laptop.status = :status', { status: 'approved' })
-      .andWhere('laptop.stockStatus = :stockStatus', {
-        stockStatus: 'in stock',
-      })
+      .select('laptop.title')
       .orderBy('RANDOM()')
       .limit(1)
       .getOne();
 
     if (!laptop) {
-      throw new NotFoundException('No available laptops found');
+      throw new NotFoundException('No laptops found');
     }
 
-    return laptop.title;
+    return { title: laptop.title };
   }
 }

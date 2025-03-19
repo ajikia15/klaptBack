@@ -35,6 +35,12 @@ export class LaptopsController {
   findByTerm(@Query() searchDto: SearchLaptopDto) {
     return this.laptopsService.findWithFilters(searchDto);
   }
+
+  @Get('random')
+  getRandomLaptopTitle() {
+    return this.laptopsService.getRandomLaptopTitle();
+  }
+
   @Get('/:id')
   getLaptop(@Param('id') id: string) {
     return this.laptopsService.findOne(parseInt(id));
@@ -65,11 +71,6 @@ export class LaptopsController {
   //   await this.laptopsService.update(parseInt(id), body);
   //   return laptop;
   // }
-
-  @Get('random')
-  getRandomLaptopName() {
-    return this.laptopsService.getRandomName();
-  }
 }
 
 // TODO : Get amount of laptops
