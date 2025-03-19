@@ -13,6 +13,7 @@ content-type: application/json
     "price": 2799,
     "brand": "Asus",
     "model": "Zephyrus G14",
+    "shortDesc": "RTX 4060 Ryzen 9 7940HS 16GB DDR5 1TB SSD 14.0 2560x1600 165Hz 2023",
     "gpuBrand": "Nvidia",
     "gpuModel": "RTX 4060",
     "vram": "8GB",
@@ -52,15 +53,6 @@ content-type: application/json
 {
     "title": "Asus Zephyrus",
     "price": 20
-}
-
-### Sign in
-POST http://localhost:3000/auth/signin
-content-type: application/json
-
-{
-    "email": "bigbig111@balls.com",
-    "password": "heheasdfasdf"
 }
 
 ### Approve laptop status

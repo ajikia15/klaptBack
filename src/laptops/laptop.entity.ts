@@ -26,6 +26,9 @@ export class Laptop {
   price: number;
 
   @Column()
+  shortDesc: string;
+
+  @Column()
   brand: string;
 
   @Column()

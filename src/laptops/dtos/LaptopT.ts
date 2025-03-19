@@ -1,6 +1,7 @@
 export type LaptopT = {
   id: number;
   title: string;
+  shortDesc: string;
   price: number;
   brand: string;
   model: string;

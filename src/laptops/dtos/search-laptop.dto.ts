@@ -19,6 +19,10 @@ export class SearchLaptopDto {
 
   @IsOptional()
   @IsString()
+  shortDesc?: string;
+
+  @IsOptional()
+  @IsString()
   model?: string;
 
   @IsOptional()
