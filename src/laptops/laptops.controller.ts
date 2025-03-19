@@ -65,6 +65,11 @@ export class LaptopsController {
   //   await this.laptopsService.update(parseInt(id), body);
   //   return laptop;
   // }
+
+  @Get('random')
+  getRandomLaptopName() {
+    return this.laptopsService.getRandomName();
+  }
 }
 
 // TODO : Get amount of laptops

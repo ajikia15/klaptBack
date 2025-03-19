@@ -147,4 +147,22 @@ export class LaptopsService {
     laptop.status = status;
     return this.repo.save(laptop);
   }
+
+  async getRandomName() {
+    const laptop = await this.repo
+      .createQueryBuilder('laptop')
+      .where('laptop.status = :status', { status: 'approved' })
+      .andWhere('laptop.stockStatus = :stockStatus', {
+        stockStatus: 'in stock',
+      })
+      .orderBy('RANDOM()')
+      .limit(1)
+      .getOne();
+
+    if (!laptop) {
+      throw new NotFoundException('No available laptops found');
+    }
+
+    return laptop.title;
+  }
 }

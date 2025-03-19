@@ -70,3 +70,6 @@ content-type: application/json
 {
     "status": "approved"
 }
+
+### Get random laptop name
+GET http://localhost:3000/laptops/random
