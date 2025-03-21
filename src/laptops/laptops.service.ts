@@ -147,4 +147,20 @@ export class LaptopsService {
     laptop.status = status;
     return this.repo.save(laptop);
   }
+
+  async getRandomLaptopTitle() {
+    // Using database's random selection capability with ORDER BY RANDOM() LIMIT 1
+    const laptop = await this.repo
+      .createQueryBuilder('laptop')
+      .select('laptop.title')
+      .orderBy('RANDOM()')
+      .limit(1)
+      .getOne();
+
+    if (!laptop) {
+      throw new NotFoundException('No laptops found');
+    }
+
+    return { title: laptop.title };
+  }
 }
