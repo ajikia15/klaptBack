@@ -1,0 +1,64 @@
+### Zephyrus
+POST http://localhost:3000/laptops/
+content-type: application/json
+
+{
+    "title": "Asus Zephyrus G14 (2023)",
+    "price": 2799,
+    "brand": "Asus",
+    "model": "Zephyrus G14",
+    "shortDesc": "RTX 4060 Ryzen 9 7940HS 16GB DDR5 1TB SSD 14.0 2560x1600 165Hz 2023",
+    "gpuBrand": "Nvidia",
+    "gpuModel": "RTX 4060",
+    "vram": "8GB",
+    "backlightType": "rgb",
+    "processorBrand": "AMD",
+    "processorModel": "Ryzen 9 7940HS",
+    "cores": 8,
+    "threads": 16,
+    "ram": "16GB",
+    "ramType": "DDR5",
+    "storageType": "SSD",
+    "storageCapacity": "1TB",
+    "screenSize": "14.0",
+    "screenResolution": "2560x1600",
+    "refreshRate": 165,
+    "year": 2023,
+    "weight": "1.65kg",
+    "description": "Compact yet powerful gaming laptop with excellent build quality and Anime Matrix display",
+    "images": ["https://ibb.co/931W8mBf"],
+    "stockStatus": "in stock"
+}
+
+### Lenovo
+
+POST http://localhost:3000/laptops/
+content-type: application/json
+
+{
+    "title": "Lenovo Legion 5 Pro (2023)",
+    "price": 2799,
+    "brand": "Lenovo",
+    "model": "Legion 5 Pro",
+    "shortDesc": "RTX 4060 Ryzen 9 7940HS 16GB DDR5 1TB SSD 16.0 2560x1600 165Hz 2023",
+    "gpuBrand": "Nvidia",
+    "gpuModel": "RTX 4060",
+    "vram": "8GB",
+    "backlightType": "rgb",
+    "processorBrand": "AMD",
+    "processorModel": "Ryzen 9 7940HS",
+    "cores": 8,
+    "threads": 16,
+    "ram": "16GB",
+    "ramType": "DDR5",
+    "storageType": "SSD",
+    "storageCapacity": "1TB",
+    "screenSize": "16.0",
+    "screenResolution": "2560x1600",
+    "refreshRate": 165,
+    "year": 2023,
+    "weight": "2.65kg",
+    "description": "Powerful gaming laptop with excellent build quality and 16 inch display",
+    "images": ["https://ibb.co/wZCybKMh"],
+    "stockStatus": "in stock"
+}
