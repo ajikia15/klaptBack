@@ -26,6 +26,7 @@ import { SearchLaptopDto } from './dtos/search-laptop.dto';
 export class LaptopsController {
   constructor(public laptopsService: LaptopsService) {}
 
+  // TODO: add admin guard for all laptops, add separate route for normal requests which only have approved items.
   @Get()
   listLaptops() {
     return this.laptopsService.findAll();

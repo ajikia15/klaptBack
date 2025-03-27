@@ -7,6 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Laptop } from './laptops/laptop.entity';
 import { User } from './users/user.entity';
 import { CurrentUserMiddleware } from './users/middlewares/current-user.middleware';
+import { FavoritesModule } from './favorites/favorites.module';
+import { Favorite } from './favorites/favorite.entity';
 const cookieSession = require('cookie-session');
 
 @Module({
@@ -16,10 +18,11 @@ const cookieSession = require('cookie-session');
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite',
-      entities: [Laptop, User],
+      entities: [Laptop, User, Favorite],
       synchronize: true,
       // logging: true,
     }),
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

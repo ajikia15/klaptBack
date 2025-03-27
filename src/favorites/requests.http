@@ -1,0 +1,16 @@
+### List all favorites
+GET http://localhost:3000/favorites/all
+
+### List user's favorites
+GET http://localhost:3000/favorites
+
+### Add laptop to favorites
+POST http://localhost:3000/favorites
+content-type: application/json
+
+{
+    "laptopId": 1
+}
+
+### Remove laptop from favorites
+DELETE http://localhost:3000/favorites/1

@@ -6,6 +6,7 @@ import {
   AfterInsert,
   AfterUpdate,
   AfterRemove,
+  ManyToMany,
 } from 'typeorm';
 import { Laptop } from 'src/laptops/laptop.entity';
 @Entity()
