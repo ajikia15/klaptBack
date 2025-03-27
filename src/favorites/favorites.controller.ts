@@ -25,6 +25,11 @@ export class FavoritesController {
     return this.favoritesService.findAll();
   }
 
+  @Get('/:id')
+  getFavorite(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.favoritesService.findForLaptop(+id, user.id);
+  }
+
   // TODO: for now it just returns the id-s. for a real app we need relations and returning of the actual laptops.
   @Get()
   getFavorites(@CurrentUser() user: User): Promise<Favorite[]> {

@@ -17,3 +17,6 @@ DELETE http://localhost:3000/favorites/1
 
 ### Count laptop favorited amount
 GET http://localhost:3000/favorites/count/3
+
+### Is favorited by user
+GET http://localhost:3000/favorites/3

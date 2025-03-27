@@ -40,6 +40,18 @@ export class FavoritesService {
     }
   }
 
+  async findForLaptop(laptopId: number, userId: number) {
+    if (!laptopId) {
+      throw new BadRequestException('Laptop ID is required');
+    }
+
+    const favorite = await this.favoritesRepo.findOne({
+      where: { laptopId, userId },
+    });
+
+    return favorite;
+  }
+
   async findAll() {
     const favorites = await this.favoritesRepo.find();
     if (!favorites.length) {
@@ -56,10 +68,6 @@ export class FavoritesService {
     const favorites = await this.favoritesRepo.find({
       where: { userId },
     });
-
-    if (!favorites.length) {
-      throw new NotFoundException(`No favorites found for user ${userId}`);
-    }
 
     return favorites;
   }
