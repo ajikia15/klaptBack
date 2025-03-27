@@ -26,7 +26,7 @@ content-type: application/json
     "year": 2023,
     "weight": "1.65kg",
     "description": "Compact yet powerful gaming laptop with excellent build quality and Anime Matrix display",
-    "images": ["https://ibb.co/931W8mBf"],
+    "images": ["https://i.ibb.co/6JTFncGp/asus.png"],
     "stockStatus": "in stock"
 }
 
@@ -59,6 +59,6 @@ content-type: application/json
     "year": 2023,
     "weight": "2.65kg",
     "description": "Powerful gaming laptop with excellent build quality and 16 inch display",
-    "images": ["https://ibb.co/wZCybKMh"],
+    "images": ["https://i.ibb.co/XfpXdzSx/slim.png"],
     "stockStatus": "in stock"
 }
