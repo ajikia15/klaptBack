@@ -40,4 +40,9 @@ export class FavoritesController {
   remove(@Param('id') id: string, @CurrentUser() user: User) {
     return this.favoritesService.remove(user.id, +id);
   }
+
+  @Get('/count/:id')
+  count(@Param('id') id: string): Promise<number> {
+    return this.favoritesService.count(+id);
+  }
 }

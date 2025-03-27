@@ -64,6 +64,22 @@ export class FavoritesService {
     return favorites;
   }
 
+  async count(laptopId: number) {
+    if (!laptopId) {
+      throw new BadRequestException('Laptop ID is required');
+    }
+
+    try {
+      const count = await this.favoritesRepo.count({
+        where: { laptopId },
+      });
+
+      return count;
+    } catch (error) {
+      throw new BadRequestException('Failed to count favorites for laptop');
+    }
+  }
+
   async remove(userId: number, laptopId: number) {
     if (!userId || !laptopId) {
       throw new BadRequestException('User ID and Laptop ID are required');

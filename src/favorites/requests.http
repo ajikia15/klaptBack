@@ -9,8 +9,11 @@ POST http://localhost:3000/favorites
 content-type: application/json
 
 {
-    "laptopId": 1
+    "laptopId": 3
 }
 
 ### Remove laptop from favorites
 DELETE http://localhost:3000/favorites/1
+
+### Count laptop favorited amount
+GET http://localhost:3000/favorites/count/3
