@@ -6,6 +6,7 @@ import { Laptop } from './laptop.entity';
 import { CreateLaptopDto } from './dtos/create-laptop.dto';
 import { User } from 'src/users/user.entity';
 import { SearchLaptopDto } from './dtos/search-laptop.dto';
+import { FilterOptions } from './filterOptions';
 @Injectable()
 export class LaptopsService {
   constructor(@InjectRepository(Laptop) private repo: Repository<Laptop>) {}
@@ -31,7 +32,7 @@ export class LaptopsService {
       .getMany();
   }
 
-  async getFilterOptions() {
+  async getFilterOptions(): Promise<FilterOptions> {
     const [
       brands,
       // gpuBrands,
