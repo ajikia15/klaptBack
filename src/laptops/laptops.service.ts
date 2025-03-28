@@ -31,6 +31,137 @@ export class LaptopsService {
       .getMany();
   }
 
+  async getFilterOptions() {
+    const [
+      brands,
+      // gpuBrands,
+      gpuModels,
+      // processorBrands,
+      processorModels,
+      ramTypes,
+      ramSizes,
+      storageTypes,
+      storageSizes,
+      stockStatuses,
+      screenSizes,
+      screenResolutions,
+    ] = await Promise.all([
+      this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.brand', 'value')
+        .where('laptop.brand IS NOT NULL')
+        .orderBy('value', 'ASC')
+        .getRawMany(),
+
+      // this.repo
+      //   .createQueryBuilder('laptop')
+      //   .select('DISTINCT laptop.gpuBrand', 'value')
+      //   .where('laptop.gpuBrand IS NOT NULL')
+      //   .orderBy('value', 'ASC')
+      //   .getRawMany(),
+
+      this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.gpuModel', 'value')
+        .where('laptop.gpuModel IS NOT NULL')
+        .orderBy('value', 'ASC')
+        .getRawMany(),
+
+      // this.repo
+      //   .createQueryBuilder('laptop')
+      //   .select('DISTINCT laptop.processorBrand', 'value')
+      //   .where('laptop.processorBrand IS NOT NULL')
+      //   .orderBy('value', 'ASC')
+      //   .getRawMany(),
+
+      this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.processorModel', 'value')
+        .where('laptop.processorModel IS NOT NULL')
+        .orderBy('value', 'ASC')
+        .getRawMany(),
+
+      this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.ramType', 'value')
+        .where('laptop.ramType IS NOT NULL')
+        .orderBy('value', 'ASC')
+        .getRawMany(),
+
+      this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.ram', 'value')
+        .where('laptop.ram IS NOT NULL')
+        .orderBy('value', 'ASC')
+        .getRawMany(),
+
+      this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.storageType', 'value')
+        .where('laptop.storageType IS NOT NULL')
+        .orderBy('value', 'ASC')
+        .getRawMany(),
+
+      this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.storageCapacity', 'value')
+        .where('laptop.storageCapacity IS NOT NULL')
+        .orderBy('value', 'ASC')
+        .getRawMany(),
+
+      this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.stockStatus', 'value')
+        .where('laptop.stockStatus IS NOT NULL')
+        .orderBy('value', 'ASC')
+        .getRawMany(),
+
+      this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.screenSize', 'value')
+        .where('laptop.screenSize IS NOT NULL')
+        .orderBy('value', 'ASC')
+        .getRawMany(),
+
+      this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.screenResolution', 'value')
+        .where('laptop.screenResolution IS NOT NULL')
+        .orderBy('value', 'ASC')
+        .getRawMany(),
+    ]);
+
+    // Get min and max prices
+    const minPrice = await this.repo
+      .createQueryBuilder('laptop')
+      .select('MIN(laptop.price)', 'min')
+      .getRawOne();
+
+    const maxPrice = await this.repo
+      .createQueryBuilder('laptop')
+      .select('MAX(laptop.price)', 'max')
+      .getRawOne();
+
+    return {
+      brands: brands.map((item) => item.value),
+      // gpuBrands: gpuBrands.map((item) => item.value),
+      gpuModels: gpuModels.map((item) => item.value),
+      // processorBrands: processorBrands.map((item) => item.value),
+      processorModels: processorModels.map((item) => item.value),
+      ramTypes: ramTypes.map((item) => item.value),
+      ram: ramSizes.map((item) => item.value),
+      storageTypes: storageTypes.map((item) => item.value),
+      storageCapacity: storageSizes.map((item) => item.value),
+      stockStatuses: stockStatuses.map((item) => item.value),
+      screenSizes: screenSizes.map((item) => item.value),
+      screenResolutions: screenResolutions.map((item) => item.value),
+      priceRange: {
+        min: minPrice?.min || 0,
+        max: maxPrice?.max || 0,
+      },
+    };
+  }
+
   findWithFilters(filters: SearchLaptopDto) {
     const query = this.repo.createQueryBuilder('laptop');
 

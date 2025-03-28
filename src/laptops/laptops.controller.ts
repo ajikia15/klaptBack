@@ -42,6 +42,11 @@ export class LaptopsController {
     return this.laptopsService.getRandomLaptopTitle();
   }
 
+  @Get('filters')
+  getFilterOptions() {
+    return this.laptopsService.getFilterOptions();
+  }
+
   @Get('/:id')
   getLaptop(@Param('id') id: string) {
     return this.laptopsService.findOne(parseInt(id));

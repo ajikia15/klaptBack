@@ -9,7 +9,7 @@ POST http://localhost:3000/favorites
 content-type: application/json
 
 {
-    "laptopId": 3
+    "laptopId": 4
 }
 
 ### Remove laptop from favorites

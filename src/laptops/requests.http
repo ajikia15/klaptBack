@@ -2,7 +2,7 @@
 GET http://localhost:3000/laptops
 
 ### Get laptop
-GET http://localhost:3000/laptops/1
+GET http://localhost:3000/laptops/4
 
 ### Create new laptop
 POST http://localhost:3000/laptops/
@@ -65,3 +65,6 @@ content-type: application/json
 
 ### Get random laptop name
 GET http://localhost:3000/laptops/random
+
+### Get relevant filters
+GET http://localhost:3000/laptops/filters
