@@ -91,7 +91,7 @@ content-type: application/json
     "year": 2023,
     "weight": "2.4kg",
     "description": "Entry-level gaming laptop with strong CPU performance and modern features at an affordable price point",
-    "images": ["https://i.ibb.co/hsMNTrZ/acer-nitro.png"],
+    "images": ["https://i.ibb.co/6R00B2DJ/acer.png"],
     "stockStatus": "in stock"
 }
 
@@ -123,6 +123,6 @@ content-type: application/json
     "year": 2023,
     "weight": "1.86kg",
     "description": "Affordable gaming laptop with a lightweight design, decent gaming performance, and good thermal management",
-    "images": ["https://i.ibb.co/dKhzP5r/msi-gf63.png"],
+    "images": ["https://i.ibb.co/9kPchdbf/msikatana.png"],
     "stockStatus": "in stock"
 }

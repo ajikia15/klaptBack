@@ -1,0 +1,196 @@
+{
+  "info": {
+    "name": "Laptops API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List all laptops",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/laptops",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops"]
+        }
+      }
+    },
+    {
+      "name": "Get laptop by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/laptops/4",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", "4"]
+        }
+      }
+    },
+    {
+      "name": "Create new laptop",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/laptops/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", ""]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Gaypherus Zephyrus G14 (2023)\",\n    \"price\": 2799,\n    \"brand\": \"Asus\",\n    \"model\": \"Zephyrus G14\",\n    \"shortDesc\": \"RTX 4060 Ryzen 9 7940HS 16GB DDR5 1TB SSD 14.0 2560x1600 165Hz 2023\",\n    \"gpuBrand\": \"Nvidia\",\n    \"gpuModel\": \"RTX 4060\",\n    \"vram\": \"8GB\",\n    \"backlightType\": \"rgb\",\n    \"processorBrand\": \"AMD\",\n    \"processorModel\": \"Ryzen 9 7940HS\",\n    \"cores\": 8,\n    \"threads\": 16,\n    \"ram\": \"16GB\",\n    \"ramType\": \"DDR5\",\n    \"storageType\": \"SSD\",\n    \"storageCapacity\": \"1TB\",\n    \"screenSize\": \"14.0\",\n    \"screenResolution\": \"2560x1600\",\n    \"refreshRate\": 165,\n    \"year\": 2023,\n    \"weight\": \"1.65kg\",\n    \"description\": \"Compact yet powerful gaming laptop with excellent build quality and Anime Matrix display\",\n    \"images\": [\"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpisces.bbystatic.com%2Fimage2%2FBestBuy_US%2Fimages%2Fproducts%2F6535%2F6535495cv15d.jpg&f=1&nofb=1&ipt=0e331a97eb7bc066dbcd0b860b6cfb5eddef8e3654e5ae86f127f18f2387f864&ipo=images\", \"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages-cdn.ubuy.co.in%2F645cc339bbf29658085b9bdb-excaliberpc-2023-asus-rog-zephyrus-g14.jpg&f=1&nofb=1&ipt=c2ce5a8b6a3210d75848a62263669c48a3d6f3c629fbc5a477bc31079bc8080d&ipo=images\", \"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.evetech.co.za%2Frepository%2Fmobile%2FLaptop%2FProImages%2Fasus-rog-zephyrus-g14-rtx-4060-ryzen-9-gaming-laptop-1000px-v1-0003.jpg&f=1&nofb=1&ipt=17c6b8c0e618e5105d9bcde10b7daed1d1f659876fc47607ae1c9f3575b52998&ipo=images\"],\n    \"stockStatus\": \"in stock\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Search for laptops",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/laptops/search?term=Gay",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", "search"],
+          "query": [
+            {
+              "key": "term",
+              "value": "Gay"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Advanced search",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/laptops/search?brand=asus&minPrice=2000&maxPrice=3000&processorBrand=AMD&ramType=DDR5",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", "search"],
+          "query": [
+            {
+              "key": "brand",
+              "value": "asus"
+            },
+            {
+              "key": "minPrice",
+              "value": "2000"
+            },
+            {
+              "key": "maxPrice",
+              "value": "3000"
+            },
+            {
+              "key": "processorBrand",
+              "value": "AMD"
+            },
+            {
+              "key": "ramType",
+              "value": "DDR5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete laptop",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:3000/laptops/8",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", "8"]
+        }
+      }
+    },
+    {
+      "name": "Update laptop",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/laptops/308",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", "308"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Asus Zephyrus\",\n    \"price\": 20\n}"
+        }
+      }
+    },
+    {
+      "name": "Approve laptop status",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/laptops/9",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", "9"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"status\": \"approved\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get random laptop name",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/laptops/random",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", "random"]
+        }
+      }
+    },
+    {
+      "name": "Get relevant filters",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/laptops/filters",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", "filters"]
+        }
+      }
+    }
+  ]
+}

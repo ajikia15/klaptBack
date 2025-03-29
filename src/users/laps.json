@@ -1,0 +1,100 @@
+{
+  "info": {
+    "name": "Laptop Creation Requests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Asus Zephyrus G14",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/laptops/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", ""]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Asus Zephyrus G14 (2023)\",\n    \"price\": 2799,\n    \"brand\": \"Asus\",\n    \"model\": \"Zephyrus G14\",\n    \"shortDesc\": \"RTX 4060 Ryzen 9 7940HS 16GB DDR5 1TB SSD 14.0 2560x1600 165Hz 2023\",\n    \"gpuBrand\": \"Nvidia\",\n    \"gpuModel\": \"RTX 4060\",\n    \"vram\": \"8GB\",\n    \"backlightType\": \"rgb\",\n    \"processorBrand\": \"AMD\",\n    \"processorModel\": \"Ryzen 9 7940HS\",\n    \"cores\": 8,\n    \"threads\": 16,\n    \"ram\": \"16GB\",\n    \"ramType\": \"DDR5\",\n    \"storageType\": \"SSD\",\n    \"storageCapacity\": \"1TB\",\n    \"screenSize\": \"14.0\",\n    \"screenResolution\": \"2560x1600\",\n    \"refreshRate\": 165,\n    \"year\": 2023,\n    \"weight\": \"1.65kg\",\n    \"description\": \"Compact yet powerful gaming laptop with excellent build quality and Anime Matrix display\",\n    \"images\": [\"https://i.ibb.co/6JTFncGp/asus.png\"],\n    \"stockStatus\": \"in stock\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Create Lenovo Legion 5 Pro",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/laptops/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", ""]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Lenovo Legion 5 Pro (2023)\",\n    \"price\": 2799,\n    \"brand\": \"Lenovo\",\n    \"model\": \"Legion 5 Pro\",\n    \"shortDesc\": \"RTX 4060 Ryzen 9 7940HS 16GB DDR5 1TB SSD 16.0 2560x1600 165Hz 2023\",\n    \"gpuBrand\": \"Nvidia\",\n    \"gpuModel\": \"RTX 4060\",\n    \"vram\": \"8GB\",\n    \"backlightType\": \"rgb\",\n    \"processorBrand\": \"AMD\",\n    \"processorModel\": \"Ryzen 9 7940HS\",\n    \"cores\": 8,\n    \"threads\": 16,\n    \"ram\": \"16GB\",\n    \"ramType\": \"DDR5\",\n    \"storageType\": \"SSD\",\n    \"storageCapacity\": \"1TB\",\n    \"screenSize\": \"16.0\",\n    \"screenResolution\": \"2560x1600\",\n    \"refreshRate\": 165,\n    \"year\": 2023,\n    \"weight\": \"2.65kg\",\n    \"description\": \"Powerful gaming laptop with excellent build quality and 16 inch display\",\n    \"images\": [\"https://i.ibb.co/XfpXdzSx/slim.png\"],\n    \"stockStatus\": \"in stock\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Create Acer Nitro V 15",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/laptops/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", ""]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Acer Nitro V 15 (2023)\",\n    \"price\": 1399,\n    \"brand\": \"Acer\",\n    \"model\": \"Nitro V 15\",\n    \"shortDesc\": \"RTX 4050 i7-13620H 16GB DDR5 512GB SSD 15.6 1920x1080 144Hz 2023\",\n    \"gpuBrand\": \"Nvidia\",\n    \"gpuModel\": \"RTX 4050\",\n    \"vram\": \"6GB\",\n    \"backlightType\": \"rgb\",\n    \"processorBrand\": \"Intel\",\n    \"processorModel\": \"i7-13620H\",\n    \"cores\": 10,\n    \"threads\": 16,\n    \"ram\": \"16GB\",\n    \"ramType\": \"DDR5\",\n    \"storageType\": \"SSD\",\n    \"storageCapacity\": \"512GB\",\n    \"screenSize\": \"15.6\",\n    \"screenResolution\": \"1920x1080\",\n    \"refreshRate\": 144,\n    \"year\": 2023,\n    \"weight\": \"2.4kg\",\n    \"description\": \"Entry-level gaming laptop with strong CPU performance and modern features at an affordable price point\",\n    \"images\": [\"https://i.ibb.co/6R00B2DJ/acer.png\"],\n    \"stockStatus\": \"in stock\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Create MSI GF63 Thin",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/laptops/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["laptops", ""]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"MSI GF63 Thin (2023)\",\n    \"price\": 1299,\n    \"brand\": \"MSI\",\n    \"model\": \"GF63 Thin\",\n    \"shortDesc\": \"RTX 4050 i5-12450H 16GB DDR4 512GB SSD 15.6 1920x1080 144Hz 2023\",\n    \"gpuBrand\": \"Nvidia\",\n    \"gpuModel\": \"RTX 4050\",\n    \"vram\": \"6GB\",\n    \"backlightType\": \"red\",\n    \"processorBrand\": \"Intel\",\n    \"processorModel\": \"i5-12450H\",\n    \"cores\": 8,\n    \"threads\": 12,\n    \"ram\": \"16GB\",\n    \"ramType\": \"DDR4\",\n    \"storageType\": \"SSD\",\n    \"storageCapacity\": \"512GB\",\n    \"screenSize\": \"15.6\",\n    \"screenResolution\": \"1920x1080\",\n    \"refreshRate\": 144,\n    \"year\": 2023,\n    \"weight\": \"1.86kg\",\n    \"description\": \"Affordable gaming laptop with a lightweight design, decent gaming performance, and good thermal management\",\n    \"images\": [\"https://i.ibb.co/9kPchdbf/msikatana.png\"],\n    \"stockStatus\": \"in stock\"\n}"
+        }
+      }
+    }
+  ]
+}
