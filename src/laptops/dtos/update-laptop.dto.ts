@@ -36,8 +36,8 @@ export class UpdateLaptopDto {
   vram?: string;
 
   @IsOptional()
-  @IsEnum(['none', 'rgb', 'white'])
-  backlightType?: 'none' | 'rgb' | 'white';
+  @IsString()
+  backlightType?: string;
 
   @IsOptional()
   @IsEnum(['Intel', 'AMD'])

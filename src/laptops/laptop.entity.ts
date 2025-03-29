@@ -44,7 +44,7 @@ export class Laptop {
   vram: string;
 
   @Column()
-  backlightType: 'none' | 'rgb' | 'white';
+  backlightType: string;
 
   @Column()
   processorBrand: 'Intel' | 'AMD';

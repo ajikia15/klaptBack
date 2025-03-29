@@ -62,3 +62,67 @@ content-type: application/json
     "images": ["https://i.ibb.co/XfpXdzSx/slim.png"],
     "stockStatus": "in stock"
 }
+
+### Acer Nitro
+POST http://localhost:3000/laptops/
+content-type: application/json
+
+{
+    "title": "Acer Nitro V 15 (2023)",
+    "price": 1399,
+    "brand": "Acer",
+    "model": "Nitro V 15",
+    "shortDesc": "RTX 4050 i7-13620H 16GB DDR5 512GB SSD 15.6 1920x1080 144Hz 2023",
+    "gpuBrand": "Nvidia",
+    "gpuModel": "RTX 4050",
+    "vram": "6GB",
+    "backlightType": "rgb",
+    "processorBrand": "Intel",
+    "processorModel": "i7-13620H",
+    "cores": 10,
+    "threads": 16,
+    "ram": "16GB",
+    "ramType": "DDR5",
+    "storageType": "SSD",
+    "storageCapacity": "512GB",
+    "screenSize": "15.6",
+    "screenResolution": "1920x1080",
+    "refreshRate": 144,
+    "year": 2023,
+    "weight": "2.4kg",
+    "description": "Entry-level gaming laptop with strong CPU performance and modern features at an affordable price point",
+    "images": ["https://i.ibb.co/hsMNTrZ/acer-nitro.png"],
+    "stockStatus": "in stock"
+}
+
+### MSI GF63
+POST http://localhost:3000/laptops/
+content-type: application/json
+
+{
+    "title": "MSI GF63 Thin (2023)",
+    "price": 1299,
+    "brand": "MSI",
+    "model": "GF63 Thin",
+    "shortDesc": "RTX 4050 i5-12450H 16GB DDR4 512GB SSD 15.6 1920x1080 144Hz 2023",
+    "gpuBrand": "Nvidia",
+    "gpuModel": "RTX 4050",
+    "vram": "6GB",
+    "backlightType": "red",
+    "processorBrand": "Intel",
+    "processorModel": "i5-12450H",
+    "cores": 8,
+    "threads": 12,
+    "ram": "16GB",
+    "ramType": "DDR4",
+    "storageType": "SSD",
+    "storageCapacity": "512GB",
+    "screenSize": "15.6",
+    "screenResolution": "1920x1080",
+    "refreshRate": 144,
+    "year": 2023,
+    "weight": "1.86kg",
+    "description": "Affordable gaming laptop with a lightweight design, decent gaming performance, and good thermal management",
+    "images": ["https://i.ibb.co/dKhzP5r/msi-gf63.png"],
+    "stockStatus": "in stock"
+}

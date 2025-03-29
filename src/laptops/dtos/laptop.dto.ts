@@ -29,7 +29,7 @@ export class LaptopDto {
   vram: string;
 
   @Expose()
-  backlightType: 'none' | 'rgb' | 'white';
+  backlightType: string;
 
   @Expose()
   processorBrand: 'Intel' | 'AMD';

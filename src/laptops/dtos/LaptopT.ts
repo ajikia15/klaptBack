@@ -8,7 +8,7 @@ export type LaptopT = {
   gpuBrand: string;
   gpuModel: string;
   vram: string;
-  backlightType: 'none' | 'rgb' | 'white';
+  backlightType: string;
   processorBrand: 'Intel' | 'AMD';
   processorModel: string;
   cores: number;

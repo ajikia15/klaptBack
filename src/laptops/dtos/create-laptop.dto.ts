@@ -31,8 +31,8 @@ export class CreateLaptopDto {
   @IsString()
   vram: string;
 
-  @IsEnum(['none', 'rgb', 'white'])
-  backlightType: 'none' | 'rgb' | 'white';
+  @IsString()
+  backlightType: string;
 
   @IsEnum(['Intel', 'AMD'])
   processorBrand: 'Intel' | 'AMD';
