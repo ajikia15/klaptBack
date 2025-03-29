@@ -1,0 +1,18 @@
+type: http_request
+model: http_request
+id: rq_op2RDSusMW
+createdAt: 2025-03-29T14:21:55.883614597
+updatedAt: 2025-03-29T14:23:10.212003383
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_ZJryWRCAye
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: DELETE
+name: Delete user
+sortPriority: 4000.0
+url: http://localhost:3000/auth/3
+urlParameters: []

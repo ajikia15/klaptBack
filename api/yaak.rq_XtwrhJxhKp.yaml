@@ -1,0 +1,27 @@
+type: http_request
+model: http_request
+id: rq_XtwrhJxhKp
+createdAt: 2025-03-29T14:28:20.229831835
+updatedAt: 2025-03-29T14:28:43.052146690
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_ZJryWRCAye
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+        "email": "bigbig114@balls.com",
+        "password": "heheasdfasdf"
+    }
+bodyType: other
+description: ''
+headers:
+- enabled: true
+  name: content-type
+  value: application/json
+  id: null
+method: POST
+name: Update
+sortPriority: 1000.001
+url: http://localhost:3000/auth/1
+urlParameters: []

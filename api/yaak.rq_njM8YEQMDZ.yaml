@@ -1,0 +1,27 @@
+type: http_request
+model: http_request
+id: rq_njM8YEQMDZ
+createdAt: 2025-03-29T14:30:41.873881541
+updatedAt: 2025-03-29T15:10:21.551048129
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_7dXTjsFa8Z
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+        "title": "Asus Zephyrus",
+        "price": 20
+    }
+bodyType: other
+description: ''
+headers:
+- enabled: true
+  name: content-type
+  value: application/json
+  id: null
+method: PATCH
+name: Update laptop
+sortPriority: 7000.0
+url: http://localhost:3000/laptops/308
+urlParameters: []

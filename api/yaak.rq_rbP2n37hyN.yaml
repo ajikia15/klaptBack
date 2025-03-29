@@ -1,0 +1,27 @@
+type: http_request
+model: http_request
+id: rq_rbP2n37hyN
+createdAt: 2025-03-29T14:21:55.871767738
+updatedAt: 2025-03-29T14:23:10.211846659
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_ZJryWRCAye
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+        "email": "bigbig114@balls.com",
+        "password": "heheasdfasdf"
+    }
+bodyType: other
+description: ''
+headers:
+- enabled: true
+  name: content-type
+  value: application/json
+  id: null
+method: POST
+name: Sign in
+sortPriority: 1000.0
+url: http://localhost:3000/auth/signin
+urlParameters: []

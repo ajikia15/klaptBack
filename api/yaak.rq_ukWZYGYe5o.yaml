@@ -1,0 +1,22 @@
+type: http_request
+model: http_request
+id: rq_ukWZYGYe5o
+createdAt: 2025-03-29T14:21:55.880793577
+updatedAt: 2025-03-29T14:23:10.212404689
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_ZJryWRCAye
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: Search for users
+sortPriority: 5000.0
+url: http://localhost:3000/auth/search
+urlParameters:
+- enabled: true
+  name: term
+  value: big
+  id: null

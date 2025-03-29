@@ -1,0 +1,26 @@
+type: http_request
+model: http_request
+id: rq_J86KNJTEFr
+createdAt: 2025-03-29T14:30:41.876824853
+updatedAt: 2025-03-29T15:10:21.550254981
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_7dXTjsFa8Z
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+        "status": "approved"
+    }
+bodyType: other
+description: ''
+headers:
+- enabled: true
+  name: content-type
+  value: application/json
+  id: null
+method: PATCH
+name: Approve laptop status
+sortPriority: 1000.0
+url: http://localhost:3000/laptops/9
+urlParameters: []

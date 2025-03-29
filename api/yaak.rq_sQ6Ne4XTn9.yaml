@@ -1,0 +1,50 @@
+type: http_request
+model: http_request
+id: rq_sQ6Ne4XTn9
+createdAt: 2025-03-29T14:38:55.190041277
+updatedAt: 2025-03-29T15:11:30.184457203
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_FycCr5Ruto
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+        "title": "MSI GF63 Thin (2023)",
+        "price": 1299,
+        "brand": "MSI",
+        "model": "GF63 Thin",
+        "shortDesc": "RTX 4050 i5-12450H 16GB DDR4 512GB SSD 15.6 1920x1080 144Hz 2023",
+        "gpuBrand": "Nvidia",
+        "gpuModel": "RTX 4050",
+        "vram": "6GB",
+        "backlightType": "red",
+        "processorBrand": "Intel",
+        "processorModel": "i5-12450H",
+        "cores": 8,
+        "threads": 12,
+        "ram": "16GB",
+        "ramType": "DDR4",
+        "storageType": "SSD",
+        "storageCapacity": "512GB",
+        "screenSize": "15.6",
+        "screenResolution": "1920x1080",
+        "refreshRate": 144,
+        "year": 2023,
+        "weight": "1.86kg",
+        "description": "Affordable gaming laptop with a lightweight design, decent gaming performance, and good thermal management",
+        "images": ["https://i.ibb.co/9kPchdbf/msikatana.png"],
+        "stockStatus": "in stock"
+    }
+bodyType: other
+description: ''
+headers:
+- enabled: true
+  name: content-type
+  value: application/json
+  id: null
+method: POST
+name: MSI GF63 Thin
+sortPriority: 0.0
+url: http://localhost:3000/laptops/
+urlParameters: []

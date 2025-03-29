@@ -1,0 +1,18 @@
+type: http_request
+model: http_request
+id: rq_HfggmHmFtm
+createdAt: 2025-03-29T14:21:55.865717268
+updatedAt: 2025-03-29T14:23:10.212534105
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_ZJryWRCAye
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: Get user by ID
+sortPriority: 7000.0
+url: http://localhost:3000/auth/1
+urlParameters: []

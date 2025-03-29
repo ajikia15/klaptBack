@@ -1,0 +1,18 @@
+type: http_request
+model: http_request
+id: rq_r7ydGdGfK6
+createdAt: 2025-03-29T14:21:55.874965131
+updatedAt: 2025-03-29T14:23:10.211974887
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_ZJryWRCAye
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: POST
+name: Sign out
+sortPriority: 3000.0
+url: http://localhost:3000/auth/signout
+urlParameters: []

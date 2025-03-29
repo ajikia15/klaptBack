@@ -1,0 +1,38 @@
+type: http_request
+model: http_request
+id: rq_xB7Yvj2MQR
+createdAt: 2025-03-29T14:30:41.868300054
+updatedAt: 2025-03-29T15:10:21.550649181
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_7dXTjsFa8Z
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: Advanced search
+sortPriority: 4000.0
+url: http://localhost:3000/laptops/search
+urlParameters:
+- enabled: true
+  name: brand
+  value: asus
+  id: null
+- enabled: true
+  name: minPrice
+  value: '2000'
+  id: null
+- enabled: true
+  name: maxPrice
+  value: '3000'
+  id: null
+- enabled: true
+  name: processorBrand
+  value: AMD
+  id: null
+- enabled: true
+  name: ramType
+  value: DDR5
+  id: null

@@ -1,0 +1,10 @@
+type: workspace
+model: workspace
+id: wk_Q9A29vyBmH
+createdAt: 2025-03-29T14:21:55.848618990
+updatedAt: 2025-03-29T15:11:11
+name: Klaptopi
+description: ''
+settingValidateCertificates: true
+settingFollowRedirects: true
+settingRequestTimeout: 0

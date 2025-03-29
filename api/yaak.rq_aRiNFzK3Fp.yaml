@@ -1,0 +1,50 @@
+type: http_request
+model: http_request
+id: rq_aRiNFzK3Fp
+createdAt: 2025-03-29T14:38:55.181045121
+updatedAt: 2025-03-29T15:11:39.057697829
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_FycCr5Ruto
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+        "title": "Asus Zephyrus G14 (2023)",
+        "price": 2799,
+        "brand": "Asus",
+        "model": "Zephyrus G14",
+        "shortDesc": "RTX 4060 Ryzen 9 7940HS 16GB DDR5 1TB SSD 14.0 2560x1600 165Hz 2023",
+        "gpuBrand": "Nvidia",
+        "gpuModel": "RTX 4060",
+        "vram": "8GB",
+        "backlightType": "rgb",
+        "processorBrand": "AMD",
+        "processorModel": "Ryzen 9 7940HS",
+        "cores": 8,
+        "threads": 16,
+        "ram": "16GB",
+        "ramType": "DDR5",
+        "storageType": "SSD",
+        "storageCapacity": "1TB",
+        "screenSize": "14.0",
+        "screenResolution": "2560x1600",
+        "refreshRate": 165,
+        "year": 2023,
+        "weight": "1.65kg",
+        "description": "Compact yet powerful gaming laptop with excellent build quality and Anime Matrix display",
+        "images": ["https://i.ibb.co/6JTFncGp/asus.png"],
+        "stockStatus": "in stock"
+    }
+bodyType: other
+description: ''
+headers:
+- enabled: true
+  name: content-type
+  value: application/json
+  id: null
+method: POST
+name: Asus Zephyrus G14
+sortPriority: 2000.0
+url: http://localhost:3000/laptops/
+urlParameters: []

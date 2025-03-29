@@ -1,0 +1,50 @@
+type: http_request
+model: http_request
+id: rq_Zp7AwinkUY
+createdAt: 2025-03-29T14:38:55.187037413
+updatedAt: 2025-03-29T15:11:57.115781539
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_FycCr5Ruto
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+        "title": "Acer Nitro V 5 (2023)",
+        "price": 1399,
+        "brand": "Acer",
+        "model": "Nitro V 5",
+        "shortDesc": "RTX 4050 i7-13620H 16GB DDR5 512GB SSD 15.6 1920x1080 144Hz 2023",
+        "gpuBrand": "Nvidia",
+        "gpuModel": "RTX 4050",
+        "vram": "6GB",
+        "backlightType": "rgb",
+        "processorBrand": "Intel",
+        "processorModel": "i7-13620H",
+        "cores": 10,
+        "threads": 16,
+        "ram": "16GB",
+        "ramType": "DDR5",
+        "storageType": "SSD",
+        "storageCapacity": "512GB",
+        "screenSize": "15.6",
+        "screenResolution": "1920x1080",
+        "refreshRate": 144,
+        "year": 2023,
+        "weight": "2.4kg",
+        "description": "Entry-level gaming laptop with strong CPU performance and modern features at an affordable price point",
+        "images": ["https://i.ibb.co/6R00B2DJ/acer.png"],
+        "stockStatus": "in stock"
+    }
+bodyType: other
+description: ''
+headers:
+- enabled: true
+  name: content-type
+  value: application/json
+  id: null
+method: POST
+name: Acer Nitro V 15
+sortPriority: 1000.0
+url: http://localhost:3000/laptops/
+urlParameters: []

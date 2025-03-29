@@ -1,0 +1,22 @@
+type: http_request
+model: http_request
+id: rq_aTQxWybN4M
+createdAt: 2025-03-29T14:30:41.865579954
+updatedAt: 2025-03-29T15:10:21.550471079
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_7dXTjsFa8Z
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: Search for laptops
+sortPriority: 3000.0
+url: http://localhost:3000/laptops/search
+urlParameters:
+- enabled: true
+  name: term
+  value: Gay
+  id: null

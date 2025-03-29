@@ -1,0 +1,18 @@
+type: http_request
+model: http_request
+id: rq_8Mp5wLZwHi
+createdAt: 2025-03-29T14:30:41.882405153
+updatedAt: 2025-03-29T15:10:21.551331905
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_7dXTjsFa8Z
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: Get relevant filters
+sortPriority: 10000.0
+url: http://localhost:3000/laptops/filters
+urlParameters: []
