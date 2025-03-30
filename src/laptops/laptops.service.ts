@@ -108,9 +108,7 @@ export class LaptopsService {
           disabled: false,
         })),
         processorModels: allOptions.processorModels.map((value) => {
-          const exists = availableProcessors.some(
-            (p) => p && p.toLowerCase().trim() === value.toLowerCase().trim(),
-          );
+          const exists = existsInNormalizedArray(value, availableProcessors);
           return {
             value,
             disabled: !exists,
@@ -143,9 +141,7 @@ export class LaptopsService {
 
       return {
         brands: allOptions.brands.map((value) => {
-          const exists = availableBrands.some(
-            (b) => b && b.toLowerCase().trim() === value.toLowerCase().trim(),
-          );
+          const exists = existsInNormalizedArray(value, availableBrands);
 
           return {
             value,
