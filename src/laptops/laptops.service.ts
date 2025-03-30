@@ -8,6 +8,39 @@ import { User } from 'src/users/user.entity';
 import { SearchLaptopDto } from './dtos/search-laptop.dto';
 import { FilterOptions } from './filterOptions';
 
+/**
+ * Normalizes a string by converting to lowercase and trimming whitespace
+ */
+export function normalizeString(str: string): string {
+  return str ? str.toLowerCase().trim() : '';
+}
+
+/**
+ * Checks if a string value exists in a normalized array
+ */
+export function existsInNormalizedArray(
+  value: string,
+  array: string[],
+): boolean {
+  if (!array || !array.length) return false;
+  const normalized = normalizeString(value);
+  return array.some((item) => normalizeString(item) === normalized);
+}
+
+/**
+ * Creates a filter option object with disabled state based on existence in array
+ */
+export function createFilterOption(
+  value: string,
+  availableValues: string[],
+  isActiveFilter: boolean,
+): { value: string; disabled: boolean } {
+  return {
+    value,
+    disabled:
+      !isActiveFilter && !existsInNormalizedArray(value, availableValues),
+  };
+}
 @Injectable()
 export class LaptopsService {
   constructor(@InjectRepository(Laptop) private repo: Repository<Laptop>) {}
@@ -145,35 +178,76 @@ export class LaptopsService {
     );
 
     return {
-      brands: allOptions.brands.map((value) => ({
-        value,
-        disabled:
-          !activeFilters.includes('brand') &&
-          !filteredOptions.brands.some(
-            (b) => b.toLowerCase().trim() === value.toLowerCase().trim(),
-          ),
-      })),
-      processorModels: allOptions.processorModels.map((value) => {
-        const normalized = value.toLowerCase().trim();
-        const isDisabled =
-          !activeFilters.includes('processorModel') &&
-          !filteredOptions.processorModels
-            .map((p) => p.toLowerCase().trim())
-            .includes(normalized);
-
-        return {
+      brands: allOptions.brands.map((value) =>
+        createFilterOption(
           value,
-          disabled: isDisabled,
-        };
-      }),
-      gpuModels: [],
-      ramTypes: [],
-      ram: [],
-      storageTypes: [],
-      storageCapacity: [],
-      stockStatuses: [],
-      screenSizes: [],
-      screenResolutions: [],
+          filteredOptions.brands,
+          activeFilters.includes('brand'),
+        ),
+      ),
+      processorModels: allOptions.processorModels.map((value) =>
+        createFilterOption(
+          value,
+          filteredOptions.processorModels,
+          activeFilters.includes('processorModel'),
+        ),
+      ),
+      gpuModels: allOptions.gpuModels.map((value) =>
+        createFilterOption(
+          value,
+          filteredOptions.gpuModels,
+          activeFilters.includes('gpuModel'),
+        ),
+      ),
+      ramTypes: allOptions.ramTypes.map((value) =>
+        createFilterOption(
+          value,
+          filteredOptions.ramTypes,
+          activeFilters.includes('ramType'),
+        ),
+      ),
+      ram: allOptions.ram.map((value) =>
+        createFilterOption(
+          value,
+          filteredOptions.ram,
+          activeFilters.includes('ram'),
+        ),
+      ),
+      storageTypes: allOptions.storageTypes.map((value) =>
+        createFilterOption(
+          value,
+          filteredOptions.storageTypes,
+          activeFilters.includes('storageType'),
+        ),
+      ),
+      storageCapacity: allOptions.storageCapacity.map((value) =>
+        createFilterOption(
+          value,
+          filteredOptions.storageCapacity,
+          activeFilters.includes('storageCapacity'),
+        ),
+      ),
+      stockStatuses: allOptions.stockStatuses.map((value) =>
+        createFilterOption(
+          value,
+          filteredOptions.stockStatuses,
+          activeFilters.includes('stockStatus'),
+        ),
+      ),
+      screenSizes: allOptions.screenSizes.map((value) =>
+        createFilterOption(
+          value,
+          filteredOptions.screenSizes,
+          activeFilters.includes('screenSize'),
+        ),
+      ),
+      screenResolutions: allOptions.screenResolutions.map((value) =>
+        createFilterOption(
+          value,
+          filteredOptions.screenResolutions,
+          activeFilters.includes('screenResolution'),
+        ),
+      ),
       priceRange: filteredOptions.priceRange || allOptions.priceRange,
     };
   }
