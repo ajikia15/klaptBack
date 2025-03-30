@@ -71,22 +71,14 @@ export class LaptopsService {
     const allOptions = await this.getAllFilterOptions();
 
     if (!filters || this.areFiltersEmpty(filters)) {
-      // No filters, everything enabled
+      const baseOptions = this.createBaseFilterOptions(allOptions.priceRange);
       return {
+        ...baseOptions,
         brands: allOptions.brands.map((value) => ({ value, disabled: false })),
         processorModels: allOptions.processorModels.map((value) => ({
           value,
           disabled: false,
         })),
-        gpuModels: [],
-        ramTypes: [],
-        ram: [],
-        storageTypes: [],
-        storageCapacity: [],
-        stockStatuses: [],
-        screenSizes: [],
-        screenResolutions: [],
-        priceRange: allOptions.priceRange,
       };
     }
 
@@ -101,8 +93,9 @@ export class LaptopsService {
 
       const availableProcessors = brandProcessors.map((p) => p.model);
 
-      // Create result with direct filtering
+      const baseOptions = this.createBaseFilterOptions(allOptions.priceRange);
       return {
+        ...baseOptions,
         brands: allOptions.brands.map((value) => ({
           value,
           disabled: false,
@@ -114,15 +107,6 @@ export class LaptopsService {
             disabled: !exists,
           };
         }),
-        gpuModels: [],
-        ramTypes: [],
-        ram: [],
-        storageTypes: [],
-        storageCapacity: [],
-        stockStatuses: [],
-        screenSizes: [],
-        screenResolutions: [],
-        priceRange: allOptions.priceRange,
       };
     }
 
@@ -139,7 +123,9 @@ export class LaptopsService {
 
       const availableBrands = processorBrands.map((b) => b.brand);
 
+      const baseOptions = this.createBaseFilterOptions(allOptions.priceRange);
       return {
+        ...baseOptions,
         brands: allOptions.brands.map((value) => {
           const exists = existsInNormalizedArray(value, availableBrands);
 
@@ -152,15 +138,6 @@ export class LaptopsService {
           value,
           disabled: false,
         })),
-        gpuModels: [],
-        ramTypes: [],
-        ram: [],
-        storageTypes: [],
-        storageCapacity: [],
-        stockStatuses: [],
-        screenSizes: [],
-        screenResolutions: [],
-        priceRange: allOptions.priceRange,
       };
     }
 
@@ -284,89 +261,43 @@ export class LaptopsService {
   }
 
   private async getAllFilterOptions(): Promise<any> {
+    // Create a helper method for getting distinct column values
+    const getDistinctValues = async (column: string) => {
+      return this.repo
+        .createQueryBuilder('laptop')
+        .select(`DISTINCT laptop.${column}`, 'value')
+        .where(`laptop.${column} IS NOT NULL`)
+        .orderBy('value', 'ASC')
+        .getRawMany()
+        .then((results) => results.map((item) => item.value));
+    };
+
+    // Execute all queries in parallel
     const [
-      brand,
-      gpuModel,
-      processorModel,
-      ramType,
-      ramSize,
-      storageType,
-      storageSize,
-      stockStatuse,
-      screenSize,
-      screenResolution,
+      brands,
+      gpuModels,
+      processorModels,
+      ramTypes,
+      ram,
+      storageTypes,
+      storageCapacity,
+      stockStatuses,
+      screenSizes,
+      screenResolutions,
     ] = await Promise.all([
-      this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.brand', 'value')
-        .where('laptop.brand IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.gpuModel', 'value')
-        .where('laptop.gpuModel IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.processorModel', 'value')
-        .where('laptop.processorModel IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.ramType', 'value')
-        .where('laptop.ramType IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.ram', 'value')
-        .where('laptop.ram IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.storageType', 'value')
-        .where('laptop.storageType IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.storageCapacity', 'value')
-        .where('laptop.storageCapacity IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.stockStatus', 'value')
-        .where('laptop.stockStatus IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.screenSize', 'value')
-        .where('laptop.screenSize IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.screenResolution', 'value')
-        .where('laptop.screenResolution IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
+      getDistinctValues('brand'),
+      getDistinctValues('gpuModel'),
+      getDistinctValues('processorModel'),
+      getDistinctValues('ramType'),
+      getDistinctValues('ram'),
+      getDistinctValues('storageType'),
+      getDistinctValues('storageCapacity'),
+      getDistinctValues('stockStatus'),
+      getDistinctValues('screenSize'),
+      getDistinctValues('screenResolution'),
     ]);
 
+    // Get price range
     const minPrice = await this.repo
       .createQueryBuilder('laptop')
       .select('MIN(laptop.price)', 'min')
@@ -378,16 +309,16 @@ export class LaptopsService {
       .getRawOne();
 
     return {
-      brands: brand.map((item) => item.value),
-      gpuModels: gpuModel.map((item) => item.value),
-      processorModels: processorModel.map((item) => item.value),
-      ramTypes: ramType.map((item) => item.value),
-      ram: ramSize.map((item) => item.value),
-      storageTypes: storageType.map((item) => item.value),
-      storageCapacity: storageSize.map((item) => item.value),
-      stockStatuses: stockStatuse.map((item) => item.value),
-      screenSizes: screenSize.map((item) => item.value),
-      screenResolutions: screenResolution.map((item) => item.value),
+      brands,
+      gpuModels,
+      processorModels,
+      ramTypes,
+      ram,
+      storageTypes,
+      storageCapacity,
+      stockStatuses,
+      screenSizes,
+      screenResolutions,
       priceRange: {
         min: minPrice?.min || 0,
         max: maxPrice?.max || 0,
@@ -469,21 +400,15 @@ export class LaptopsService {
       .getRawOne();
 
     // Create a result object with filtered options
+    const baseOptions = this.createBaseFilterOptions({
+      min: minPrice?.min || 0,
+      max: maxPrice?.max || 0,
+    });
+
     return {
+      ...baseOptions,
       brands,
       processorModels,
-      gpuModels: [],
-      ramTypes: [],
-      ram: [],
-      storageTypes: [],
-      storageCapacity: [],
-      stockStatuses: [],
-      screenSizes: [],
-      screenResolutions: [],
-      priceRange: {
-        min: minPrice?.min || 0,
-        max: maxPrice?.max || 0,
-      },
     };
   }
 
@@ -570,5 +495,23 @@ export class LaptopsService {
     }
 
     return { title: laptop.title };
+  }
+
+  private createBaseFilterOptions(
+    priceRange: any = { min: 0, max: 0 },
+  ): FilterOptions {
+    return {
+      brands: [],
+      processorModels: [],
+      gpuModels: [],
+      ramTypes: [],
+      ram: [],
+      storageTypes: [],
+      storageCapacity: [],
+      stockStatuses: [],
+      screenSizes: [],
+      screenResolutions: [],
+      priceRange,
+    };
   }
 }
