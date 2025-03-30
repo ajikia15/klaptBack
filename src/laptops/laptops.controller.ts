@@ -33,8 +33,8 @@ export class LaptopsController {
   }
 
   @Get('search')
-  findByTerm(@Query() searchDto: SearchLaptopDto) {
-    return this.laptopsService.findWithFilters(searchDto);
+  find(@Query() searchDto: SearchLaptopDto) {
+    return this.laptopsService.find(searchDto);
   }
 
   @Get('random')

@@ -35,9 +35,9 @@ export class LaptopsService {
   async getFilterOptions(): Promise<FilterOptions> {
     const [
       brand,
-      // gpuBrands,
+      // gpuBrand,
       gpuModel,
-      // processorBrands,
+      // processorBrand,
       processorModel,
       ramType,
       ramSize,
@@ -149,7 +149,7 @@ export class LaptopsService {
     };
   }
 
-  findWithFilters(filters: SearchLaptopDto) {
+  find(filters: SearchLaptopDto) {
     const query = this.repo.createQueryBuilder('laptop');
 
     // Search by title (no change - single value)
