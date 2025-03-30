@@ -34,92 +34,130 @@ export class LaptopsService {
   }
 
   async getFilterOptions(filters?: SearchLaptopDto): Promise<FilterOptions> {
+    console.log('========== NEW FILTER REQUEST ==========');
+    console.log('Incoming filters:', JSON.stringify(filters, null, 2));
+
+    // Get all options first
     const allOptions = await this.getAllFilterOptions();
 
     if (!filters || this.areFiltersEmpty(filters)) {
+      console.log('No filters applied, returning all options as enabled');
       return {
         brands: allOptions.brands.map((value) => ({ value, disabled: false })),
-        gpuModels: allOptions.gpuModels.map((value) => ({
-          value,
-          disabled: false,
-        })),
         processorModels: allOptions.processorModels.map((value) => ({
           value,
           disabled: false,
         })),
-        ramTypes: allOptions.ramTypes.map((value) => ({
-          value,
-          disabled: false,
-        })),
-        ram: allOptions.ram.map((value) => ({ value, disabled: false })),
-        storageTypes: allOptions.storageTypes.map((value) => ({
-          value,
-          disabled: false,
-        })),
-        storageCapacity: allOptions.storageCapacity.map((value) => ({
-          value,
-          disabled: false,
-        })),
-        stockStatuses: allOptions.stockStatuses.map((value) => ({
-          value,
-          disabled: false,
-        })),
-        screenSizes: allOptions.screenSizes.map((value) => ({
-          value,
-          disabled: false,
-        })),
-        screenResolutions: allOptions.screenResolutions.map((value) => ({
-          value,
-          disabled: false,
-        })),
+        // Keep other fields as placeholders with disabled: false
+        gpuModels: [],
+        ramTypes: [],
+        ram: [],
+        storageTypes: [],
+        storageCapacity: [],
+        stockStatuses: [],
+        screenSizes: [],
+        screenResolutions: [],
         priceRange: allOptions.priceRange,
       };
     }
 
+    // For debugging: If brand filter is applied, directly check which processors exist
+    if (filters.brand && filters.brand.length > 0) {
+      console.log(`BRAND FILTER DETECTED: ${filters.brand.join(', ')}`);
+
+      // Direct DB query to check which processors exist for this brand
+      const brandProcessors = await this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.processorModel', 'model')
+        .where('laptop.brand IN (:...brands)', { brands: filters.brand })
+        .getRawMany();
+
+      const availableProcessors = brandProcessors.map((p) => p.model);
+
+      console.log(
+        `DIRECT DB CHECK: Found ${availableProcessors.length} processors for brand ${filters.brand.join(
+          ', ',
+        )}:`,
+      );
+      console.log(availableProcessors);
+
+      // Check if specific processors exist
+      const testProcessors = ['Ryzen 9 7940HS', 'i7-13620H'];
+      testProcessors.forEach((proc) => {
+        const exists = availableProcessors.some(
+          (p) => p && p.toLowerCase().trim() === proc.toLowerCase().trim(),
+        );
+        console.log(
+          `DIRECT DB CHECK: ${proc} exists for ${filters.brand.join(
+            ', ',
+          )}: ${exists}`,
+        );
+      });
+
+      // Create result with direct filtering
+      return {
+        brands: allOptions.brands.map((value) => ({
+          value,
+          disabled: !filters.brand.includes(value),
+        })),
+        processorModels: allOptions.processorModels.map((value) => {
+          // Simple, direct check if processor exists for this brand
+          const exists = availableProcessors.some(
+            (p) => p && p.toLowerCase().trim() === value.toLowerCase().trim(),
+          );
+
+          console.log(`Setting processor '${value}' disabled=${!exists}`);
+
+          return {
+            value,
+            disabled: !exists,
+          };
+        }),
+        // Keep other fields as placeholders
+        gpuModels: [],
+        ramTypes: [],
+        ram: [],
+        storageTypes: [],
+        storageCapacity: [],
+        stockStatuses: [],
+        screenSizes: [],
+        screenResolutions: [],
+        priceRange: allOptions.priceRange,
+      };
+    }
+
+    // For non-brand filters, use your existing implementation
     const filteredOptions = await this.getFilteredOptions(filters);
 
+    // Using normalized comparison for all options
     return {
       brands: allOptions.brands.map((value) => ({
         value,
-        disabled: !filteredOptions.brands.includes(value),
+        disabled: !filteredOptions.brands.some(
+          (b) => b.toLowerCase().trim() === value.toLowerCase().trim(),
+        ),
       })),
-      gpuModels: allOptions.gpuModels.map((value) => ({
-        value,
-        disabled: !filteredOptions.gpuModels.includes(value),
-      })),
-      processorModels: allOptions.processorModels.map((value) => ({
-        value,
-        disabled: !filteredOptions.processorModels.includes(value),
-      })),
-      ramTypes: allOptions.ramTypes.map((value) => ({
-        value,
-        disabled: !filteredOptions.ramTypes.includes(value),
-      })),
-      ram: allOptions.ram.map((value) => ({
-        value,
-        disabled: !filteredOptions.ram.includes(value),
-      })),
-      storageTypes: allOptions.storageTypes.map((value) => ({
-        value,
-        disabled: !filteredOptions.storageTypes.includes(value),
-      })),
-      storageCapacity: allOptions.storageCapacity.map((value) => ({
-        value,
-        disabled: !filteredOptions.storageCapacity.includes(value),
-      })),
-      stockStatuses: allOptions.stockStatuses.map((value) => ({
-        value,
-        disabled: !filteredOptions.stockStatuses.includes(value),
-      })),
-      screenSizes: allOptions.screenSizes.map((value) => ({
-        value,
-        disabled: !filteredOptions.screenSizes.includes(value),
-      })),
-      screenResolutions: allOptions.screenResolutions.map((value) => ({
-        value,
-        disabled: !filteredOptions.screenResolutions.includes(value),
-      })),
-      priceRange: filteredOptions.priceRange,
+      processorModels: allOptions.processorModels.map((value) => {
+        const normalized = value.toLowerCase().trim();
+        const isDisabled = !filteredOptions.processorModels
+          .map((p) => p.toLowerCase().trim())
+          .includes(normalized);
+
+        return {
+          value,
+          disabled: isDisabled,
+        };
+      }),
+      // Keep other fields as placeholders
+      gpuModels: [],
+      ramTypes: [],
+      ram: [],
+      storageTypes: [],
+      storageCapacity: [],
+      stockStatuses: [],
+      screenSizes: [],
+      screenResolutions: [],
+      priceRange: filteredOptions.priceRange || allOptions.priceRange,
     };
   }
 
@@ -271,113 +309,131 @@ export class LaptopsService {
   }
 
   private async getFilteredOptions(filters: SearchLaptopDto): Promise<any> {
-    const baseQuery = this.repo.createQueryBuilder('laptop');
-    this.applyFilters(baseQuery, filters);
+    console.log(
+      'Getting filtered options with filters:',
+      Object.keys(filters).filter(
+        (k) =>
+          filters[k] &&
+          (Array.isArray(filters[k]) ? filters[k].length > 0 : true),
+      ),
+    );
 
-    const [
-      brand,
-      gpuModel,
-      processorModel,
-      ramType,
-      ramSize,
-      storageType,
-      storageSize,
-      stockStatuse,
-      screenSize,
-      screenResolution,
-    ] = await Promise.all([
-      baseQuery
-        .clone()
+    // Get brands available with current processor filters
+    const getAvailableBrands = async () => {
+      const query = this.repo.createQueryBuilder('laptop');
+
+      // Apply only processor filters (skip brand filters)
+      if (filters.processorModel && filters.processorModel.length > 0) {
+        query.andWhere('laptop.processorModel IN (:...processorModels)', {
+          processorModels: filters.processorModel,
+        });
+        console.log(
+          'Applied processorModel filter for brand filtering:',
+          filters.processorModel,
+        );
+      }
+
+      // Apply all other filters except brand
+      const filteredFilters = { ...filters };
+      delete filteredFilters.brand;
+      this.applyFilters(query, filteredFilters);
+
+      console.log('SQL for available brands:', query.getSql());
+
+      const results = await query
         .select('DISTINCT laptop.brand', 'value')
         .where('laptop.brand IS NOT NULL')
         .orderBy('value', 'ASC')
-        .getRawMany(),
+        .getRawMany()
+        .then((results) => results.map((item) => item.value));
 
-      baseQuery
-        .clone()
-        .select('DISTINCT laptop.gpuModel', 'value')
-        .where('laptop.gpuModel IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
+      console.log('Available brands:', results);
+      return results;
+    };
 
-      baseQuery
-        .clone()
+    // Get processor models available with current brand filters
+    const getAvailableProcessorModels = async () => {
+      const query = this.repo.createQueryBuilder('laptop');
+
+      // Apply only brand filters (skip processor filters)
+      if (filters.brand && filters.brand.length > 0) {
+        query.andWhere('laptop.brand IN (:...brands)', {
+          brands: filters.brand,
+        });
+        console.log(
+          'Applied brand filter for processor filtering:',
+          filters.brand,
+        );
+
+        // Debug: Check how many laptops match this brand
+        const countQuery = this.repo
+          .createQueryBuilder('laptop')
+          .where('laptop.brand IN (:...brands)', { brands: filters.brand });
+
+        const count = await countQuery.getCount();
+        console.log(
+          `Found ${count} laptops with brand(s): ${filters.brand.join(', ')}`,
+        );
+      }
+
+      // Apply all other filters except processorModel
+      const filteredFilters = { ...filters };
+      delete filteredFilters.processorModel;
+      this.applyFilters(query, filteredFilters);
+
+      console.log('SQL for available processor models:', query.getSql());
+
+      const results = await query
         .select('DISTINCT laptop.processorModel', 'value')
         .where('laptop.processorModel IS NOT NULL')
         .orderBy('value', 'ASC')
-        .getRawMany(),
+        .getRawMany()
+        .then((results) => results.map((item) => item.value));
 
-      baseQuery
-        .clone()
-        .select('DISTINCT laptop.ramType', 'value')
-        .where('laptop.ramType IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
+      console.log(
+        'Available processor models with brand filters:',
+        results.length > 10
+          ? results
+              .slice(0, 5)
+              .concat(['...', '(and', results.length - 5, 'more)'])
+          : results,
+      );
 
-      baseQuery
-        .clone()
-        .select('DISTINCT laptop.ram', 'value')
-        .where('laptop.ram IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
+      return results;
+    };
 
-      baseQuery
-        .clone()
-        .select('DISTINCT laptop.storageType', 'value')
-        .where('laptop.storageType IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      baseQuery
-        .clone()
-        .select('DISTINCT laptop.storageCapacity', 'value')
-        .where('laptop.storageCapacity IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      baseQuery
-        .clone()
-        .select('DISTINCT laptop.stockStatus', 'value')
-        .where('laptop.stockStatus IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      baseQuery
-        .clone()
-        .select('DISTINCT laptop.screenSize', 'value')
-        .where('laptop.screenSize IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
-
-      baseQuery
-        .clone()
-        .select('DISTINCT laptop.screenResolution', 'value')
-        .where('laptop.screenResolution IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany(),
+    // Execute both queries
+    const [brands, processorModels] = await Promise.all([
+      getAvailableBrands(),
+      getAvailableProcessorModels(),
     ]);
 
-    const minPrice = await baseQuery
+    // Get price range
+    const priceQuery = this.repo.createQueryBuilder('laptop');
+    this.applyFilters(priceQuery, filters);
+
+    const minPrice = await priceQuery
       .clone()
       .select('MIN(laptop.price)', 'min')
       .getRawOne();
 
-    const maxPrice = await baseQuery
+    const maxPrice = await priceQuery
       .clone()
       .select('MAX(laptop.price)', 'max')
       .getRawOne();
 
+    // Create a result object with filtered options
     return {
-      brands: brand.map((item) => item.value),
-      gpuModels: gpuModel.map((item) => item.value),
-      processorModels: processorModel.map((item) => item.value),
-      ramTypes: ramType.map((item) => item.value),
-      ram: ramSize.map((item) => item.value),
-      storageTypes: storageType.map((item) => item.value),
-      storageCapacity: storageSize.map((item) => item.value),
-      stockStatuses: stockStatuse.map((item) => item.value),
-      screenSizes: screenSize.map((item) => item.value),
-      screenResolutions: screenResolution.map((item) => item.value),
+      brands,
+      processorModels,
+      gpuModels: [],
+      ramTypes: [],
+      ram: [],
+      storageTypes: [],
+      storageCapacity: [],
+      stockStatuses: [],
+      screenSizes: [],
+      screenResolutions: [],
       priceRange: {
         min: minPrice?.min || 0,
         max: maxPrice?.max || 0,
@@ -391,10 +447,13 @@ export class LaptopsService {
   ) {
     if (!filters) return;
 
+    const appliedFilters = [];
+
     if (filters.term) {
       query.andWhere('LOWER(laptop.title) LIKE LOWER(:term)', {
         term: `%${filters.term}%`,
       });
+      appliedFilters.push('term');
     }
 
     if (
@@ -402,16 +461,12 @@ export class LaptopsService {
       Array.isArray(filters.brand) &&
       filters.brand.length > 0
     ) {
-      const conditions = filters.brand
-        .map((_, index) => `LOWER(laptop.brand) LIKE LOWER(:brand${index})`)
-        .join(' OR ');
-
-      const params = {};
-      filters.brand.forEach((value, index) => {
-        params[`brand${index}`] = `%${value}%`;
+      // Use exact match with IN clause
+      query.andWhere('laptop.brand IN (:...brands)', {
+        brands: filters.brand,
       });
-
-      query.andWhere(`(${conditions})`, params);
+      console.log('Applied brand filter with values:', filters.brand);
+      appliedFilters.push('brand');
     }
 
     if (
@@ -429,18 +484,21 @@ export class LaptopsService {
       });
 
       query.andWhere(`(${conditions})`, params);
+      appliedFilters.push('model');
     }
 
     if (filters.minPrice !== undefined) {
       query.andWhere('laptop.price >= :minPrice', {
         minPrice: filters.minPrice,
       });
+      appliedFilters.push('minPrice');
     }
 
     if (filters.maxPrice !== undefined) {
       query.andWhere('laptop.price <= :maxPrice', {
         maxPrice: filters.maxPrice,
       });
+      appliedFilters.push('maxPrice');
     }
 
     if (
@@ -460,6 +518,7 @@ export class LaptopsService {
       });
 
       query.andWhere(`(${conditions})`, params);
+      appliedFilters.push('gpuBrand');
     }
 
     if (
@@ -479,6 +538,7 @@ export class LaptopsService {
       });
 
       query.andWhere(`(${conditions})`, params);
+      appliedFilters.push('gpuModel');
     }
 
     if (
@@ -489,6 +549,7 @@ export class LaptopsService {
       query.andWhere('laptop.processorBrand IN (:...processorBrand)', {
         processorBrand: filters.processorBrand,
       });
+      appliedFilters.push('processorBrand');
     }
 
     if (
@@ -496,19 +557,15 @@ export class LaptopsService {
       Array.isArray(filters.processorModel) &&
       filters.processorModel.length > 0
     ) {
-      const conditions = filters.processorModel
-        .map(
-          (_, index) =>
-            `LOWER(laptop.processorModel) LIKE LOWER(:processorModel${index})`,
-        )
-        .join(' OR ');
-
-      const params = {};
-      filters.processorModel.forEach((value, index) => {
-        params[`processorModel${index}`] = `%${value}%`;
+      // Use exact match with IN clause
+      query.andWhere('laptop.processorModel IN (:...processorModels)', {
+        processorModels: filters.processorModel,
       });
-
-      query.andWhere(`(${conditions})`, params);
+      console.log(
+        'Applied processorModel filter with values:',
+        filters.processorModel,
+      );
+      appliedFilters.push('processorModel');
     }
 
     if (
@@ -519,6 +576,7 @@ export class LaptopsService {
       query.andWhere('laptop.ramType IN (:...ramType)', {
         ramType: filters.ramType,
       });
+      appliedFilters.push('ramType');
     }
 
     if (filters.ram && Array.isArray(filters.ram) && filters.ram.length > 0) {
@@ -532,6 +590,7 @@ export class LaptopsService {
       });
 
       query.andWhere(`(${conditions})`, params);
+      appliedFilters.push('ram');
     }
 
     if (
@@ -542,6 +601,7 @@ export class LaptopsService {
       query.andWhere('laptop.storageType IN (:...storageType)', {
         storageType: filters.storageType,
       });
+      appliedFilters.push('storageType');
     }
 
     if (
@@ -559,6 +619,7 @@ export class LaptopsService {
       });
 
       query.andWhere(`(${conditions})`, params);
+      appliedFilters.push('storageCapacity');
     }
 
     if (
@@ -576,6 +637,7 @@ export class LaptopsService {
       });
 
       query.andWhere(`(${conditions})`, params);
+      appliedFilters.push('screenSize');
     }
 
     if (
@@ -595,6 +657,7 @@ export class LaptopsService {
       });
 
       query.andWhere(`(${conditions})`, params);
+      appliedFilters.push('screenResolution');
     }
 
     if (
@@ -605,6 +668,7 @@ export class LaptopsService {
       query.andWhere('laptop.year IN (:...year)', {
         year: filters.year,
       });
+      appliedFilters.push('year');
     }
 
     if (
@@ -615,7 +679,10 @@ export class LaptopsService {
       query.andWhere('laptop.stockStatus IN (:...stockStatus)', {
         stockStatus: filters.stockStatus,
       });
+      appliedFilters.push('stockStatus');
     }
+
+    console.log('Applied filters to query:', appliedFilters.join(', '));
   }
 
   find(filters: SearchLaptopDto) {
