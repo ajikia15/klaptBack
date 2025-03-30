@@ -79,6 +79,10 @@ export class LaptopsService {
           value,
           disabled: false,
         })),
+        gpuModels: allOptions.gpuModels.map((value) => ({
+          value,
+          disabled: false,
+        })),
       };
     }
 
@@ -93,6 +97,15 @@ export class LaptopsService {
 
       const availableProcessors = brandProcessors.map((p) => p.model);
 
+      // Get available GPU models for this brand too
+      const brandGpus = await this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.gpuModel', 'model')
+        .where('laptop.brand IN (:...brands)', { brands: filters.brand })
+        .getRawMany();
+
+      const availableGpus = brandGpus.map((g) => g.model);
+
       const baseOptions = this.createBaseFilterOptions(allOptions.priceRange);
       return {
         ...baseOptions,
@@ -102,6 +115,13 @@ export class LaptopsService {
         })),
         processorModels: allOptions.processorModels.map((value) => {
           const exists = existsInNormalizedArray(value, availableProcessors);
+          return {
+            value,
+            disabled: !exists,
+          };
+        }),
+        gpuModels: allOptions.gpuModels.map((value) => {
+          const exists = existsInNormalizedArray(value, availableGpus);
           return {
             value,
             disabled: !exists,
@@ -123,12 +143,22 @@ export class LaptopsService {
 
       const availableBrands = processorBrands.map((b) => b.brand);
 
+      // Get available GPU models for these processors
+      const processorGpus = await this.repo
+        .createQueryBuilder('laptop')
+        .select('DISTINCT laptop.gpuModel', 'model')
+        .where('laptop.processorModel IN (:...processors)', {
+          processors: filters.processorModel,
+        })
+        .getRawMany();
+
+      const availableGpus = processorGpus.map((g) => g.model);
+
       const baseOptions = this.createBaseFilterOptions(allOptions.priceRange);
       return {
         ...baseOptions,
         brands: allOptions.brands.map((value) => {
           const exists = existsInNormalizedArray(value, availableBrands);
-
           return {
             value,
             disabled: !exists,
@@ -138,6 +168,13 @@ export class LaptopsService {
           value,
           disabled: false,
         })),
+        gpuModels: allOptions.gpuModels.map((value) => {
+          const exists = existsInNormalizedArray(value, availableGpus);
+          return {
+            value,
+            disabled: !exists,
+          };
+        }),
       };
     }
 
@@ -327,6 +364,25 @@ export class LaptopsService {
   }
 
   private async getFilteredOptions(filters: SearchLaptopDto): Promise<any> {
+    // Helper function to get available values for any field
+    const getAvailableValues = async (field: string, skipFilter: string) => {
+      const query = this.repo.createQueryBuilder('laptop');
+
+      // Apply all filters except the one being queried
+      const filteredFilters = { ...filters };
+      delete filteredFilters[skipFilter];
+      this.applyFilters(query, filteredFilters);
+
+      const results = await query
+        .select(`DISTINCT laptop.${field}`, 'value')
+        .where(`laptop.${field} IS NOT NULL`)
+        .orderBy('value', 'ASC')
+        .getRawMany()
+        .then((results) => results.map((item) => item.value));
+
+      return results;
+    };
+
     // Get brands available with current processor filters
     const getAvailableBrands = async () => {
       const query = this.repo.createQueryBuilder('laptop');
@@ -379,10 +435,29 @@ export class LaptopsService {
       return results;
     };
 
-    // Execute both queries
-    const [brands, processorModels] = await Promise.all([
+    // Execute all queries in parallel
+    const [
+      brands,
+      processorModels,
+      gpuModels,
+      ramTypes,
+      ram,
+      storageTypes,
+      storageCapacity,
+      stockStatuses,
+      screenSizes,
+      screenResolutions,
+    ] = await Promise.all([
       getAvailableBrands(),
       getAvailableProcessorModels(),
+      getAvailableValues('gpuModel', 'gpuModel'),
+      getAvailableValues('ramType', 'ramType'),
+      getAvailableValues('ram', 'ram'),
+      getAvailableValues('storageType', 'storageType'),
+      getAvailableValues('storageCapacity', 'storageCapacity'),
+      getAvailableValues('stockStatus', 'stockStatus'),
+      getAvailableValues('screenSize', 'screenSize'),
+      getAvailableValues('screenResolution', 'screenResolution'),
     ]);
 
     // Get price range
@@ -399,16 +474,24 @@ export class LaptopsService {
       .select('MAX(laptop.price)', 'max')
       .getRawOne();
 
-    // Create a result object with filtered options
-    const baseOptions = this.createBaseFilterOptions({
+    const priceRange = {
       min: minPrice?.min || 0,
       max: maxPrice?.max || 0,
-    });
+    };
 
+    // Return all filtered options
     return {
-      ...baseOptions,
       brands,
       processorModels,
+      gpuModels,
+      ramTypes,
+      ram,
+      storageTypes,
+      storageCapacity,
+      stockStatuses,
+      screenSizes,
+      screenResolutions,
+      priceRange,
     };
   }
 
@@ -443,6 +526,17 @@ export class LaptopsService {
       // Use exact match with IN clause
       query.andWhere('laptop.processorModel IN (:...processorModels)', {
         processorModels: filters.processorModel,
+      });
+    }
+
+    if (
+      filters.gpuModel &&
+      Array.isArray(filters.gpuModel) &&
+      filters.gpuModel.length > 0
+    ) {
+      // Use exact match with IN clause
+      query.andWhere('laptop.gpuModel IN (:...gpuModels)', {
+        gpuModels: filters.gpuModel,
       });
     }
   }
