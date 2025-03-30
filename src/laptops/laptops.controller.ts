@@ -43,8 +43,8 @@ export class LaptopsController {
   }
 
   @Get('filters')
-  getFilterOptions() {
-    return this.laptopsService.getFilterOptions();
+  async getFilterOptions(@Query() filters: SearchLaptopDto) {
+    return this.laptopsService.getFilterOptions(filters);
   }
 
   @Get('/:id')
