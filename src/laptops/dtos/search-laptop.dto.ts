@@ -6,6 +6,7 @@ import {
   IsEnum,
   Min,
   Max,
+  IsArray,
 } from 'class-validator';
 
 export class SearchLaptopDto {
@@ -14,16 +15,28 @@ export class SearchLaptopDto {
   term?: string;
 
   @IsOptional()
-  @IsString()
-  brand?: string;
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsString({ each: true })
+  brand?: string[];
 
   @IsOptional()
-  @IsString()
-  shortDesc?: string;
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsString({ each: true })
+  shortDesc?: string[];
 
   @IsOptional()
-  @IsString()
-  model?: string;
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsString({ each: true })
+  model?: string[];
 
   @IsOptional()
   @IsNumber()
@@ -38,32 +51,103 @@ export class SearchLaptopDto {
   maxPrice?: number;
 
   @IsOptional()
-  @IsString()
-  gpuBrand?: string;
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsString({ each: true })
+  gpuBrand?: string[];
 
   @IsOptional()
-  @IsString()
-  gpuModel?: string;
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsString({ each: true })
+  gpuModel?: string[];
 
   @IsOptional()
-  @IsEnum(['Intel', 'AMD'])
-  processorBrand?: 'Intel' | 'AMD';
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsEnum(['Intel', 'AMD'], { each: true })
+  processorBrand?: ('Intel' | 'AMD')[];
 
   @IsOptional()
-  @IsEnum(['DDR3', 'DDR4', 'DDR5'])
-  ramType?: 'DDR3' | 'DDR4' | 'DDR5';
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsString({ each: true })
+  processorModel?: string[];
 
   @IsOptional()
-  @IsEnum(['HDD', 'SSD', 'Hybrid'])
-  storageType?: 'HDD' | 'SSD' | 'Hybrid';
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsEnum(['DDR3', 'DDR4', 'DDR5'], { each: true })
+  ramType?: ('DDR3' | 'DDR4' | 'DDR5')[];
 
   @IsOptional()
-  @IsEnum(['reserved', 'sold', 'in stock'])
-  stockStatus?: 'reserved' | 'sold' | 'in stock';
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsString({ each: true })
+  ram?: string[];
 
   @IsOptional()
-  @IsNumber()
-  @Min(2000)
-  @Max(2030)
-  year?: number;
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsEnum(['HDD', 'SSD', 'Hybrid'], { each: true })
+  storageType?: ('HDD' | 'SSD' | 'Hybrid')[];
+
+  @IsOptional()
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsEnum(['reserved', 'sold', 'in stock'], { each: true })
+  stockStatus?: ('reserved' | 'sold' | 'in stock')[];
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (Array.isArray(value)) return value;
+    if (value === undefined || value === null) return [];
+    // Handle number conversion for year
+    return [parseInt(value, 10)];
+  })
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @Min(2000, { each: true })
+  @Max(2030, { each: true })
+  year?: number[];
+
+  @IsOptional()
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsString({ each: true })
+  storageCapacity?: string[];
+
+  @IsOptional()
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsString({ each: true })
+  screenSize?: string[];
+
+  @IsOptional()
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [value] : [],
+  )
+  @IsArray()
+  @IsString({ each: true })
+  screenResolution?: string[];
 }

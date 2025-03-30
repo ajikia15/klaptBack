@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_Zo5YGWVedM
 createdAt: 2025-03-29T14:30:41.871067645
-updatedAt: 2025-03-29T15:10:21.550349969
+updatedAt: 2025-03-30T07:47:41.312927278
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_7dXTjsFa8Z
 authentication: {}
@@ -14,5 +14,5 @@ headers: []
 method: DELETE
 name: Delete laptop
 sortPriority: 2000.0
-url: http://localhost:3000/laptops/8
+url: http://localhost:3000/laptops/14
 urlParameters: []

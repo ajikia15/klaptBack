@@ -34,18 +34,18 @@ export class LaptopsService {
 
   async getFilterOptions(): Promise<FilterOptions> {
     const [
-      brands,
+      brand,
       // gpuBrands,
-      gpuModels,
+      gpuModel,
       // processorBrands,
-      processorModels,
-      ramTypes,
-      ramSizes,
-      storageTypes,
-      storageSizes,
-      stockStatuses,
-      screenSizes,
-      screenResolutions,
+      processorModel,
+      ramType,
+      ramSize,
+      storageType,
+      storageSize,
+      stockStatuse,
+      screenSize,
+      screenResolution,
     ] = await Promise.all([
       this.repo
         .createQueryBuilder('laptop')
@@ -54,26 +54,12 @@ export class LaptopsService {
         .orderBy('value', 'ASC')
         .getRawMany(),
 
-      // this.repo
-      //   .createQueryBuilder('laptop')
-      //   .select('DISTINCT laptop.gpuBrand', 'value')
-      //   .where('laptop.gpuBrand IS NOT NULL')
-      //   .orderBy('value', 'ASC')
-      //   .getRawMany(),
-
       this.repo
         .createQueryBuilder('laptop')
         .select('DISTINCT laptop.gpuModel', 'value')
         .where('laptop.gpuModel IS NOT NULL')
         .orderBy('value', 'ASC')
         .getRawMany(),
-
-      // this.repo
-      //   .createQueryBuilder('laptop')
-      //   .select('DISTINCT laptop.processorBrand', 'value')
-      //   .where('laptop.processorBrand IS NOT NULL')
-      //   .orderBy('value', 'ASC')
-      //   .getRawMany(),
 
       this.repo
         .createQueryBuilder('laptop')
@@ -144,18 +130,18 @@ export class LaptopsService {
       .getRawOne();
 
     return {
-      brands: brands.map((item) => item.value),
+      brands: brand.map((item) => item.value),
       // gpuBrands: gpuBrands.map((item) => item.value),
-      gpuModels: gpuModels.map((item) => item.value),
+      gpuModels: gpuModel.map((item) => item.value),
       // processorBrands: processorBrands.map((item) => item.value),
-      processorModels: processorModels.map((item) => item.value),
-      ramTypes: ramTypes.map((item) => item.value),
-      ram: ramSizes.map((item) => item.value),
-      storageTypes: storageTypes.map((item) => item.value),
-      storageCapacity: storageSizes.map((item) => item.value),
-      stockStatuses: stockStatuses.map((item) => item.value),
-      screenSizes: screenSizes.map((item) => item.value),
-      screenResolutions: screenResolutions.map((item) => item.value),
+      processorModels: processorModel.map((item) => item.value),
+      ramTypes: ramType.map((item) => item.value),
+      ram: ramSize.map((item) => item.value),
+      storageTypes: storageType.map((item) => item.value),
+      storageCapacity: storageSize.map((item) => item.value),
+      stockStatuses: stockStatuse.map((item) => item.value),
+      screenSizes: screenSize.map((item) => item.value),
+      screenResolutions: screenResolution.map((item) => item.value),
       priceRange: {
         min: minPrice?.min || 0,
         max: maxPrice?.max || 0,
@@ -166,28 +152,50 @@ export class LaptopsService {
   findWithFilters(filters: SearchLaptopDto) {
     const query = this.repo.createQueryBuilder('laptop');
 
-    // Search by title
+    // Search by title (no change - single value)
     if (filters.term) {
       query.andWhere('LOWER(laptop.title) LIKE LOWER(:term)', {
         term: `%${filters.term}%`,
       });
     }
 
-    // Filter by brand
-    if (filters.brand) {
-      query.andWhere('LOWER(laptop.brand) LIKE LOWER(:brand)', {
-        brand: `%${filters.brand}%`,
+    // Filter by brand (array)
+    if (
+      filters.brand &&
+      Array.isArray(filters.brand) &&
+      filters.brand.length > 0
+    ) {
+      const conditions = filters.brand
+        .map((_, index) => `LOWER(laptop.brand) LIKE LOWER(:brand${index})`)
+        .join(' OR ');
+
+      const params = {};
+      filters.brand.forEach((value, index) => {
+        params[`brand${index}`] = `%${value}%`;
       });
+
+      query.andWhere(`(${conditions})`, params);
     }
 
-    // Filter by model
-    if (filters.model) {
-      query.andWhere('LOWER(laptop.model) LIKE LOWER(:model)', {
-        model: `%${filters.model}%`,
+    // Filter by model (array)
+    if (
+      filters.model &&
+      Array.isArray(filters.model) &&
+      filters.model.length > 0
+    ) {
+      const conditions = filters.model
+        .map((_, index) => `LOWER(laptop.model) LIKE LOWER(:model${index})`)
+        .join(' OR ');
+
+      const params = {};
+      filters.model.forEach((value, index) => {
+        params[`model${index}`] = `%${value}%`;
       });
+
+      query.andWhere(`(${conditions})`, params);
     }
 
-    // Filter by price range
+    // Filter by price range (no change - single values)
     if (filters.minPrice !== undefined) {
       query.andWhere('laptop.price >= :minPrice', {
         minPrice: filters.minPrice,
@@ -200,56 +208,195 @@ export class LaptopsService {
       });
     }
 
-    // Filter by GPU brand
-    if (filters.gpuBrand) {
-      query.andWhere('LOWER(laptop.gpuBrand) LIKE LOWER(:gpuBrand)', {
-        gpuBrand: `%${filters.gpuBrand}%`,
+    // Filter by GPU brand (array)
+    if (
+      filters.gpuBrand &&
+      Array.isArray(filters.gpuBrand) &&
+      filters.gpuBrand.length > 0
+    ) {
+      const conditions = filters.gpuBrand
+        .map(
+          (_, index) => `LOWER(laptop.gpuBrand) LIKE LOWER(:gpuBrand${index})`,
+        )
+        .join(' OR ');
+
+      const params = {};
+      filters.gpuBrand.forEach((value, index) => {
+        params[`gpuBrand${index}`] = `%${value}%`;
       });
+
+      query.andWhere(`(${conditions})`, params);
     }
 
-    // Filter by GPU model
-    if (filters.gpuModel) {
-      query.andWhere('LOWER(laptop.gpuModel) LIKE LOWER(:gpuModel)', {
-        gpuModel: `%${filters.gpuModel}%`,
+    // Filter by GPU model (array)
+    if (
+      filters.gpuModel &&
+      Array.isArray(filters.gpuModel) &&
+      filters.gpuModel.length > 0
+    ) {
+      const conditions = filters.gpuModel
+        .map(
+          (_, index) => `LOWER(laptop.gpuModel) LIKE LOWER(:gpuModel${index})`,
+        )
+        .join(' OR ');
+
+      const params = {};
+      filters.gpuModel.forEach((value, index) => {
+        params[`gpuModel${index}`] = `%${value}%`;
       });
+
+      query.andWhere(`(${conditions})`, params);
     }
 
-    if (filters.processorBrand) {
-      query.andWhere('laptop.processorBrand = :processorBrand', {
+    // Filter by processor brand (array)
+    if (
+      filters.processorBrand &&
+      Array.isArray(filters.processorBrand) &&
+      filters.processorBrand.length > 0
+    ) {
+      query.andWhere('laptop.processorBrand IN (:...processorBrand)', {
         processorBrand: filters.processorBrand,
       });
     }
 
-    // Filter by RAM type
-    if (filters.ramType) {
-      query.andWhere('laptop.ramType = :ramType', {
+    // Filter by processor model (array)
+    if (
+      filters.processorModel &&
+      Array.isArray(filters.processorModel) &&
+      filters.processorModel.length > 0
+    ) {
+      const conditions = filters.processorModel
+        .map(
+          (_, index) =>
+            `LOWER(laptop.processorModel) LIKE LOWER(:processorModel${index})`,
+        )
+        .join(' OR ');
+
+      const params = {};
+      filters.processorModel.forEach((value, index) => {
+        params[`processorModel${index}`] = `%${value}%`;
+      });
+
+      query.andWhere(`(${conditions})`, params);
+    }
+
+    // Filter by RAM type (array)
+    if (
+      filters.ramType &&
+      Array.isArray(filters.ramType) &&
+      filters.ramType.length > 0
+    ) {
+      query.andWhere('laptop.ramType IN (:...ramType)', {
         ramType: filters.ramType,
       });
     }
 
-    // Filter by storage type
-    if (filters.storageType) {
-      query.andWhere('laptop.storageType = :storageType', {
+    // Filter by RAM amount (array)
+    if (filters.ram && Array.isArray(filters.ram) && filters.ram.length > 0) {
+      const conditions = filters.ram
+        .map((_, index) => `laptop.ram = :ram${index}`)
+        .join(' OR ');
+
+      const params = {};
+      filters.ram.forEach((value, index) => {
+        params[`ram${index}`] = value;
+      });
+
+      query.andWhere(`(${conditions})`, params);
+    }
+
+    // Filter by storage type (array)
+    if (
+      filters.storageType &&
+      Array.isArray(filters.storageType) &&
+      filters.storageType.length > 0
+    ) {
+      query.andWhere('laptop.storageType IN (:...storageType)', {
         storageType: filters.storageType,
       });
     }
 
-    // Filter by year
-    if (filters.year) {
-      query.andWhere('laptop.year = :year', {
+    // Filter by storage capacity (array)
+    if (
+      filters.storageCapacity &&
+      Array.isArray(filters.storageCapacity) &&
+      filters.storageCapacity.length > 0
+    ) {
+      const conditions = filters.storageCapacity
+        .map((_, index) => `laptop.storageCapacity = :storageCapacity${index}`)
+        .join(' OR ');
+
+      const params = {};
+      filters.storageCapacity.forEach((value, index) => {
+        params[`storageCapacity${index}`] = value;
+      });
+
+      query.andWhere(`(${conditions})`, params);
+    }
+
+    // Filter by screen size (array)
+    if (
+      filters.screenSize &&
+      Array.isArray(filters.screenSize) &&
+      filters.screenSize.length > 0
+    ) {
+      const conditions = filters.screenSize
+        .map((_, index) => `laptop.screenSize = :screenSize${index}`)
+        .join(' OR ');
+
+      const params = {};
+      filters.screenSize.forEach((value, index) => {
+        params[`screenSize${index}`] = value;
+      });
+
+      query.andWhere(`(${conditions})`, params);
+    }
+
+    // Filter by screen resolution (array)
+    if (
+      filters.screenResolution &&
+      Array.isArray(filters.screenResolution) &&
+      filters.screenResolution.length > 0
+    ) {
+      const conditions = filters.screenResolution
+        .map(
+          (_, index) => `laptop.screenResolution = :screenResolution${index}`,
+        )
+        .join(' OR ');
+
+      const params = {};
+      filters.screenResolution.forEach((value, index) => {
+        params[`screenResolution${index}`] = value;
+      });
+
+      query.andWhere(`(${conditions})`, params);
+    }
+
+    // Filter by year (array)
+    if (
+      filters.year &&
+      Array.isArray(filters.year) &&
+      filters.year.length > 0
+    ) {
+      query.andWhere('laptop.year IN (:...year)', {
         year: filters.year,
       });
     }
 
-    // Filter by stock status
-    if (filters.stockStatus) {
-      query.andWhere('laptop.stockStatus = :stockStatus', {
+    // Filter by stock status (array)
+    if (
+      filters.stockStatus &&
+      Array.isArray(filters.stockStatus) &&
+      filters.stockStatus.length > 0
+    ) {
+      query.andWhere('laptop.stockStatus IN (:...stockStatus)', {
         stockStatus: filters.stockStatus,
       });
     }
 
     return query.getMany();
   }
+
   async remove(id: number) {
     const laptop = await this.findOne(id);
     if (!laptop) {

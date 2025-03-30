@@ -1,0 +1,26 @@
+type: http_request
+model: http_request
+id: rq_6bFaoFP9kG
+createdAt: 2025-03-30T07:32:48.361782330
+updatedAt: 2025-03-30T07:33:54.639410350
+workspaceId: wk_Q9A29vyBmH
+folderId: fl_gYQwX5xzFT
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: ''
+sortPriority: 1000.0
+url: http://localhost:3000/laptops/search
+urlParameters:
+- enabled: true
+  name: processorModel
+  value: i5-12450H
+  id: HD2qBrM8ES
+- enabled: true
+  name: ''
+  value: ''
+  id: HnSPwNgHQQ

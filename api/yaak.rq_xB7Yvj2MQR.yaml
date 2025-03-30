@@ -2,9 +2,9 @@ type: http_request
 model: http_request
 id: rq_xB7Yvj2MQR
 createdAt: 2025-03-29T14:30:41.868300054
-updatedAt: 2025-03-29T15:10:21.550649181
+updatedAt: 2025-03-30T08:07:59.407927764
 workspaceId: wk_Q9A29vyBmH
-folderId: fl_7dXTjsFa8Z
+folderId: fl_gYQwX5xzFT
 authentication: {}
 authenticationType: null
 body: {}
@@ -13,26 +13,42 @@ description: ''
 headers: []
 method: GET
 name: Advanced search
-sortPriority: 4000.0
+sortPriority: 0.0
 url: http://localhost:3000/laptops/search
 urlParameters:
-- enabled: true
+- enabled: false
   name: brand
   value: asus
-  id: null
-- enabled: true
+  id: 2AhErYXaPD
+- enabled: false
   name: minPrice
-  value: '2000'
-  id: null
-- enabled: true
+  value: '10000'
+  id: mYtzVE3rBy
+- enabled: false
   name: maxPrice
   value: '3000'
-  id: null
-- enabled: true
+  id: TP9S2mIEYq
+- enabled: false
   name: processorBrand
-  value: AMD
-  id: null
-- enabled: true
+  value: Intel
+  id: m3y4PzmvJr
+- enabled: false
+  name: ramType
+  value: DDR4
+  id: bfjtfvBnnv
+- enabled: false
   name: ramType
   value: DDR5
-  id: null
+  id: 5JjSer3siI
+- enabled: false
+  name: processorModel
+  value: i5-12450H
+  id: B8SH4eNnQu
+- enabled: false
+  name: ram
+  value: 8GB
+  id: njVaukrHgk
+- enabled: true
+  name: ''
+  value: ''
+  id: 3IUBs6eJKb

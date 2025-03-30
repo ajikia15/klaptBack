@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_sQ6Ne4XTn9
 createdAt: 2025-03-29T14:38:55.190041277
-updatedAt: 2025-03-29T15:11:30.184457203
+updatedAt: 2025-03-30T07:43:20.411541174
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_FycCr5Ruto
 authentication: {}
@@ -23,7 +23,7 @@ body:
         "processorModel": "i5-12450H",
         "cores": 8,
         "threads": 12,
-        "ram": "16GB",
+        "ram": "8GB",
         "ramType": "DDR4",
         "storageType": "SSD",
         "storageCapacity": "512GB",
