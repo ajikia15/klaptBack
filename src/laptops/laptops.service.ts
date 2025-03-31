@@ -67,198 +67,248 @@ export class LaptopsService {
   }
 
   async getFilterOptions(filters?: SearchLaptopDto): Promise<FilterOptions> {
-    // Get all options first
+    // Get all possible options first
     const allOptions = await this.getAllFilterOptions();
 
+    // If no filters, return everything enabled
     if (!filters || this.areFiltersEmpty(filters)) {
-      const baseOptions = this.createBaseFilterOptions(allOptions.priceRange);
-      return {
-        ...baseOptions,
-        brands: allOptions.brands.map((value) => ({ value, disabled: false })),
-        processorModels: allOptions.processorModels.map((value) => ({
-          value,
-          disabled: false,
-        })),
-        gpuModels: allOptions.gpuModels.map((value) => ({
-          value,
-          disabled: false,
-        })),
-      };
+      return this.createEnabledFilterOptions(allOptions);
     }
 
-    // For debugging: If brand filter is applied, directly check which processors exist
-    if (filters.brand && filters.brand.length > 0) {
-      // Direct DB query to check which processors exist for this brand
-      const brandProcessors = await this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.processorModel', 'model')
-        .where('laptop.brand IN (:...brands)', { brands: filters.brand })
-        .getRawMany();
+    // Define the mapping between result field names and filter property names
+    const fieldMapping = {
+      brands: 'brand',
+      processorModels: 'processorModel',
+      gpuModels: 'gpuModel',
+      ramTypes: 'ramType',
+      ram: 'ram',
+      storageTypes: 'storageType',
+      storageCapacity: 'storageCapacity',
+      stockStatuses: 'stockStatus',
+      screenSizes: 'screenSize',
+      screenResolutions: 'screenResolution',
+    };
 
-      const availableProcessors = brandProcessors.map((p) => p.model);
+    // Start with creating enabled options for all filters
+    const result = this.createEnabledFilterOptions(allOptions);
 
-      // Get available GPU models for this brand too
-      const brandGpus = await this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.gpuModel', 'model')
-        .where('laptop.brand IN (:...brands)', { brands: filters.brand })
-        .getRawMany();
+    // For each filter field, check compatibility with current selection
+    for (const [resultField, filterField] of Object.entries(fieldMapping)) {
+      // Skip the fields that are already selected
+      if (filters[filterField] && filters[filterField].length > 0) {
+        continue; // Keep selected filters enabled
+      }
 
-      const availableGpus = brandGpus.map((g) => g.model);
+      // For each value in this field, check if it's compatible with current filters
+      for (const option of result[resultField]) {
+        // Create a test query with current filters plus this value
+        const testQuery = this.repo.createQueryBuilder('laptop');
+        const testFilters = { ...filters };
 
-      const baseOptions = this.createBaseFilterOptions(allOptions.priceRange);
-      return {
-        ...baseOptions,
-        brands: allOptions.brands.map((value) => ({
-          value,
-          disabled: false,
-        })),
-        processorModels: allOptions.processorModels.map((value) => {
-          const exists = existsInNormalizedArray(value, availableProcessors);
-          return {
-            value,
-            disabled: !exists,
-          };
-        }),
-        gpuModels: allOptions.gpuModels.map((value) => {
-          const exists = existsInNormalizedArray(value, availableGpus);
-          return {
-            value,
-            disabled: !exists,
-          };
-        }),
-      };
+        // Add this value to the filters for testing
+        testFilters[filterField] = [option.value];
+
+        // Apply all filters
+        this.applyFilters(testQuery, testFilters);
+
+        // Check if there would be any results with this combination
+        const count = await testQuery.getCount();
+
+        // If no results, this option is incompatible - disable it
+        if (count === 0) {
+          option.disabled = true;
+        }
+      }
     }
 
-    // For processor model filters, only disable brands that don't have this processor
-    if (filters.processorModel && filters.processorModel.length > 0) {
-      // Direct DB query to check which brands have these processors
-      const processorBrands = await this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.brand', 'brand')
-        .where('laptop.processorModel IN (:...processors)', {
-          processors: filters.processorModel,
-        })
-        .getRawMany();
+    return result;
+  }
 
-      const availableBrands = processorBrands.map((b) => b.brand);
+  find(filters: SearchLaptopDto) {
+    const query = this.repo.createQueryBuilder('laptop');
+    this.applyFilters(query, filters);
+    return query.getMany();
+  }
 
-      // Get available GPU models for these processors
-      const processorGpus = await this.repo
-        .createQueryBuilder('laptop')
-        .select('DISTINCT laptop.gpuModel', 'model')
-        .where('laptop.processorModel IN (:...processors)', {
-          processors: filters.processorModel,
-        })
-        .getRawMany();
+  async remove(id: number) {
+    const laptop = await this.findOne(id);
+    if (!laptop) {
+      throw new NotFoundException('Laptop not found');
+    }
+    return this.repo.remove(laptop);
+  }
 
-      const availableGpus = processorGpus.map((g) => g.model);
+  async update(id: number, attrs: Partial<Laptop>) {
+    const laptop = await this.findOne(id);
+    if (!laptop) {
+      throw new NotFoundException('user not found');
+    }
+    Object.assign(laptop, attrs);
+    return this.repo.save(laptop);
+  }
 
-      const baseOptions = this.createBaseFilterOptions(allOptions.priceRange);
-      return {
-        ...baseOptions,
-        brands: allOptions.brands.map((value) => {
-          const exists = existsInNormalizedArray(value, availableBrands);
-          return {
-            value,
-            disabled: !exists,
-          };
-        }),
-        processorModels: allOptions.processorModels.map((value) => ({
-          value,
-          disabled: false,
-        })),
-        gpuModels: allOptions.gpuModels.map((value) => {
-          const exists = existsInNormalizedArray(value, availableGpus);
-          return {
-            value,
-            disabled: !exists,
-          };
-        }),
-      };
+  async changeStatus(
+    id: number,
+    status: 'approved' | 'pending' | 'rejected' | 'archived',
+  ) {
+    const laptop = await this.repo.findOne({ where: { id: id } });
+    if (!laptop) {
+      throw new NotFoundException('user not found');
+    }
+    laptop.status = status;
+    return this.repo.save(laptop);
+  }
+
+  async getRandomLaptopTitle() {
+    const laptop = await this.repo
+      .createQueryBuilder('laptop')
+      .select('laptop.title')
+      .orderBy('RANDOM()')
+      .limit(1)
+      .getOne();
+
+    if (!laptop) {
+      throw new NotFoundException('No laptops found');
     }
 
-    // For all other filter combinations, use the existing complex logic
-    const filteredOptions = await this.getFilteredOptions(filters);
+    return { title: laptop.title };
+  }
 
-    const activeFilters = Object.keys(filters).filter(
-      (k) =>
-        filters[k] &&
-        (Array.isArray(filters[k]) ? filters[k].length > 0 : true),
-    );
+  private createBaseFilterOptions(
+    priceRange: any = { min: 0, max: 0 },
+  ): FilterOptions {
+    return {
+      brands: [],
+      processorModels: [],
+      gpuModels: [],
+      ramTypes: [],
+      ram: [],
+      storageTypes: [],
+      storageCapacity: [],
+      stockStatuses: [],
+      screenSizes: [],
+      screenResolutions: [],
+      priceRange,
+    };
+  }
+
+  private createEnabledFilterOptions(allOptions: any): FilterOptions {
+    return {
+      brands: allOptions.brands.map((value) => ({ value, disabled: false })),
+      processorModels: allOptions.processorModels.map((value) => ({
+        value,
+        disabled: false,
+      })),
+      gpuModels: allOptions.gpuModels.map((value) => ({
+        value,
+        disabled: false,
+      })),
+      ramTypes: allOptions.ramTypes.map((value) => ({
+        value,
+        disabled: false,
+      })),
+      ram: allOptions.ram.map((value) => ({
+        value,
+        disabled: false,
+      })),
+      storageTypes: allOptions.storageTypes.map((value) => ({
+        value,
+        disabled: false,
+      })),
+      storageCapacity: allOptions.storageCapacity.map((value) => ({
+        value,
+        disabled: false,
+      })),
+      stockStatuses: allOptions.stockStatuses.map((value) => ({
+        value,
+        disabled: false,
+      })),
+      screenSizes: allOptions.screenSizes.map((value) => ({
+        value,
+        disabled: false,
+      })),
+      screenResolutions: allOptions.screenResolutions.map((value) => ({
+        value,
+        disabled: false,
+      })),
+      priceRange: allOptions.priceRange,
+    };
+  }
+
+  private async getAvailableOptionsForFilters(
+    filters: SearchLaptopDto,
+  ): Promise<any> {
+    // For each filter field, get available values while applying all other filters
+    const getAvailableValuesForField = async (field: string) => {
+      const query = this.repo.createQueryBuilder('laptop');
+
+      // Apply all filters EXCEPT the current field's filter
+      const filteredFilters = { ...filters };
+      delete filteredFilters[field];
+      this.applyFilters(query, filteredFilters);
+
+      return query
+        .select(`DISTINCT laptop.${field}`, 'value')
+        .where(`laptop.${field} IS NOT NULL`)
+        .orderBy('value', 'ASC')
+        .getRawMany()
+        .then((results) => results.map((item) => item.value));
+    };
+
+    // Execute all queries in parallel
+    const [
+      brands,
+      processorModels,
+      gpuModels,
+      ramTypes,
+      ram,
+      storageTypes,
+      storageCapacity,
+      stockStatuses,
+      screenSizes,
+      screenResolutions,
+    ] = await Promise.all([
+      getAvailableValuesForField('brand'),
+      getAvailableValuesForField('processorModel'),
+      getAvailableValuesForField('gpuModel'),
+      getAvailableValuesForField('ramType'),
+      getAvailableValuesForField('ram'),
+      getAvailableValuesForField('storageType'),
+      getAvailableValuesForField('storageCapacity'),
+      getAvailableValuesForField('stockStatus'),
+      getAvailableValuesForField('screenSize'),
+      getAvailableValuesForField('screenResolution'),
+    ]);
+
+    // Get price range with all filters applied
+    const priceQuery = this.repo.createQueryBuilder('laptop');
+    this.applyFilters(priceQuery, filters);
+
+    const minPrice = await priceQuery
+      .clone()
+      .select('MIN(laptop.price)', 'min')
+      .getRawOne();
+
+    const maxPrice = await priceQuery
+      .clone()
+      .select('MAX(laptop.price)', 'max')
+      .getRawOne();
 
     return {
-      brands: allOptions.brands.map((value) =>
-        createFilterOption(
-          value,
-          filteredOptions.brands,
-          activeFilters.includes('brand'),
-        ),
-      ),
-      processorModels: allOptions.processorModels.map((value) =>
-        createFilterOption(
-          value,
-          filteredOptions.processorModels,
-          activeFilters.includes('processorModel'),
-        ),
-      ),
-      gpuModels: allOptions.gpuModels.map((value) =>
-        createFilterOption(
-          value,
-          filteredOptions.gpuModels,
-          activeFilters.includes('gpuModel'),
-        ),
-      ),
-      ramTypes: allOptions.ramTypes.map((value) =>
-        createFilterOption(
-          value,
-          filteredOptions.ramTypes,
-          activeFilters.includes('ramType'),
-        ),
-      ),
-      ram: allOptions.ram.map((value) =>
-        createFilterOption(
-          value,
-          filteredOptions.ram,
-          activeFilters.includes('ram'),
-        ),
-      ),
-      storageTypes: allOptions.storageTypes.map((value) =>
-        createFilterOption(
-          value,
-          filteredOptions.storageTypes,
-          activeFilters.includes('storageType'),
-        ),
-      ),
-      storageCapacity: allOptions.storageCapacity.map((value) =>
-        createFilterOption(
-          value,
-          filteredOptions.storageCapacity,
-          activeFilters.includes('storageCapacity'),
-        ),
-      ),
-      stockStatuses: allOptions.stockStatuses.map((value) =>
-        createFilterOption(
-          value,
-          filteredOptions.stockStatuses,
-          activeFilters.includes('stockStatus'),
-        ),
-      ),
-      screenSizes: allOptions.screenSizes.map((value) =>
-        createFilterOption(
-          value,
-          filteredOptions.screenSizes,
-          activeFilters.includes('screenSize'),
-        ),
-      ),
-      screenResolutions: allOptions.screenResolutions.map((value) =>
-        createFilterOption(
-          value,
-          filteredOptions.screenResolutions,
-          activeFilters.includes('screenResolution'),
-        ),
-      ),
-      priceRange: filteredOptions.priceRange || allOptions.priceRange,
+      brands,
+      processorModels,
+      gpuModels,
+      ramTypes,
+      ram,
+      storageTypes,
+      storageCapacity,
+      stockStatuses,
+      screenSizes,
+      screenResolutions,
+      priceRange: {
+        min: minPrice?.min || 0,
+        max: maxPrice?.max || 0,
+      },
     };
   }
 
@@ -269,10 +319,7 @@ export class LaptopsService {
 
     const arrayFilters = [
       'brand',
-      'model',
-      'gpuBrand',
       'gpuModel',
-      'processorBrand',
       'processorModel',
       'ramType',
       'ram',
@@ -281,7 +328,6 @@ export class LaptopsService {
       'screenSize',
       'screenResolution',
       'stockStatus',
-      'year',
     ];
 
     for (const filter of arrayFilters) {
@@ -363,138 +409,6 @@ export class LaptopsService {
     };
   }
 
-  private async getFilteredOptions(filters: SearchLaptopDto): Promise<any> {
-    // Helper function to get available values for any field
-    const getAvailableValues = async (field: string, skipFilter: string) => {
-      const query = this.repo.createQueryBuilder('laptop');
-
-      // Apply all filters except the one being queried
-      const filteredFilters = { ...filters };
-      delete filteredFilters[skipFilter];
-      this.applyFilters(query, filteredFilters);
-
-      const results = await query
-        .select(`DISTINCT laptop.${field}`, 'value')
-        .where(`laptop.${field} IS NOT NULL`)
-        .orderBy('value', 'ASC')
-        .getRawMany()
-        .then((results) => results.map((item) => item.value));
-
-      return results;
-    };
-
-    // Get brands available with current processor filters
-    const getAvailableBrands = async () => {
-      const query = this.repo.createQueryBuilder('laptop');
-
-      // Apply only processor filters (skip brand filters)
-      if (filters.processorModel && filters.processorModel.length > 0) {
-        query.andWhere('laptop.processorModel IN (:...processorModels)', {
-          processorModels: filters.processorModel,
-        });
-      }
-
-      // Apply all other filters except brand
-      const filteredFilters = { ...filters };
-      delete filteredFilters.brand;
-      this.applyFilters(query, filteredFilters);
-
-      const results = await query
-        .select('DISTINCT laptop.brand', 'value')
-        .where('laptop.brand IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany()
-        .then((results) => results.map((item) => item.value));
-
-      return results;
-    };
-
-    // Get processor models available with current brand filters
-    const getAvailableProcessorModels = async () => {
-      const query = this.repo.createQueryBuilder('laptop');
-
-      // Apply only brand filters (skip processor filters)
-      if (filters.brand && filters.brand.length > 0) {
-        query.andWhere('laptop.brand IN (:...brands)', {
-          brands: filters.brand,
-        });
-      }
-
-      // Apply all other filters except processorModel
-      const filteredFilters = { ...filters };
-      delete filteredFilters.processorModel;
-      this.applyFilters(query, filteredFilters);
-
-      const results = await query
-        .select('DISTINCT laptop.processorModel', 'value')
-        .where('laptop.processorModel IS NOT NULL')
-        .orderBy('value', 'ASC')
-        .getRawMany()
-        .then((results) => results.map((item) => item.value));
-
-      return results;
-    };
-
-    // Execute all queries in parallel
-    const [
-      brands,
-      processorModels,
-      gpuModels,
-      ramTypes,
-      ram,
-      storageTypes,
-      storageCapacity,
-      stockStatuses,
-      screenSizes,
-      screenResolutions,
-    ] = await Promise.all([
-      getAvailableBrands(),
-      getAvailableProcessorModels(),
-      getAvailableValues('gpuModel', 'gpuModel'),
-      getAvailableValues('ramType', 'ramType'),
-      getAvailableValues('ram', 'ram'),
-      getAvailableValues('storageType', 'storageType'),
-      getAvailableValues('storageCapacity', 'storageCapacity'),
-      getAvailableValues('stockStatus', 'stockStatus'),
-      getAvailableValues('screenSize', 'screenSize'),
-      getAvailableValues('screenResolution', 'screenResolution'),
-    ]);
-
-    // Get price range
-    const priceQuery = this.repo.createQueryBuilder('laptop');
-    this.applyFilters(priceQuery, filters);
-
-    const minPrice = await priceQuery
-      .clone()
-      .select('MIN(laptop.price)', 'min')
-      .getRawOne();
-
-    const maxPrice = await priceQuery
-      .clone()
-      .select('MAX(laptop.price)', 'max')
-      .getRawOne();
-
-    const priceRange = {
-      min: minPrice?.min || 0,
-      max: maxPrice?.max || 0,
-    };
-
-    // Return all filtered options
-    return {
-      brands,
-      processorModels,
-      gpuModels,
-      ramTypes,
-      ram,
-      storageTypes,
-      storageCapacity,
-      stockStatuses,
-      screenSizes,
-      screenResolutions,
-      priceRange,
-    };
-  }
-
   private applyFilters(
     query: SelectQueryBuilder<Laptop>,
     filters: SearchLaptopDto,
@@ -507,105 +421,38 @@ export class LaptopsService {
       });
     }
 
-    if (
-      filters.brand &&
-      Array.isArray(filters.brand) &&
-      filters.brand.length > 0
-    ) {
-      // Use exact match with IN clause
-      query.andWhere('laptop.brand IN (:...brands)', {
-        brands: filters.brand,
-      });
-    }
-
-    if (
-      filters.processorModel &&
-      Array.isArray(filters.processorModel) &&
-      filters.processorModel.length > 0
-    ) {
-      // Use exact match with IN clause
-      query.andWhere('laptop.processorModel IN (:...processorModels)', {
-        processorModels: filters.processorModel,
-      });
-    }
-
-    if (
-      filters.gpuModel &&
-      Array.isArray(filters.gpuModel) &&
-      filters.gpuModel.length > 0
-    ) {
-      // Use exact match with IN clause
-      query.andWhere('laptop.gpuModel IN (:...gpuModels)', {
-        gpuModels: filters.gpuModel,
-      });
-    }
-  }
-
-  find(filters: SearchLaptopDto) {
-    const query = this.repo.createQueryBuilder('laptop');
-    this.applyFilters(query, filters);
-    return query.getMany();
-  }
-
-  async remove(id: number) {
-    const laptop = await this.findOne(id);
-    if (!laptop) {
-      throw new NotFoundException('Laptop not found');
-    }
-    return this.repo.remove(laptop);
-  }
-
-  async update(id: number, attrs: Partial<Laptop>) {
-    const laptop = await this.findOne(id);
-    if (!laptop) {
-      throw new NotFoundException('user not found');
-    }
-    Object.assign(laptop, attrs);
-    return this.repo.save(laptop);
-  }
-
-  async changeStatus(
-    id: number,
-    status: 'approved' | 'pending' | 'rejected' | 'archived',
-  ) {
-    const laptop = await this.repo.findOne({ where: { id: id } });
-    if (!laptop) {
-      throw new NotFoundException('user not found');
-    }
-    laptop.status = status;
-    return this.repo.save(laptop);
-  }
-
-  async getRandomLaptopTitle() {
-    const laptop = await this.repo
-      .createQueryBuilder('laptop')
-      .select('laptop.title')
-      .orderBy('RANDOM()')
-      .limit(1)
-      .getOne();
-
-    if (!laptop) {
-      throw new NotFoundException('No laptops found');
-    }
-
-    return { title: laptop.title };
-  }
-
-  private createBaseFilterOptions(
-    priceRange: any = { min: 0, max: 0 },
-  ): FilterOptions {
-    return {
-      brands: [],
-      processorModels: [],
-      gpuModels: [],
-      ramTypes: [],
-      ram: [],
-      storageTypes: [],
-      storageCapacity: [],
-      stockStatuses: [],
-      screenSizes: [],
-      screenResolutions: [],
-      priceRange,
+    // Apply all array-based filters using the same pattern
+    const applyArrayFilter = (field: string, values: string[]) => {
+      if (values && Array.isArray(values) && values.length > 0) {
+        query.andWhere(`laptop.${field} IN (:...${field}Values)`, {
+          [`${field}Values`]: values,
+        });
+      }
     };
+
+    // Apply all filters
+    applyArrayFilter('brand', filters.brand);
+    applyArrayFilter('processorModel', filters.processorModel);
+    applyArrayFilter('gpuModel', filters.gpuModel);
+    applyArrayFilter('ramType', filters.ramType);
+    applyArrayFilter('ram', filters.ram);
+    applyArrayFilter('storageType', filters.storageType);
+    applyArrayFilter('storageCapacity', filters.storageCapacity);
+    applyArrayFilter('stockStatus', filters.stockStatus);
+    applyArrayFilter('screenSize', filters.screenSize);
+    applyArrayFilter('screenResolution', filters.screenResolution);
+
+    // Apply price range filters
+    if (filters.minPrice !== undefined) {
+      query.andWhere('laptop.price >= :minPrice', {
+        minPrice: filters.minPrice,
+      });
+    }
+
+    if (filters.maxPrice !== undefined) {
+      query.andWhere('laptop.price <= :maxPrice', {
+        maxPrice: filters.maxPrice,
+      });
+    }
   }
 }
