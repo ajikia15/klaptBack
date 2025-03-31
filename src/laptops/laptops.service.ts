@@ -8,39 +8,6 @@ import { User } from 'src/users/user.entity';
 import { SearchLaptopDto } from './dtos/search-laptop.dto';
 import { FilterOptions } from './filterOptions';
 
-/**
- * Normalizes a string by converting to lowercase and trimming whitespace
- */
-export function normalizeString(str: string): string {
-  return str ? str.toLowerCase().trim() : '';
-}
-
-/**
- * Checks if a string value exists in a normalized array
- */
-export function existsInNormalizedArray(
-  value: string,
-  array: string[],
-): boolean {
-  if (!array || !array.length) return false;
-  const normalized = normalizeString(value);
-  return array.some((item) => normalizeString(item) === normalized);
-}
-
-/**
- * Creates a filter option object with disabled state based on existence in array
- */
-export function createFilterOption(
-  value: string,
-  availableValues: string[],
-  isActiveFilter: boolean,
-): { value: string; disabled: boolean } {
-  return {
-    value,
-    disabled:
-      !isActiveFilter && !existsInNormalizedArray(value, availableValues),
-  };
-}
 @Injectable()
 export class LaptopsService {
   constructor(@InjectRepository(Laptop) private repo: Repository<Laptop>) {}
@@ -151,7 +118,7 @@ export class LaptopsService {
   async update(id: number, attrs: Partial<Laptop>) {
     const laptop = await this.findOne(id);
     if (!laptop) {
-      throw new NotFoundException('user not found');
+      throw new NotFoundException('Laptop not found');
     }
     Object.assign(laptop, attrs);
     return this.repo.save(laptop);
