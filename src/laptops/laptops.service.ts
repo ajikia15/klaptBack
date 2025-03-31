@@ -92,21 +92,31 @@ export class LaptopsService {
     // Start with creating enabled options for all filters
     const result = this.createEnabledFilterOptions(allOptions);
 
-    // For each filter field, check compatibility with current selection
+    // For each filter field, check compatibility for ALL unselected values
     for (const [resultField, filterField] of Object.entries(fieldMapping)) {
-      // Skip the fields that are already selected
-      if (filters[filterField] && filters[filterField].length > 0) {
-        continue; // Keep selected filters enabled
-      }
+      const selectedValues = filters[filterField] || [];
 
-      // For each value in this field, check if it's compatible with current filters
+      // Check each option in this field
       for (const option of result[resultField]) {
+        // If this value is already selected, keep it enabled
+        if (selectedValues.includes(option.value)) {
+          option.disabled = false;
+          continue;
+        }
+
         // Create a test query with current filters plus this value
         const testQuery = this.repo.createQueryBuilder('laptop');
         const testFilters = { ...filters };
 
-        // Add this value to the filters for testing
-        testFilters[filterField] = [option.value];
+        // THIS IS THE KEY CHANGE: If this field already has selections,
+        // we want to test this value AS AN ALTERNATIVE, not as an addition
+        if (selectedValues.length > 0) {
+          // Replace existing selection with this option to test if it's a valid alternative
+          testFilters[filterField] = [option.value]; // Test as alternative
+        } else {
+          // Add this as a new filter if field has no selections yet
+          testFilters[filterField] = [option.value];
+        }
 
         // Apply all filters
         this.applyFilters(testQuery, testFilters);
