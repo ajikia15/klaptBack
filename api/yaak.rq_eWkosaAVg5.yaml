@@ -1,8 +1,8 @@
 type: http_request
 model: http_request
-id: rq_Zo5YGWVedM
-createdAt: 2025-03-29T14:30:41.871067645
-updatedAt: 2025-04-02T16:27:29.240751947
+id: rq_eWkosaAVg5
+createdAt: 2025-04-02T15:48:02.647215791
+updatedAt: 2025-04-02T15:48:22.168884734
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_7dXTjsFa8Z
 authentication: {}
@@ -11,16 +11,16 @@ body: {}
 bodyType: null
 description: ''
 headers: []
-method: GET
-name: Get User Laptops
-sortPriority: 2000.0
-url: http://localhost:3000/laptops/user-laptops
+method: DELETE
+name: Delete laptop
+sortPriority: 2000.001
+url: http://localhost:3000/laptops/308
 urlParameters:
 - enabled: false
   name: id
-  value: '8'
+  value: '3'
   id: t6NmdMXvDB
 - enabled: true
   name: ''
   value: ''
-  id: VnnDwsaxFu
+  id: RgxQ37CBHN

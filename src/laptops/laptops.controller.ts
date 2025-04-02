@@ -26,12 +26,12 @@ import { SearchLaptopDto } from './dtos/search-laptop.dto';
 export class LaptopsController {
   constructor(public laptopsService: LaptopsService) {}
 
-  // TODO: add admin guard for all laptops, add separate route for normal requests which only have approved items.
   @Get()
-  listLaptops() {
+  getAllLaptops() {
     return this.laptopsService.findAll();
   }
 
+  // First, all the specific, non-parameterized routes
   @Get('search')
   find(@Query() searchDto: SearchLaptopDto) {
     return this.laptopsService.find(searchDto);
@@ -47,6 +47,21 @@ export class LaptopsController {
     return this.laptopsService.getFilterOptions(filters);
   }
 
+  @Get('user-laptops')
+  @UseGuards(AuthGuard)
+  @Serialize(LaptopDto)
+  getUserLaptops(@CurrentUser() user: User) {
+    return this.laptopsService.getUserLaptops(user.id);
+  }
+
+  // @Get('user-laptops/:id')
+  // @UseGuards(AuthGuard)
+  // @Serialize(LaptopDto)
+  // getUserLaptopsById(@Param('id') id: string) {
+  //   return this.laptopsService.getUserLaptopsById(parseInt(id));
+  // }
+
+  // Finally, generic parameterized routes
   @Get('/:id')
   getLaptop(@Param('id') id: string) {
     return this.laptopsService.findOne(parseInt(id));
@@ -64,7 +79,7 @@ export class LaptopsController {
     return this.laptopsService.remove(parseInt(id));
   }
 
-  @Patch('/:id') // ???
+  @Patch('/:id')
   @UseGuards(AdminGuard)
   approveLaptop(@Param('id') id: string, @Body() body: ApproveLaptopDto) {
     return this.laptopsService.changeStatus(parseInt(id), body.status);
@@ -78,6 +93,3 @@ export class LaptopsController {
   //   return laptop;
   // }
 }
-
-// TODO : Get amount of laptops
-// Get random laptop by title

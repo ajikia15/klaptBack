@@ -19,11 +19,13 @@ export class LaptopsService {
   findAll() {
     return this.repo.find();
   }
-
   async create(laptopDto: CreateLaptopDto, user: User) {
+    console.log('Creating laptop with user:', user);
     const laptop = this.repo.create(laptopDto);
     laptop.user = user;
-    return this.repo.save(laptop);
+    const savedLaptop = await this.repo.save(laptop);
+    console.log('Saved laptop:', savedLaptop);
+    return savedLaptop;
   }
 
   findByTerm(term: string) {
@@ -149,24 +151,6 @@ export class LaptopsService {
     }
 
     return { title: laptop.title };
-  }
-
-  private createBaseFilterOptions(
-    priceRange: any = { min: 0, max: 0 },
-  ): FilterOptions {
-    return {
-      brands: [],
-      processorModels: [],
-      gpuModels: [],
-      ramTypes: [],
-      ram: [],
-      storageTypes: [],
-      storageCapacity: [],
-      stockStatuses: [],
-      screenSizes: [],
-      screenResolutions: [],
-      priceRange,
-    };
   }
 
   private createEnabledFilterOptions(allOptions: any): FilterOptions {
@@ -431,5 +415,12 @@ export class LaptopsService {
         maxPrice: filters.maxPrice,
       });
     }
+  }
+
+  async getUserLaptops(userId: number) {
+    // Using repository's find method instead of query builder
+    return this.repo.find({
+      where: { user: { id: userId } },
+    });
   }
 }

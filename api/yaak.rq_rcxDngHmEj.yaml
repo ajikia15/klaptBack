@@ -1,8 +1,8 @@
 type: http_request
 model: http_request
-id: rq_qTNQoTXXbu
-createdAt: 2025-03-29T14:30:41.879599568
-updatedAt: 2025-04-02T16:03:31.107810322
+id: rq_rcxDngHmEj
+createdAt: 2025-04-02T15:32:22.136195246
+updatedAt: 2025-04-02T15:32:22.136197621
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_7dXTjsFa8Z
 authentication: {}
@@ -12,7 +12,7 @@ bodyType: null
 description: ''
 headers: []
 method: GET
-name: Get random laptop name
-sortPriority: 9000.0
-url: http://localhost:3000/laptops/random
+name: ''
+sortPriority: 1999.9999
+url: ''
 urlParameters: []

@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_rbP2n37hyN
 createdAt: 2025-03-29T14:21:55.871767738
-updatedAt: 2025-03-29T14:23:10.211846659
+updatedAt: 2025-04-02T16:25:57.771290463
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_ZJryWRCAye
 authentication: {}
@@ -10,8 +10,8 @@ authenticationType: null
 body:
   text: |-
     {
-        "email": "bigbig114@balls.com",
-        "password": "heheasdfasdf"
+        "email": "1@1.com",
+        "password": "123123123"
     }
 bodyType: other
 description: ''
