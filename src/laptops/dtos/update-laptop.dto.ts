@@ -21,6 +21,14 @@ export class UpdateLaptopDto {
 
   @IsOptional()
   @IsString()
+  shortDesc?: string;
+
+  @IsOptional()
+  @IsString()
+  graphicsType?: string;
+
+  @IsOptional()
+  @IsString()
   model?: string;
 
   @IsOptional()
@@ -33,15 +41,15 @@ export class UpdateLaptopDto {
 
   @IsOptional()
   @IsString()
-  vram?: string;
+  vram?: number;
 
   @IsOptional()
   @IsString()
   backlightType?: string;
 
   @IsOptional()
-  @IsEnum(['Intel', 'AMD'])
-  processorBrand?: 'Intel' | 'AMD';
+  @IsEnum(['Intel', 'AMD', 'Apple'])
+  processorBrand?: 'Intel' | 'AMD' | 'Apple';
 
   @IsOptional()
   @IsString()
@@ -57,15 +65,15 @@ export class UpdateLaptopDto {
 
   @IsOptional()
   @IsString()
-  ram?: string;
+  ram?: number;
 
   @IsOptional()
   @IsEnum(['DDR3', 'DDR4', 'DDR5'])
   ramType?: 'DDR3' | 'DDR4' | 'DDR5';
 
   @IsOptional()
-  @IsEnum(['HDD', 'SSD', 'Hybrid'])
-  storageType?: 'HDD' | 'SSD' | 'Hybrid';
+  @IsEnum(['HDD', 'SSD', 'HDD + SSD'])
+  storageType?: 'HDD' | 'SSD' | 'HDD + SSD';
 
   @IsOptional()
   @IsString()

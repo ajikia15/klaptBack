@@ -35,19 +35,25 @@ export class Laptop {
   model: string;
 
   @Column()
+  graphicsType: 'Integrated' | 'Dedicated';
+
+  @Column()
+  @IsOptional()
   gpuBrand: string;
 
   @Column()
+  @IsOptional()
   gpuModel: string;
 
   @Column()
-  vram: string;
+  @IsOptional()
+  vram: number;
 
   @Column()
   backlightType: string;
 
   @Column()
-  processorBrand: 'Intel' | 'AMD';
+  processorBrand: 'Intel' | 'AMD' | 'Apple';
 
   @Column()
   processorModel: string;
@@ -59,13 +65,13 @@ export class Laptop {
   threads: number;
 
   @Column()
-  ram: string;
+  ram: number;
 
   @Column()
   ramType: 'DDR3' | 'DDR4' | 'DDR5';
 
   @Column()
-  storageType: 'HDD' | 'SSD' | 'Hybrid';
+  storageType: 'HDD' | 'SSD' | 'HDD + SSD';
 
   @Column()
   storageCapacity: string;

@@ -22,20 +22,26 @@ export class CreateLaptopDto {
   @IsString()
   model: string;
 
+  @IsEnum(['Integrated', 'Dedicated'])
+  graphicsType: 'Integrated' | 'Dedicated';
+
   @IsString()
+  @IsOptional()
   gpuBrand: string;
 
   @IsString()
+  @IsOptional()
   gpuModel: string;
 
-  @IsString()
-  vram: string;
+  @IsNumber()
+  @IsOptional()
+  vram: number;
 
   @IsString()
   backlightType: string;
 
-  @IsEnum(['Intel', 'AMD'])
-  processorBrand: 'Intel' | 'AMD';
+  @IsEnum(['Intel', 'AMD', 'Apple'])
+  processorBrand: 'Intel' | 'AMD' | 'Apple';
 
   @IsString()
   processorModel: string;
@@ -46,14 +52,14 @@ export class CreateLaptopDto {
   @IsNumber()
   threads: number;
 
-  @IsString()
-  ram: string;
+  @IsNumber()
+  ram: number;
 
   @IsEnum(['DDR3', 'DDR4', 'DDR5'])
   ramType: 'DDR3' | 'DDR4' | 'DDR5';
 
-  @IsEnum(['HDD', 'SSD', 'Hybrid'])
-  storageType: 'HDD' | 'SSD' | 'Hybrid';
+  @IsEnum(['HDD', 'SSD', 'HDD + SSD'])
+  storageType: 'HDD' | 'SSD' | 'HDD + SSD';
 
   @IsString()
   storageCapacity: string;

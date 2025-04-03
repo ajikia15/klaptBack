@@ -383,7 +383,7 @@ export class LaptopsService {
     }
 
     // Apply all array-based filters using the same pattern
-    const applyArrayFilter = (field: string, values: string[]) => {
+    const applyArrayFilter = (field: string, values: (string | number)[]) => {
       if (values && Array.isArray(values) && values.length > 0) {
         query.andWhere(`laptop.${field} IN (:...${field}Values)`, {
           [`${field}Values`]: values,
@@ -394,14 +394,20 @@ export class LaptopsService {
     // Apply all filters
     applyArrayFilter('brand', filters.brand);
     applyArrayFilter('processorModel', filters.processorModel);
-    applyArrayFilter('gpuModel', filters.gpuModel);
     applyArrayFilter('ramType', filters.ramType);
     applyArrayFilter('ram', filters.ram);
+    applyArrayFilter('graphicsType', filters.graphicsType);
+    applyArrayFilter('gpuModel', filters.gpuModel);
+    applyArrayFilter('vram', filters.vram);
+    applyArrayFilter('gpuBrand', filters.gpuBrand);
+    applyArrayFilter('backlightType', filters.backlightType);
+    applyArrayFilter('processorBrand', filters.processorBrand);
     applyArrayFilter('storageType', filters.storageType);
     applyArrayFilter('storageCapacity', filters.storageCapacity);
     applyArrayFilter('stockStatus', filters.stockStatus);
     applyArrayFilter('screenSize', filters.screenSize);
     applyArrayFilter('screenResolution', filters.screenResolution);
+    applyArrayFilter('refreshRate', filters.refreshRate);
 
     // Apply price range filters
     if (filters.minPrice !== undefined) {

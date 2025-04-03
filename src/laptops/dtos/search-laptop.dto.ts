@@ -8,6 +8,10 @@ import {
   Max,
   IsArray,
 } from 'class-validator';
+import {
+  TransformToArray,
+  TransformToNumberArray,
+} from '../decorators/transformTo.decorator';
 
 export class SearchLaptopDto {
   @IsOptional()
@@ -15,25 +19,19 @@ export class SearchLaptopDto {
   term?: string;
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
   @IsArray()
   @IsString({ each: true })
   brand?: string[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
   @IsArray()
   @IsString({ each: true })
   shortDesc?: string[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
   @IsArray()
   @IsString({ each: true })
   model?: string[];
@@ -51,76 +49,79 @@ export class SearchLaptopDto {
   maxPrice?: number;
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
   @IsArray()
   @IsString({ each: true })
   gpuBrand?: string[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
   @IsArray()
   @IsString({ each: true })
   gpuModel?: string[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
   @IsArray()
   @IsEnum(['Intel', 'AMD'], { each: true })
-  processorBrand?: ('Intel' | 'AMD')[];
+  processorBrand?: ('Intel' | 'AMD' | 'Apple')[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
+  @IsArray()
+  @IsEnum(['Dedicated', 'Integrated'], { each: true })
+  graphicsType?: ('Dedicated' | 'Integrated')[];
+
+  @IsOptional()
+  @TransformToArray()
+  @IsArray()
+  @IsString({ each: true })
+  backlightType?: string[];
+
+  @IsOptional()
+  @TransformToArray()
+  @IsArray()
+  @IsString({ each: true })
+  refreshRate?: string[];
+
+  @IsOptional()
+  @TransformToArray()
   @IsArray()
   @IsString({ each: true })
   processorModel?: string[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
   @IsArray()
   @IsEnum(['DDR3', 'DDR4', 'DDR5'], { each: true })
   ramType?: ('DDR3' | 'DDR4' | 'DDR5')[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
   @IsArray()
   @IsString({ each: true })
-  ram?: string[];
+  ram?: number[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
   @IsArray()
-  @IsEnum(['HDD', 'SSD', 'Hybrid'], { each: true })
-  storageType?: ('HDD' | 'SSD' | 'Hybrid')[];
+  @IsString({ each: true })
+  vram?: number[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
+  @IsArray()
+  @IsEnum(['HDD', 'SSD', 'HDD + SSD'], { each: true })
+  storageType?: ('HDD' | 'SSD' | 'HDD + SSD')[];
+
+  @IsOptional()
+  @TransformToArray()
   @IsArray()
   @IsEnum(['reserved', 'sold', 'in stock'], { each: true })
   stockStatus?: ('reserved' | 'sold' | 'in stock')[];
 
   @IsOptional()
-  @Transform(({ value }) => {
-    if (Array.isArray(value)) return value;
-    if (value === undefined || value === null) return [];
-    // Handle number conversion for year
-    return [parseInt(value, 10)];
-  })
+  @TransformToNumberArray()
   @IsArray()
   @IsNumber({}, { each: true })
   @Min(2000, { each: true })
@@ -128,25 +129,19 @@ export class SearchLaptopDto {
   year?: number[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
   @IsArray()
   @IsString({ each: true })
   storageCapacity?: string[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
   @IsArray()
   @IsString({ each: true })
   screenSize?: string[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value : value ? [value] : [],
-  )
+  @TransformToArray()
   @IsArray()
   @IsString({ each: true })
   screenResolution?: string[];

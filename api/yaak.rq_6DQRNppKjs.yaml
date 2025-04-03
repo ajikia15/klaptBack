@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_6DQRNppKjs
 createdAt: 2025-03-29T14:30:41.859931978
-updatedAt: 2025-03-29T15:10:21.551146679
+updatedAt: 2025-04-03T11:24:06.307570801
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_7dXTjsFa8Z
 authentication: {}
@@ -14,5 +14,5 @@ headers: []
 method: GET
 name: Get laptop by ID
 sortPriority: 8000.0
-url: http://localhost:3000/laptops/4
+url: http://localhost:3000/laptops/1
 urlParameters: []
