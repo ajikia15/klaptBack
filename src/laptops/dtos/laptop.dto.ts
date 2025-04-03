@@ -20,13 +20,16 @@ export class LaptopDto {
   model: string;
 
   @Expose()
+  graphicsType: 'integrated' | 'dedicated';
+
+  @Expose()
   gpuBrand: string;
 
   @Expose()
   gpuModel: string;
 
   @Expose()
-  vram: string;
+  vram: number;
 
   @Expose()
   backlightType: string;
@@ -44,13 +47,13 @@ export class LaptopDto {
   threads: number;
 
   @Expose()
-  ram: string;
+  ram: number;
 
   @Expose()
   ramType: 'DDR3' | 'DDR4' | 'DDR5';
 
   @Expose()
-  storageType: 'HDD' | 'SSD' | 'Hybrid';
+  storageType: 'HDD' | 'SSD' | 'HDD + SSD';
 
   @Expose()
   storageCapacity: string;
@@ -82,7 +85,7 @@ export class LaptopDto {
   @Expose()
   status: 'approved' | 'pending' | 'rejected' | 'archived';
 
-  @Transform(({ obj }) => obj.id)
+  @Transform(({ obj }) => obj.user?.id)
   @Expose()
   userId: number;
 }
