@@ -20,7 +20,7 @@ export class LaptopDto {
   model: string;
 
   @Expose()
-  graphicsType: 'integrated' | 'dedicated';
+  graphicsType: 'Integrated' | 'Dedicated';
 
   @Expose()
   gpuBrand: string;
