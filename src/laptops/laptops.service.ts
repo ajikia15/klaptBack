@@ -56,6 +56,14 @@ export class LaptopsService {
       stockStatuses: 'stockStatus',
       screenSizes: 'screenSize',
       screenResolutions: 'screenResolution',
+      processorBrands: 'processorBrand',
+      gpuBrands: 'gpuBrand',
+      graphicsTypes: 'graphicsType',
+      backlightTypes: 'backlightType',
+      refreshRates: 'refreshRate',
+      vram: 'vram',
+      years: 'year',
+      models: 'model',
     };
 
     // Start with creating enabled options for all filters
@@ -155,44 +163,94 @@ export class LaptopsService {
 
   private createEnabledFilterOptions(allOptions: any): FilterOptions {
     return {
-      brands: allOptions.brands.map((value) => ({ value, disabled: false })),
-      processorModels: allOptions.processorModels.map((value) => ({
-        value,
-        disabled: false,
-      })),
-      gpuModels: allOptions.gpuModels.map((value) => ({
-        value,
-        disabled: false,
-      })),
-      ramTypes: allOptions.ramTypes.map((value) => ({
-        value,
-        disabled: false,
-      })),
-      ram: allOptions.ram.map((value) => ({
-        value,
-        disabled: false,
-      })),
-      storageTypes: allOptions.storageTypes.map((value) => ({
-        value,
-        disabled: false,
-      })),
-      storageCapacity: allOptions.storageCapacity.map((value) => ({
-        value,
-        disabled: false,
-      })),
-      stockStatuses: allOptions.stockStatuses.map((value) => ({
-        value,
-        disabled: false,
-      })),
-      screenSizes: allOptions.screenSizes.map((value) => ({
-        value,
-        disabled: false,
-      })),
-      screenResolutions: allOptions.screenResolutions.map((value) => ({
-        value,
-        disabled: false,
-      })),
-      priceRange: allOptions.priceRange,
+      brands:
+        allOptions.brands?.map((value) => ({ value, disabled: false })) || [],
+      processorModels:
+        allOptions.processorModels?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      gpuModels:
+        allOptions.gpuModels?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      ramTypes:
+        allOptions.ramTypes?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      ram:
+        allOptions.ram?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      storageTypes:
+        allOptions.storageTypes?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      storageCapacity:
+        allOptions.storageCapacity?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      stockStatuses:
+        allOptions.stockStatuses?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      screenSizes:
+        allOptions.screenSizes?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      screenResolutions:
+        allOptions.screenResolutions?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      processorBrands:
+        allOptions.processorBrands?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      gpuBrands:
+        allOptions.gpuBrands?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      graphicsTypes:
+        allOptions.graphicsTypes?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      backlightTypes:
+        allOptions.backlightTypes?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      refreshRates:
+        allOptions.refreshRates?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      vram:
+        allOptions.vram?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      years:
+        allOptions.years?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      models:
+        allOptions.models?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      priceRange: allOptions.priceRange || { min: 0, max: 0 },
     };
   }
 
@@ -228,6 +286,14 @@ export class LaptopsService {
       stockStatuses,
       screenSizes,
       screenResolutions,
+      processorBrands,
+      gpuBrands,
+      graphicsTypes,
+      backlightTypes,
+      refreshRates,
+      vram,
+      years,
+      models,
     ] = await Promise.all([
       getAvailableValuesForField('brand'),
       getAvailableValuesForField('processorModel'),
@@ -239,6 +305,14 @@ export class LaptopsService {
       getAvailableValuesForField('stockStatus'),
       getAvailableValuesForField('screenSize'),
       getAvailableValuesForField('screenResolution'),
+      getAvailableValuesForField('processorBrand'),
+      getAvailableValuesForField('gpuBrand'),
+      getAvailableValuesForField('graphicsType'),
+      getAvailableValuesForField('backlightType'),
+      getAvailableValuesForField('refreshRate'),
+      getAvailableValuesForField('vram'),
+      getAvailableValuesForField('year'),
+      getAvailableValuesForField('model'),
     ]);
 
     // Get price range with all filters applied
@@ -266,6 +340,14 @@ export class LaptopsService {
       stockStatuses,
       screenSizes,
       screenResolutions,
+      processorBrands,
+      gpuBrands,
+      graphicsTypes,
+      backlightTypes,
+      refreshRates,
+      vram,
+      years,
+      models,
       priceRange: {
         min: minPrice?.min || 0,
         max: maxPrice?.max || 0,
@@ -289,6 +371,15 @@ export class LaptopsService {
       'screenSize',
       'screenResolution',
       'stockStatus',
+      'processorBrand',
+      'gpuBrand',
+      'graphicsType',
+      'backlightType',
+      'refreshRate',
+      'vram',
+      'year',
+      'model',
+      'shortDesc',
     ];
 
     for (const filter of arrayFilters) {
@@ -319,8 +410,8 @@ export class LaptopsService {
     // Execute all queries in parallel
     const [
       brands,
-      gpuModels,
       processorModels,
+      gpuModels,
       ramTypes,
       ram,
       storageTypes,
@@ -328,10 +419,18 @@ export class LaptopsService {
       stockStatuses,
       screenSizes,
       screenResolutions,
+      processorBrands,
+      gpuBrands,
+      graphicsTypes,
+      backlightTypes,
+      refreshRates,
+      vram,
+      years,
+      models,
     ] = await Promise.all([
       getDistinctValues('brand'),
-      getDistinctValues('gpuModel'),
       getDistinctValues('processorModel'),
+      getDistinctValues('gpuModel'),
       getDistinctValues('ramType'),
       getDistinctValues('ram'),
       getDistinctValues('storageType'),
@@ -339,6 +438,14 @@ export class LaptopsService {
       getDistinctValues('stockStatus'),
       getDistinctValues('screenSize'),
       getDistinctValues('screenResolution'),
+      getDistinctValues('processorBrand'),
+      getDistinctValues('gpuBrand'),
+      getDistinctValues('graphicsType'),
+      getDistinctValues('backlightType'),
+      getDistinctValues('refreshRate'),
+      getDistinctValues('vram'),
+      getDistinctValues('year'),
+      getDistinctValues('model'),
     ]);
 
     // Get price range
@@ -354,8 +461,8 @@ export class LaptopsService {
 
     return {
       brands,
-      gpuModels,
       processorModels,
+      gpuModels,
       ramTypes,
       ram,
       storageTypes,
@@ -363,6 +470,14 @@ export class LaptopsService {
       stockStatuses,
       screenSizes,
       screenResolutions,
+      processorBrands,
+      gpuBrands,
+      graphicsTypes,
+      backlightTypes,
+      refreshRates,
+      vram,
+      years,
+      models,
       priceRange: {
         min: minPrice?.min || 0,
         max: maxPrice?.max || 0,
@@ -408,6 +523,8 @@ export class LaptopsService {
     applyArrayFilter('screenSize', filters.screenSize);
     applyArrayFilter('screenResolution', filters.screenResolution);
     applyArrayFilter('refreshRate', filters.refreshRate);
+    applyArrayFilter('year', filters.year);
+    applyArrayFilter('model', filters.model);
 
     // Apply price range filters
     if (filters.minPrice !== undefined) {
