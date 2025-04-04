@@ -357,6 +357,7 @@ export class LaptopsService {
 
   private areFiltersEmpty(filters: SearchLaptopDto): boolean {
     if (filters.term) return false;
+    if (filters.userId !== undefined) return false;
     if (filters.minPrice !== undefined || filters.maxPrice !== undefined)
       return false;
 
@@ -494,6 +495,12 @@ export class LaptopsService {
     if (filters.term) {
       query.andWhere('LOWER(laptop.title) LIKE LOWER(:term)', {
         term: `%${filters.term}%`,
+      });
+    }
+
+    if (filters.userId !== undefined) {
+      query.andWhere('laptop.userId = :userId', {
+        userId: filters.userId,
       });
     }
 

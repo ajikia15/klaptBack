@@ -19,6 +19,11 @@ export class SearchLaptopDto {
   term?: string;
 
   @IsOptional()
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value, 10))
+  userId?: number;
+
+  @IsOptional()
   @TransformToArray()
   @IsArray()
   @IsString({ each: true })
