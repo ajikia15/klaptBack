@@ -23,6 +23,7 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 import { User } from './user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { UpdateRoleDto } from './dtos/update-role.dto';
 
 @Controller('auth')
 @Serialize(UserDto) //wrapped decorator ^
@@ -80,6 +81,12 @@ export class UsersController {
 
   @Patch('/:id')
   updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
+    return this.usersService.update(parseInt(id), body);
+  }
+
+  @Patch('/:id/role')
+  @UseGuards(AuthGuard)
+  async makeAdmin(@Param('id') id: string, @Body() body: UpdateRoleDto) {
     return this.usersService.update(parseInt(id), body);
   }
 }
