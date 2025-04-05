@@ -15,7 +15,7 @@ body:
         "brand": "Lenovo",
         "model": "Legion 5 Pro",
         "shortDesc": "RTX 4060 Ryzen 9 7940HS 16GB DDR5 1TB SSD 16.0 2560x1600 165Hz 2023",
-        "gpuBrand": "Nvidia",
+        "gpuBrand": "NVIDIA",
         "gpuModel": "RTX 4060",
         "vram": "8GB",
         "backlightType": "rgb",
@@ -39,10 +39,10 @@ body:
 bodyType: other
 description: ''
 headers:
-- enabled: true
-  name: content-type
-  value: application/json
-  id: null
+  - enabled: true
+    name: content-type
+    value: application/json
+    id: null
 method: POST
 name: Lenovo Legion 5 Pro
 sortPriority: 500.0

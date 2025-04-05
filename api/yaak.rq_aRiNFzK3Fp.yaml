@@ -15,7 +15,7 @@ body:
         "brand": "Asus",
         "model": "Zephyrus G14",
         "shortDesc": "RTX 4060 Ryzen 9 7940HS 16GB DDR5 1TB SSD 14.0 2560x1600 165Hz 2023",
-        "gpuBrand": "Nvidia",
+        "gpuBrand": "NVIDIA",
         "gpuModel": "RTX 4060",
         "vram": "8GB",
         "backlightType": "rgb",
@@ -39,10 +39,10 @@ body:
 bodyType: other
 description: ''
 headers:
-- enabled: true
-  name: content-type
-  value: application/json
-  id: null
+  - enabled: true
+    name: content-type
+    value: application/json
+    id: null
 method: POST
 name: Asus Zephyrus G14
 sortPriority: 2000.0

@@ -54,14 +54,13 @@ export class LaptopsController {
     return this.laptopsService.getUserLaptops(user.id);
   }
 
-  // @Get('user-laptops/:id')
-  // @UseGuards(AuthGuard)
-  // @Serialize(LaptopDto)
-  // getUserLaptopsById(@Param('id') id: string) {
-  //   return this.laptopsService.getUserLaptopsById(parseInt(id));
-  // }
+  @Delete('all')
+  @UseGuards(AuthGuard)
+  @UseGuards(AdminGuard)
+  removeAllLaptops() {
+    return this.laptopsService.removeAll();
+  }
 
-  // Finally, generic parameterized routes
   @Get('/:id')
   getLaptop(@Param('id') id: string) {
     return this.laptopsService.findOne(parseInt(id));
@@ -75,8 +74,9 @@ export class LaptopsController {
   }
 
   @Delete('/:id')
-  removeLaptop(@Param('id') id: string) {
-    return this.laptopsService.remove(parseInt(id));
+  @UseGuards(AuthGuard)
+  removeLaptop(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.laptopsService.remove(parseInt(id), user);
   }
 
   @Patch('/:id')

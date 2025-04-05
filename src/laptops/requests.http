@@ -14,7 +14,7 @@ content-type: application/json
     "brand": "Asus",
     "model": "Zephyrus G14",
     "shortDesc": "RTX 4060 Ryzen 9 7940HS 16GB DDR5 1TB SSD 14.0 2560x1600 165Hz 2023",
-    "gpuBrand": "Nvidia",
+    "gpuBrand": "NVIDIA",
     "gpuModel": "RTX 4060",
     "vram": "8GB",
     "backlightType": "rgb",

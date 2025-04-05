@@ -117,12 +117,22 @@ export class LaptopsService {
     return query.getMany();
   }
 
-  async remove(id: number) {
-    const laptop = await this.findOne(id);
+  async remove(id: number, user: User) {
+    let laptop: Laptop;
+    if (user.admin) {
+      laptop = await this.repo.findOne({ where: { id } });
+    } else {
+      laptop = await this.repo.findOne({ where: { id, user } });
+    }
     if (!laptop) {
       throw new NotFoundException('Laptop not found');
     }
     return this.repo.remove(laptop);
+  }
+
+  async removeAll() {
+    const laptops = await this.findAll();
+    return this.repo.remove(laptops);
   }
 
   async update(id: number, attrs: Partial<Laptop>) {
