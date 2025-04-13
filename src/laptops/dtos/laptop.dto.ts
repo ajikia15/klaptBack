@@ -80,7 +80,7 @@ export class LaptopDto {
   images: string[];
 
   @Expose()
-  tags: string[];
+  tag?: string[];
 
   @Expose()
   condition: 'new' | 'like-new' | 'used' | 'damaged';

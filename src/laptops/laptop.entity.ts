@@ -96,7 +96,7 @@ export class Laptop {
   condition: 'new' | 'like-new' | 'used' | 'damaged';
 
   @Column({ type: 'simple-array' })
-  tags: string[];
+  tag?: string[];
 
   @Column({ type: 'text' })
   description: string;

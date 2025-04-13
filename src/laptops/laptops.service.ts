@@ -64,6 +64,8 @@ export class LaptopsService {
       vram: 'vram',
       years: 'year',
       models: 'model',
+      tags: 'tag',
+      conditions: 'condition',
     };
 
     // Start with creating enabled options for all filters
@@ -260,6 +262,16 @@ export class LaptopsService {
           value,
           disabled: false,
         })) || [],
+      tags:
+        allOptions.tags?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
+      conditions:
+        allOptions.conditions?.map((value) => ({
+          value,
+          disabled: false,
+        })) || [],
       priceRange: allOptions.priceRange || { min: 0, max: 0 },
     };
   }
@@ -304,6 +316,8 @@ export class LaptopsService {
       vram,
       years,
       models,
+      tags,
+      conditions,
     ] = await Promise.all([
       getAvailableValuesForField('brand'),
       getAvailableValuesForField('processorModel'),
@@ -323,6 +337,8 @@ export class LaptopsService {
       getAvailableValuesForField('vram'),
       getAvailableValuesForField('year'),
       getAvailableValuesForField('model'),
+      getAvailableValuesForField('tag'),
+      getAvailableValuesForField('condition'),
     ]);
 
     // Get price range with all filters applied
@@ -358,6 +374,8 @@ export class LaptopsService {
       vram,
       years,
       models,
+      tags,
+      conditions,
       priceRange: {
         min: minPrice?.min || 0,
         max: maxPrice?.max || 0,
@@ -391,6 +409,8 @@ export class LaptopsService {
       'year',
       'model',
       'shortDesc',
+      'tag',
+      'condition',
     ];
 
     for (const filter of arrayFilters) {
@@ -438,6 +458,8 @@ export class LaptopsService {
       vram,
       years,
       models,
+      tags,
+      conditions,
     ] = await Promise.all([
       getDistinctValues('brand'),
       getDistinctValues('processorModel'),
@@ -457,6 +479,8 @@ export class LaptopsService {
       getDistinctValues('vram'),
       getDistinctValues('year'),
       getDistinctValues('model'),
+      getDistinctValues('tag'),
+      getDistinctValues('condition'),
     ]);
 
     // Get price range
@@ -489,6 +513,8 @@ export class LaptopsService {
       vram,
       years,
       models,
+      tags,
+      conditions,
       priceRange: {
         min: minPrice?.min || 0,
         max: maxPrice?.max || 0,
@@ -542,6 +568,8 @@ export class LaptopsService {
     applyArrayFilter('refreshRate', filters.refreshRate);
     applyArrayFilter('year', filters.year);
     applyArrayFilter('model', filters.model);
+    applyArrayFilter('tag', filters.tag);
+    applyArrayFilter('condition', filters.condition);
 
     // Apply price range filters
     if (filters.minPrice !== undefined) {

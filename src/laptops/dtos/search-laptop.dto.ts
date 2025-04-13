@@ -135,7 +135,7 @@ export class SearchLaptopDto {
   @TransformToArray()
   @IsArray()
   @IsString({ each: true })
-  tags?: string[];
+  tag?: string[];
 
   @IsOptional()
   @TransformToNumberArray()

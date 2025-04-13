@@ -88,8 +88,9 @@ export class CreateLaptopDto {
   images: string[];
 
   @IsArray()
+  @IsOptional()
   @IsString({ each: true })
-  tags: string[];
+  tag?: string[];
 
   @IsEnum(['new', 'like-new', 'used', 'damaged'])
   condition: 'new' | 'like-new' | 'used' | 'damaged';
