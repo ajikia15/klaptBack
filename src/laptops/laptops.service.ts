@@ -296,6 +296,18 @@ export class LaptopsService {
         .then((results) => results.map((item) => item.value));
     };
 
+    // Special function to handle tag array field
+    const getAvailableTagValues = async () => {
+      const query = this.repo.createQueryBuilder('laptop');
+
+      // Apply all filters EXCEPT the tag filter
+      const filteredFilters = { ...filters };
+      delete filteredFilters.tag;
+      this.applyFilters(query, filteredFilters);
+
+      return this.getAvailableTagValues(query);
+    };
+
     // Execute all queries in parallel
     const [
       brands,
@@ -337,7 +349,7 @@ export class LaptopsService {
       getAvailableValuesForField('vram'),
       getAvailableValuesForField('year'),
       getAvailableValuesForField('model'),
-      getAvailableValuesForField('tag'),
+      getAvailableTagValues(), // Use custom function for tag field
       getAvailableValuesForField('condition'),
     ]);
 
@@ -438,6 +450,12 @@ export class LaptopsService {
         .then((results) => results.map((item) => item.value));
     };
 
+    // Special function for tag field which is an array
+    const getDistinctTagValues = async () => {
+      const query = this.repo.createQueryBuilder('laptop');
+      return this.getAvailableTagValues(query);
+    };
+
     // Execute all queries in parallel
     const [
       brands,
@@ -479,7 +497,7 @@ export class LaptopsService {
       getDistinctValues('vram'),
       getDistinctValues('year'),
       getDistinctValues('model'),
-      getDistinctValues('tag'),
+      getDistinctTagValues(), // Use the array-specific function for tag field
       getDistinctValues('condition'),
     ]);
 
@@ -549,6 +567,18 @@ export class LaptopsService {
       }
     };
 
+    // Special handling for tag field which is an array in the database
+    const applyTagFilter = (values: string[]) => {
+      if (values && Array.isArray(values) && values.length > 0) {
+        // For each tag value, check if it exists in the array stored in database
+        values.forEach((value, index) => {
+          // This should work for both PostgreSQL and SQLite
+          const sanitizedValue = value.replace(/'/g, "''"); // Escape single quotes
+          query.andWhere(`laptop.tag LIKE '%${sanitizedValue}%'`);
+        });
+      }
+    };
+
     // Apply all filters
     applyArrayFilter('brand', filters.brand);
     applyArrayFilter('processorModel', filters.processorModel);
@@ -568,7 +598,7 @@ export class LaptopsService {
     applyArrayFilter('refreshRate', filters.refreshRate);
     applyArrayFilter('year', filters.year);
     applyArrayFilter('model', filters.model);
-    applyArrayFilter('tag', filters.tag);
+    applyTagFilter(filters.tag); // Use special handling for tag array field
     applyArrayFilter('condition', filters.condition);
 
     // Apply price range filters
@@ -583,6 +613,51 @@ export class LaptopsService {
         maxPrice: filters.maxPrice,
       });
     }
+  }
+
+  private async getAvailableTagValues(query): Promise<string[]> {
+    // Get all laptops with their tags that match filters
+    const laptopsWithTags = await query
+      .select('laptop.tag')
+      .where('laptop.tag IS NOT NULL')
+      .getRawMany();
+
+    // Extract all unique tag values
+    const allTags = new Set<string>();
+
+    // Process each result - try different possible field naming conventions
+    laptopsWithTags.forEach((laptop) => {
+      let tagArray: string[] = null;
+
+      // Try to find the tag array in the response object
+      // TypeORM might return the column as laptop_tag or tag
+      if (laptop.laptop_tag) {
+        // Handle various formats: string array, stringified array, or comma-separated string
+        tagArray = Array.isArray(laptop.laptop_tag)
+          ? laptop.laptop_tag
+          : typeof laptop.laptop_tag === 'string'
+            ? laptop.laptop_tag.replace(/[{}]/g, '').split(',').filter(Boolean)
+            : null;
+      } else if (laptop.tag) {
+        tagArray = Array.isArray(laptop.tag)
+          ? laptop.tag
+          : typeof laptop.tag === 'string'
+            ? laptop.tag.replace(/[{}]/g, '').split(',').filter(Boolean)
+            : null;
+      }
+
+      // Add each tag to our set
+      if (tagArray) {
+        tagArray.forEach((tag) => {
+          if (tag && typeof tag === 'string' && tag.trim()) {
+            allTags.add(tag.trim());
+          }
+        });
+      }
+    });
+
+    // Convert to sorted array
+    return Array.from(allTags).sort();
   }
 
   async getUserLaptops(userId: number) {
