@@ -80,6 +80,12 @@ export class LaptopDto {
   images: string[];
 
   @Expose()
+  tags: string[];
+
+  @Expose()
+  condition: 'new' | 'like-new' | 'used' | 'damaged';
+
+  @Expose()
   stockStatus: 'reserved' | 'sold' | 'in stock';
 
   @Expose()

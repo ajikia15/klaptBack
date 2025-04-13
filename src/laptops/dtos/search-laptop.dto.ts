@@ -126,6 +126,18 @@ export class SearchLaptopDto {
   stockStatus?: ('reserved' | 'sold' | 'in stock')[];
 
   @IsOptional()
+  @TransformToArray()
+  @IsArray()
+  @IsEnum(['new', 'like-new', 'used', 'damaged'], { each: true })
+  condition?: ('new' | 'like-new' | 'used' | 'damaged')[];
+
+  @IsOptional()
+  @TransformToArray()
+  @IsArray()
+  @IsString({ each: true })
+  tags?: string[];
+
+  @IsOptional()
   @TransformToNumberArray()
   @IsArray()
   @IsNumber({}, { each: true })

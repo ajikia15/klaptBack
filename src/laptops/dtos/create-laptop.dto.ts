@@ -87,6 +87,13 @@ export class CreateLaptopDto {
   @IsString({ each: true })
   images: string[];
 
+  @IsArray()
+  @IsString({ each: true })
+  tags: string[];
+
+  @IsEnum(['new', 'like-new', 'used', 'damaged'])
+  condition: 'new' | 'like-new' | 'used' | 'damaged';
+
   @IsEnum(['reserved', 'sold', 'in stock'])
   stockStatus: 'reserved' | 'sold' | 'in stock' = 'in stock';
 

@@ -26,18 +26,18 @@ export class User {
   @OneToMany(() => Laptop, (laptop) => laptop.user)
   laptops: Laptop[];
 
-  @AfterInsert()
-  logInsert() {
-    console.log('Inserted User with id', this.id);
-  }
+  // @AfterInsert()
+  // logInsert() {
+  //   console.log('Inserted User with id', this.id);
+  // }
 
-  @AfterUpdate()
-  logUpdate() {
-    console.log('Updated User with id', this.id);
-  }
+  // @AfterUpdate()
+  // logUpdate() {
+  //   console.log('Updated User with id', this.id);
+  // }
 
-  @AfterRemove()
-  logRemove() {
-    console.log('Removed User with id', this.id);
-  }
+  // @AfterRemove()
+  // logRemove() {
+  //   console.log('Removed User with id', this.id);
+  // }
 }

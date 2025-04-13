@@ -14,6 +14,8 @@ export interface FilterOptions {
   graphicsTypes: { value: string; disabled: boolean }[];
   backlightTypes: { value: string; disabled: boolean }[];
   refreshRates: { value: string; disabled: boolean }[];
+  conditions: { value: string; disabled: boolean }[];
+  tags: { value: string; disabled: boolean }[];
   vram: { value: string; disabled: boolean }[];
   years: { value: string; disabled: boolean }[];
   models: { value: string; disabled: boolean }[];

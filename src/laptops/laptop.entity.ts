@@ -92,6 +92,12 @@ export class Laptop {
   @Column()
   year: number;
 
+  @Column()
+  condition: 'new' | 'like-new' | 'used' | 'damaged';
+
+  @Column({ type: 'simple-array' })
+  tags: string[];
+
   @Column({ type: 'text' })
   description: string;
 
