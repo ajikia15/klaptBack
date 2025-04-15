@@ -10,7 +10,7 @@ const scrypt = promisify(_scrypt);
 @Injectable()
 export class AuthService {
   constructor(private usersService: UsersService) {}
-  async signup(email: string, password: string) {
+  async signup(email: string, password: string, username: string) {
     const users = await this.usersService.find(email);
     if (users.length) {
       throw new BadRequestException('email in use');

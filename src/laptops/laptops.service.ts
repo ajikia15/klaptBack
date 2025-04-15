@@ -50,9 +50,10 @@ export class LaptopsService {
   }
 
   async create(laptopDto: CreateLaptopDto, user: User) {
-    console.log('Creating laptop with user:', user);
     const laptop = this.repo.create(laptopDto);
     laptop.user = user;
+    if (!user.admin) laptop.status = 'pending';
+    else laptop.status = 'approved';
     const savedLaptop = await this.repo.save(laptop);
     console.log('Saved laptop:', savedLaptop);
     return savedLaptop;

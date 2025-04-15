@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_XS5wCXYkJa
 createdAt: 2025-03-29T14:21:55.868619024
-updatedAt: 2025-04-02T16:45:45.543021379
+updatedAt: 2025-04-15T20:34:54.091246862
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_ZJryWRCAye
 authentication: {}
@@ -11,7 +11,8 @@ body:
   text: |-
     {
         "email": "1@1.com",
-        "password": "123123123"
+        "password": "123123123",
+        "username": "chickenjock"
     }
 bodyType: other
 description: ''

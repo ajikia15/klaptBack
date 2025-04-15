@@ -36,7 +36,11 @@ export class UsersController {
 
   @Post('/signup')
   async createUser(@Body() body: CreateUserDto, @Session() session: any) {
-    const user = await this.authService.signup(body.email, body.password);
+    const user = await this.authService.signup(
+      body.email,
+      body.password,
+      body.username,
+    );
     session.userId = user.id;
     return user;
   }
@@ -61,7 +65,6 @@ export class UsersController {
 
   @Get('/:id')
   async findUser(@Param('id') id: string) {
-    console.log('handler is running');
     const user = await this.usersService.findOne(parseInt(id));
     if (!user) {
       throw new NotFoundException('user not found');
