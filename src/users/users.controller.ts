@@ -87,8 +87,9 @@ export class UsersController {
     return this.usersService.update(parseInt(id), body);
   }
 
+  // https link -
   @Patch('/:id/role')
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard) TODO REMOVE COMMENT
   async makeAdmin(@Param('id') id: string, @Body() body: UpdateRoleDto) {
     return this.usersService.update(parseInt(id), body);
   }
