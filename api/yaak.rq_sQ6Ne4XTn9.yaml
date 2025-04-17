@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_sQ6Ne4XTn9
 createdAt: 2025-03-29T14:38:55.190041277
-updatedAt: 2025-04-03T11:23:06.635025061
+updatedAt: 2025-04-17T14:25:13.060579599
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_FycCr5Ruto
 authentication: {}
@@ -15,35 +15,37 @@ body:
         "brand": "MSI",
         "model": "GF63 Thin",
         "shortDesc": "RTX 4050 i5-12450H 16GB DDR4 512GB SSD 15.6 1920x1080 144Hz 2023",
-        "graphicsType": "Dedicated",
-        "gpuBrand": "NVIDIA",
-        "gpuModel": "RTX 4050",
-        "vram": 6,
-        "backlightType": "RGB",
+        "description": "Affordable gaming laptop with a lightweight design, decent gaming performance, and good thermal management",
+        "year": 2023,
+        "stockStatus": "in stock",
+        "condition": "new",
         "processorBrand": "Intel",
         "processorModel": "i5-12450H",
         "cores": 8,
         "threads": 12,
-        "ram": 8,
+        "graphicsType": "Dedicated",
+        "gpuBrand": "NVIDIA",
+        "gpuModel": "RTX 4050",
+        "vram": 6,
+        "ram": 16,
         "ramType": "DDR4",
         "storageType": "SSD",
         "storageCapacity": "512GB",
         "screenSize": "15.6",
         "screenResolution": "1920x1080",
         "refreshRate": 144,
-        "year": 2023,
-        "weight": "1.86kg",
-        "description": "Affordable gaming laptop with a lightweight design, decent gaming performance, and good thermal management",
-        "images": ["https://i.ibb.co/9kPchdbf/msikatana.png"],
-        "stockStatus": "in stock"
+        "weight": "1.86",
+        "backlightType": "RGB",
+        "tag": ["gaming", "budget"],
+        "images": ["https://i.ibb.co/9kPchdbf/msikatana.png"]
     }
 bodyType: other
 description: ''
 headers:
-  - enabled: true
-    name: content-type
-    value: application/json
-    id: null
+- enabled: true
+  name: content-type
+  value: application/json
+  id: null
 method: POST
 name: MSI GF63 Thin
 sortPriority: 0.0

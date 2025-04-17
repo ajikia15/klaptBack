@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_mwxHdiS4rQ
 createdAt: 2025-03-29T14:38:55.184063232
-updatedAt: 2025-03-29T15:11:32.687700073
+updatedAt: 2025-04-17T14:29:34.267969794
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_FycCr5Ruto
 authentication: {}
@@ -15,36 +15,39 @@ body:
         "brand": "Lenovo",
         "model": "Legion 5 Pro",
         "shortDesc": "RTX 4060 Ryzen 9 7940HS 16GB DDR5 1TB SSD 16.0 2560x1600 165Hz 2023",
-        "gpuBrand": "NVIDIA",
-        "gpuModel": "RTX 4060",
-        "vram": "8GB",
-        "backlightType": "rgb",
+        "description": "Powerful gaming laptop with excellent build quality and 16 inch display",
+        "year": 2023,
+        "stockStatus": "in stock",
+        "condition": "new",
         "processorBrand": "AMD",
         "processorModel": "Ryzen 9 7940HS",
         "cores": 8,
         "threads": 16,
-        "ram": "16GB",
+        "graphicsType": "Dedicated",
+        "gpuBrand": "NVIDIA",
+        "gpuModel": "RTX 4060",
+        "vram": 8,
+        "ram": 16,
         "ramType": "DDR5",
         "storageType": "SSD",
         "storageCapacity": "1TB",
         "screenSize": "16.0",
         "screenResolution": "2560x1600",
         "refreshRate": 165,
-        "year": 2023,
-        "weight": "2.65kg",
-        "description": "Powerful gaming laptop with excellent build quality and 16 inch display",
-        "images": ["https://i.ibb.co/XfpXdzSx/slim.png"],
-        "stockStatus": "in stock"
+        "weight": "2.65",
+        "backlightType": "RGB",
+        "tag": ["gaming", "premium"],
+        "images": ["https://i.ibb.co/XfpXdzSx/slim.png"]
     }
 bodyType: other
 description: ''
 headers:
-  - enabled: true
-    name: content-type
-    value: application/json
-    id: null
+- enabled: true
+  name: content-type
+  value: application/json
+  id: null
 method: POST
-name: Lenovo Legion 5 Pro
+name: Legion Slim 5
 sortPriority: 500.0
 url: http://localhost:3000/laptops/
 urlParameters: []

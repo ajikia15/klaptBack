@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_aRiNFzK3Fp
 createdAt: 2025-03-29T14:38:55.181045121
-updatedAt: 2025-03-29T15:11:39.057697829
+updatedAt: 2025-04-17T14:31:02.149107503
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_FycCr5Ruto
 authentication: {}
@@ -15,34 +15,37 @@ body:
         "brand": "Asus",
         "model": "Zephyrus G14",
         "shortDesc": "RTX 4060 Ryzen 9 7940HS 16GB DDR5 1TB SSD 14.0 2560x1600 165Hz 2023",
-        "gpuBrand": "NVIDIA",
-        "gpuModel": "RTX 4060",
-        "vram": "8GB",
-        "backlightType": "rgb",
+        "description": "Compact yet powerful gaming laptop with excellent build quality and Anime Matrix display",
+        "year": 2023,
+        "stockStatus": "in stock",
+        "condition": "new",
         "processorBrand": "AMD",
         "processorModel": "Ryzen 9 7940HS",
         "cores": 8,
         "threads": 16,
-        "ram": "16GB",
+        "graphicsType": "Dedicated",
+        "gpuBrand": "NVIDIA",
+        "gpuModel": "RTX 4060",
+        "vram": 8,
+        "ram": 16,
         "ramType": "DDR5",
         "storageType": "SSD",
         "storageCapacity": "1TB",
         "screenSize": "14.0",
         "screenResolution": "2560x1600",
         "refreshRate": 165,
-        "year": 2023,
-        "weight": "1.65kg",
-        "description": "Compact yet powerful gaming laptop with excellent build quality and Anime Matrix display",
-        "images": ["https://i.ibb.co/6JTFncGp/asus.png"],
-        "stockStatus": "in stock"
+        "weight": "1.65",
+        "backlightType": "RGB",
+        "tag": ["gaming", "premium", "portable"],
+        "images": ["https://i.ibb.co/6JTFncGp/asus.png"]
     }
 bodyType: other
 description: ''
 headers:
-  - enabled: true
-    name: content-type
-    value: application/json
-    id: null
+- enabled: true
+  name: content-type
+  value: application/json
+  id: null
 method: POST
 name: Asus Zephyrus G14
 sortPriority: 2000.0
