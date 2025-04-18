@@ -17,19 +17,19 @@ export class UpdateLaptopDto {
 
   @IsOptional()
   @IsString()
-  brand?: string;
-
-  @IsOptional()
-  @IsString()
   shortDesc?: string;
 
   @IsOptional()
   @IsString()
-  graphicsType?: string;
+  brand?: string;
 
   @IsOptional()
   @IsString()
   model?: string;
+
+  @IsOptional()
+  @IsEnum(['Integrated', 'Dedicated'])
+  graphicsType?: 'Integrated' | 'Dedicated';
 
   @IsOptional()
   @IsString()
@@ -40,7 +40,7 @@ export class UpdateLaptopDto {
   gpuModel?: string;
 
   @IsOptional()
-  @IsString()
+  @IsNumber()
   vram?: number;
 
   @IsOptional()
@@ -64,7 +64,7 @@ export class UpdateLaptopDto {
   threads?: number;
 
   @IsOptional()
-  @IsString()
+  @IsNumber()
   ram?: number;
 
   @IsOptional()
@@ -109,10 +109,19 @@ export class UpdateLaptopDto {
   images?: string[];
 
   @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tag?: string[];
+
+  @IsOptional()
+  @IsEnum(['new', 'like-new', 'used', 'damaged'])
+  condition?: 'new' | 'like-new' | 'used' | 'damaged';
+
+  @IsOptional()
   @IsEnum(['reserved', 'sold', 'in stock'])
-  stockStatus?: 'reserved' | 'sold' | 'in stock' = 'in stock';
+  stockStatus?: 'reserved' | 'sold' | 'in stock';
 
   @IsOptional()
   @IsEnum(['approved', 'pending', 'rejected', 'archived'])
-  status?: 'approved' | 'pending' | 'rejected' | 'archived' = 'pending';
+  status?: 'approved' | 'pending' | 'rejected' | 'archived';
 }
