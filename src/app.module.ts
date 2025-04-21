@@ -29,6 +29,13 @@ const cookieSession = require('cookie-session');
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(cookieSession({ keys: ['asdfasdf'] })).forRoutes('*');
+    consumer
+      .apply(
+        cookieSession({
+          keys: ['asdfasdf'],
+          maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+        }),
+      )
+      .forRoutes('*');
   }
 }
