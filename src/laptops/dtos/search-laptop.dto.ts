@@ -105,13 +105,13 @@ export class SearchLaptopDto {
   @TransformToArray()
   @IsArray()
   @IsString({ each: true })
-  ram?: number[];
+  ram?: string[];
 
   @IsOptional()
   @TransformToArray()
   @IsArray()
   @IsString({ each: true })
-  vram?: number[];
+  vram?: string[];
 
   @IsOptional()
   @TransformToArray()

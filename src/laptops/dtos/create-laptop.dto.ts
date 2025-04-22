@@ -33,9 +33,9 @@ export class CreateLaptopDto {
   @IsOptional()
   gpuModel: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  vram: number;
+  vram: string;
 
   @IsString()
   backlightType: string;
@@ -52,8 +52,8 @@ export class CreateLaptopDto {
   @IsNumber()
   threads: number;
 
-  @IsNumber()
-  ram: number;
+  @IsString()
+  ram: string;
 
   @IsEnum(['DDR3', 'DDR4', 'DDR5'])
   ramType: 'DDR3' | 'DDR4' | 'DDR5';
@@ -70,8 +70,8 @@ export class CreateLaptopDto {
   @IsString()
   screenResolution: string;
 
-  @IsNumber()
-  refreshRate: number;
+  @IsString()
+  refreshRate: string;
 
   @IsNumber()
   year: number;

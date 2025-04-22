@@ -29,7 +29,7 @@ export class LaptopDto {
   gpuModel: string;
 
   @Expose()
-  vram: number;
+  vram: string;
 
   @Expose()
   backlightType: string;
@@ -47,7 +47,7 @@ export class LaptopDto {
   threads: number;
 
   @Expose()
-  ram: number;
+  ram: string;
 
   @Expose()
   ramType: 'DDR3' | 'DDR4' | 'DDR5';
@@ -65,7 +65,7 @@ export class LaptopDto {
   screenResolution: string;
 
   @Expose()
-  refreshRate: number;
+  refreshRate: string;
 
   @Expose()
   weight?: string;

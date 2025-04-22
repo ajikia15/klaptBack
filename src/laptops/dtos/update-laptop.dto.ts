@@ -40,8 +40,8 @@ export class UpdateLaptopDto {
   gpuModel?: string;
 
   @IsOptional()
-  @IsNumber()
-  vram?: number;
+  @IsString()
+  vram?: string;
 
   @IsOptional()
   @IsString()
@@ -64,8 +64,8 @@ export class UpdateLaptopDto {
   threads?: number;
 
   @IsOptional()
-  @IsNumber()
-  ram?: number;
+  @IsString()
+  ram?: string;
 
   @IsOptional()
   @IsEnum(['DDR3', 'DDR4', 'DDR5'])
@@ -88,8 +88,8 @@ export class UpdateLaptopDto {
   screenResolution?: string;
 
   @IsOptional()
-  @IsNumber()
-  refreshRate?: number;
+  @IsString()
+  refreshRate?: string;
 
   @IsOptional()
   @IsNumber()

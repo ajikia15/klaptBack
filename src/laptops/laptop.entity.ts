@@ -47,7 +47,7 @@ export class Laptop {
 
   @Column()
   @IsOptional()
-  vram: number;
+  vram: string;
 
   @Column()
   backlightType: string;
@@ -65,7 +65,7 @@ export class Laptop {
   threads: number;
 
   @Column()
-  ram: number;
+  ram: string;
 
   @Column()
   ramType: 'DDR3' | 'DDR4' | 'DDR5';
@@ -83,7 +83,7 @@ export class Laptop {
   screenResolution: string;
 
   @Column()
-  refreshRate: number;
+  refreshRate: string;
 
   @IsOptional()
   @Column()
