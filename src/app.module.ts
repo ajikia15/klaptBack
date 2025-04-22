@@ -9,30 +9,46 @@ import { User } from './users/user.entity';
 import { CurrentUserMiddleware } from './users/middlewares/current-user.middleware';
 import { FavoritesModule } from './favorites/favorites.module';
 import { Favorite } from './favorites/favorite.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 const cookieSession = require('cookie-session');
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV}`,
+    }),
     LaptopsModule,
     UsersModule,
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'db.sqlite',
-      entities: [Laptop, User, Favorite],
-      synchronize: true,
-      // logging: true,
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'sqlite',
+        database: config.get<string>('DB_NAME'),
+        synchronize: true,
+        entities: [Laptop, User, Favorite],
+        // logging: true,
+      }),
     }),
+    // TypeOrmModule.forRoot({
+    //   type: 'sqlite',
+    //   database: 'db.sqlite',
+    //   entities: [Laptop, User, Favorite],
+    //   synchronize: true,
+    //   // logging: true,
+    // }),
     FavoritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {
+  constructor(private configService: ConfigService) {}
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
         cookieSession({
-          keys: ['asdfasdf'],
+          keys: [this.configService.get('COOKIE_KEY')],
           maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
         }),
       )
