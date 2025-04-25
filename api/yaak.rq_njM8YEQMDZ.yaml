@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_njM8YEQMDZ
 createdAt: 2025-03-29T14:30:41.873881541
-updatedAt: 2025-03-29T15:10:21.551048129
+updatedAt: 2025-04-25T06:54:54.854566914
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_7dXTjsFa8Z
 authentication: {}
@@ -23,5 +23,5 @@ headers:
 method: PATCH
 name: Update laptop
 sortPriority: 7000.0
-url: http://localhost:3000/laptops/308
+url: http://localhost:3000/laptops/5
 urlParameters: []

@@ -79,17 +79,17 @@ export class LaptopsController {
     return this.laptopsService.remove(parseInt(id), user);
   }
 
-  @Patch('/:id')
+  @Patch('/:id/status')
   @UseGuards(AdminGuard)
   approveLaptop(@Param('id') id: string, @Body() body: ApproveLaptopDto) {
     return this.laptopsService.changeStatus(parseInt(id), body.status);
   }
 
-  // @Patch('/:id')
-  // async updateLaptop(@Param('id') id: string, @Body() body: UpdateLaptopDto) {
-  //   const laptop = await this.laptopsService.findOne(parseInt(id));
-  //   if (!laptop) throw new NotFoundException('No laptop found with such id');
-  //   await this.laptopsService.update(parseInt(id), body);
-  //   return laptop;
-  // }
+  @Patch('/:id')
+  async updateLaptop(@Param('id') id: string, @Body() body: UpdateLaptopDto) {
+    const laptop = await this.laptopsService.findOne(parseInt(id));
+    if (!laptop) throw new NotFoundException('No laptop found with such id');
+    await this.laptopsService.update(parseInt(id), body);
+    return laptop;
+  }
 }

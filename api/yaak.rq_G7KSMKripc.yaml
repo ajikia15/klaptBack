@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_G7KSMKripc
 createdAt: 2025-04-15T21:00:08.824088256
-updatedAt: 2025-04-15T21:02:05.764867160
+updatedAt: 2025-04-22T09:11:28.842789266
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_ZJryWRCAye
 authentication: {}
@@ -26,9 +26,9 @@ url: http://localhost:3000/auth/:id/role
 urlParameters:
 - enabled: true
   name: :id
-  value: '2'
+  value: '1'
   id: WBpVP4rJPy
 - enabled: true
   name: ''
   value: ''
-  id: JDaImJf0aD
+  id: yJbpiTTPNK

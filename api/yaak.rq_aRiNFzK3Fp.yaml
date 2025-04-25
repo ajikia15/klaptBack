@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_aRiNFzK3Fp
 createdAt: 2025-03-29T14:38:55.181045121
-updatedAt: 2025-04-17T14:31:02.149107503
+updatedAt: 2025-04-22T09:16:10.098023894
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_FycCr5Ruto
 authentication: {}
@@ -26,14 +26,14 @@ body:
         "graphicsType": "Dedicated",
         "gpuBrand": "NVIDIA",
         "gpuModel": "RTX 4060",
-        "vram": 8,
-        "ram": 16,
+        "vram": "8GB",
+        "ram": "16GB",
         "ramType": "DDR5",
         "storageType": "SSD",
         "storageCapacity": "1TB",
-        "screenSize": "14.0",
+        "screenSize": "14.0\"",
         "screenResolution": "2560x1600",
-        "refreshRate": 165,
+        "refreshRate": "165Hz",
         "weight": "1.65",
         "backlightType": "RGB",
         "tag": ["gaming", "premium", "portable"],

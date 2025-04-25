@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_sQ6Ne4XTn9
 createdAt: 2025-03-29T14:38:55.190041277
-updatedAt: 2025-04-17T14:25:13.060579599
+updatedAt: 2025-04-22T09:15:52.557754514
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_FycCr5Ruto
 authentication: {}
@@ -26,14 +26,14 @@ body:
         "graphicsType": "Dedicated",
         "gpuBrand": "NVIDIA",
         "gpuModel": "RTX 4050",
-        "vram": 6,
-        "ram": 16,
+        "vram": "16GB",
+        "ram": "32GB",
         "ramType": "DDR4",
         "storageType": "SSD",
         "storageCapacity": "512GB",
-        "screenSize": "15.6",
+        "screenSize": "15.6\"",
         "screenResolution": "1920x1080",
-        "refreshRate": 144,
+        "refreshRate": "144Hz",
         "weight": "1.86",
         "backlightType": "RGB",
         "tag": ["gaming", "budget"],
@@ -50,4 +50,12 @@ method: POST
 name: MSI GF63 Thin
 sortPriority: 0.0
 url: http://localhost:3000/laptops/
-urlParameters: []
+urlParameters:
+- enabled: false
+  name: ''
+  value: ''
+  id: K7yhX8pGm5
+- enabled: true
+  name: ''
+  value: ''
+  id: KbQQjjGPMZ

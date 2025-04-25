@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_Zp7AwinkUY
 createdAt: 2025-03-29T14:38:55.187037413
-updatedAt: 2025-04-17T14:30:18.096949172
+updatedAt: 2025-04-22T09:16:07.620328716
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_FycCr5Ruto
 authentication: {}
@@ -26,14 +26,14 @@ body:
         "graphicsType": "Dedicated",
         "gpuBrand": "NVIDIA",
         "gpuModel": "RTX 4050",
-        "vram": 6,
-        "ram": 16,
+        "vram": "6GB",
+        "ram": "16GB",
         "ramType": "DDR5",
         "storageType": "SSD",
         "storageCapacity": "512GB",
-        "screenSize": "15.6",
+        "screenSize": "15.6\"",
         "screenResolution": "1920x1080",
-        "refreshRate": 144,
+        "refreshRate": "144Hz",
         "weight": "2.4",
         "backlightType": "RGB",
         "tag": ["gaming", "budget"],
