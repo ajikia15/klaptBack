@@ -79,11 +79,11 @@ export class LaptopsController {
     return this.laptopsService.remove(parseInt(id), user);
   }
 
-  @Patch('/:id/status')
-  @UseGuards(AdminGuard)
-  approveLaptop(@Param('id') id: string, @Body() body: ApproveLaptopDto) {
-    return this.laptopsService.changeStatus(parseInt(id), body.status);
-  }
+  // @Patch('/:id/status')
+  // @UseGuards(AdminGuard)
+  // approveLaptop(@Param('id') id: string, @Body() body: ApproveLaptopDto) {
+  //   return this.laptopsService.changeStatus(parseInt(id), body.status);
+  // }
 
   @Patch('/:id')
   async updateLaptop(@Param('id') id: string, @Body() body: UpdateLaptopDto) {
