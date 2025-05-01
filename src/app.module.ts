@@ -10,6 +10,7 @@ import { CurrentUserMiddleware } from './users/middlewares/current-user.middlewa
 import { FavoritesModule } from './favorites/favorites.module';
 import { Favorite } from './favorites/favorite.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ScrapModule } from './scrap/scrap.module';
 const cookieSession = require('cookie-session');
 
 @Module({
@@ -38,6 +39,7 @@ const cookieSession = require('cookie-session');
     //   // logging: true,
     // }),
     FavoritesModule,
+    ScrapModule,
   ],
   controllers: [AppController],
   providers: [AppService],
