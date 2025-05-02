@@ -27,14 +27,21 @@ export class LaptopsController {
   constructor(public laptopsService: LaptopsService) {}
 
   @Get()
-  getAllLaptops() {
-    return this.laptopsService.findAll();
+  getAllLaptops(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pageNum = page ? parseInt(page, 10) : 1;
+    const limitNum = limit ? parseInt(limit, 10) : 20;
+    return this.laptopsService.findAll(pageNum, limitNum);
   }
 
-  // First, all the specific, non-parameterized routes
   @Get('search')
-  find(@Query() searchDto: SearchLaptopDto) {
-    return this.laptopsService.find(searchDto);
+  find(
+    @Query() searchDto: SearchLaptopDto,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const pageNum = page ? parseInt(page, 10) : 1;
+    const limitNum = limit ? parseInt(limit, 10) : 20;
+    return this.laptopsService.find(searchDto, pageNum, limitNum);
   }
 
   @Get('random')
@@ -50,16 +57,22 @@ export class LaptopsController {
   @Get('user-laptops')
   @UseGuards(AuthGuard)
   @Serialize(LaptopDto)
-  getUserLaptops(@CurrentUser() user: User) {
-    return this.laptopsService.getUserLaptops(user.id);
+  getUserLaptops(
+    @CurrentUser() user: User,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const pageNum = page ? parseInt(page, 10) : 1;
+    const limitNum = limit ? parseInt(limit, 10) : 20;
+    return this.laptopsService.getUserLaptops(user.id, pageNum, limitNum);
   }
 
-  @Delete('all')
-  @UseGuards(AuthGuard)
-  @UseGuards(AdminGuard)
-  removeAllLaptops() {
-    return this.laptopsService.removeAll();
-  }
+  // @Delete('all')
+  // @UseGuards(AuthGuard)
+  // @UseGuards(AdminGuard)
+  // removeAllLaptops() {
+  //   return this.laptopsService.removeAll();
+  // }
 
   @Get('/:id')
   getLaptop(@Param('id') id: string) {

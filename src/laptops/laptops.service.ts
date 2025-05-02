@@ -45,8 +45,18 @@ export class LaptopsService {
     return this.repo.findOneBy({ id });
   }
 
-  findAll() {
-    return this.repo.find();
+  async findAll(page = 1, limit = 20) {
+    const [data, total] = await this.repo.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+    return {
+      data,
+      total,
+      page,
+      limit,
+      pageCount: Math.ceil(total / limit),
+    };
   }
 
   async create(laptopDto: CreateLaptopDto, user: User) {
@@ -125,10 +135,20 @@ export class LaptopsService {
   /**
    * Find laptops by applying filters
    */
-  find(filters: SearchLaptopDto) {
+  async find(filters: SearchLaptopDto, page = 1, limit = 20) {
     const query = this.repo.createQueryBuilder('laptop');
     this.applyFilters(query, filters);
-    return query.getMany();
+    const [data, total] = await query
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+    return {
+      data,
+      total,
+      page,
+      limit,
+      pageCount: Math.ceil(total / limit),
+    };
   }
 
   async remove(id: number, user: User) {
@@ -144,10 +164,10 @@ export class LaptopsService {
     return this.repo.remove(laptop);
   }
 
-  async removeAll() {
-    const laptops = await this.findAll();
-    return this.repo.remove(laptops);
-  }
+  // async removeAll() {
+  //   const laptops = await this.findAll();
+  //    return this.repo.remove(laptops);
+  // }
 
   async update(id: number, attrs: Partial<Laptop>) {
     const laptop = await this.findOne(id);
@@ -416,9 +436,18 @@ export class LaptopsService {
     return null;
   }
 
-  async getUserLaptops(userId: number) {
-    return this.repo.find({
+  async getUserLaptops(userId: number, page = 1, limit = 20) {
+    const [data, total] = await this.repo.findAndCount({
       where: { user: { id: userId } },
+      skip: (page - 1) * limit,
+      take: limit,
     });
+    return {
+      data,
+      total,
+      page,
+      limit,
+      pageCount: Math.ceil(total / limit),
+    };
   }
 }
