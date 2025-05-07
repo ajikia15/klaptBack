@@ -22,7 +22,11 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://192.168.1.235:5173'],
+    origin: [
+      'http://localhost:5173',
+      'http://192.168.1.235:5173',
+      'https://kaidolaptops.netlify.app/',
+    ],
     credentials: true,
   });
 
