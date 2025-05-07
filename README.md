@@ -1,6 +1,6 @@
 # Kaido: Laptop Marketplace API
 
-**Kaido** is a feature-rich, modern NestJS API for managing a laptop marketplace. This project provides RESTful APIs for CRUD operations such as authentication, filtering and so on. Project uses [NestJS](https://nestjs.com/), [TypeORM](https://typeorm.io/), and [SQLite](https://www.sqlite.org/).
+**Kaido** is a feature-rich, modern NestJS API backend for managing laptop marketplace - [Kaido Laptops(front-end)](https://https://github.com/ajikia15/klaptFront). This project provides RESTful APIs for CRUD operations such as authentication, filtering and so on. Project uses [NestJS](https://nestjs.com/), [TypeORM](https://typeorm.io/), and [SQLite](https://www.sqlite.org/).
 
 ---
 
