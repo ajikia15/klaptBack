@@ -1,88 +1,109 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Klaptopi: Modern Laptop Marketplace API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Welcome to **Klaptopi**, a feature-rich, modern NestJS API for managing a laptop marketplace. This project demonstrates best practices in RESTful API design, authentication, filtering, and modular architecture using [NestJS](https://nestjs.com/), [TypeORM](https://typeorm.io/), and [SQLite](https://www.sqlite.org/).
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 🚀 Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### 1. **User Authentication & Authorization**
 
-## Project setup
+- **Secure Signup & Login:** Passwords are hashed with salt using Node's crypto module.
+- **Session Management:** Cookie-based sessions for persistent authentication.
+- **Role-based Access:** Admins can manage users and laptops with elevated privileges.
+- **Current User Context:** Custom decorators and middleware make accessing the current user seamless in controllers.
 
-```bash
-$ npm install
-```
+### 2. **Laptop Management**
 
-## Compile and run the project
+- **CRUD Operations:** Create, read, update, and delete laptops with full validation.
+- **Ownership:** Each laptop is linked to its creator; only admins or owners can modify/delete.
+- **Approval Workflow:** Laptops can be approved, rejected, or archived by admins.
+- **Rich Laptop Model:** Extensive fields including specs, images, tags, and condition.
 
-```bash
-# development
-$ npm run start
+### 3. **Advanced Filtering & Search**
 
-# watch mode
-$ npm run start:dev
+- **Dynamic Filters:** Query laptops by brand, price, processor, RAM, storage, year, and more.
+- **Smart Filter Options:** The `/laptops/filters` endpoint returns only compatible filter options based on current selections, making UI filter panels dynamic and user-friendly.
+- **Full-text Search:** Search laptops by title or description.
+- **Pagination:** All list endpoints support pagination for scalable data delivery.
 
-# production mode
-$ npm run start:prod
-```
+### 4. **Favorites System**
 
-## Run tests
+- **User Favorites:** Authenticated users can favorite/unfavorite laptops.
+- **Favorite Counts:** See how many users have favorited a laptop.
+- **Per-user Favorites:** Retrieve all laptops favorited by the current user.
 
-```bash
-# unit tests
-$ npm run test
+### 5. **Robust Validation & Serialization**
 
-# e2e tests
-$ npm run test:e2e
+- **DTOs Everywhere:** All input and output is validated and serialized using DTOs and class-transformer.
+- **Automatic Data Shaping:** Only safe, relevant fields are exposed in API responses.
 
-# test coverage
-$ npm run test:cov
-```
+### 6. **Developer Experience**
 
-## Deployment
+- **TypeScript First:** Strong typing throughout the codebase.
+- **Modular Structure:** Clear separation of concerns with modules for users, laptops, and favorites.
+- **E2E & Unit Testing:** Ready-to-run Jest tests for reliability.
+- **Environment Config:** Supports multiple environments via `.env` files and NestJS ConfigModule.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### 7. **API Usability**
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- **HTTP Request Examples:** `.http` files for easy API testing with tools like VSCode REST Client or Insomnia.
+- **CORS Enabled:** Ready for frontend integration out of the box.
+- **Descriptive Errors:** Consistent error handling with meaningful messages.
+
+---
+
+## 🛠️ Getting Started
 
 ```bash
-$ npm install -g mau
-$ mau deploy
+npm install
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+- The API runs on `http://localhost:3000` by default.
+- Use the provided `.http` files or your favorite API client to explore endpoints.
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## 📚 Notable Endpoints
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- `POST /auth/signup` – Register a new user
+- `POST /auth/signin` – Login and start a session
+- `GET /auth/whoami` – Get the current logged-in user
+- `GET /laptops` – List all laptops (paginated)
+- `GET /laptops/search` – Advanced search with filters
+- `GET /laptops/filters` – Get dynamic filter options
+- `POST /laptops/` – Create a new laptop (authenticated)
+- `PATCH /laptops/:id` – Update a laptop (owner/admin)
+- `DELETE /laptops/:id` – Delete a laptop (owner/admin)
+- `POST /favorites` – Favorite a laptop
+- `GET /favorites` – List your favorites
+
+---
+
+## 💡 Why You'll Love This Project
+
+- **Real-World Patterns:** See how to build a scalable, maintainable API with NestJS.
+- **Dynamic Filtering:** The filter logic is smart—users never see filter options that would yield zero results.
+- **Security:** Passwords are never stored in plain text, and sensitive fields are never leaked.
+- **Extensible:** Add new features (like reviews or orders) with minimal friction.
+- **Great for Learning:** The codebase is clean, well-typed, and full of best practices.
+
+---
+
+## 🧑‍💻 Contributing
+
+Pull requests are welcome! Please open an issue first to discuss major changes.
+
+---
+
+## 📄 License
+
+MIT
+
+---
+
+**Happy coding! 🚀**
 
 ## Support
 
