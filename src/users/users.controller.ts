@@ -8,9 +8,6 @@ import {
   Param,
   Query,
   NotFoundException,
-  Session,
-  UsePipes,
-  UseInterceptors,
   UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -20,14 +17,11 @@ import { UserDto } from './dtos/user.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
-import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 import { User } from './user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UpdateRoleDto } from './dtos/update-role.dto';
 
 @Controller('auth')
-@Serialize(UserDto) //wrapped decorator ^
-@UseInterceptors(CurrentUserInterceptor)
 export class UsersController {
   constructor(
     private usersService: UsersService,
@@ -35,35 +29,38 @@ export class UsersController {
   ) {}
 
   @Post('/signup')
-  async createUser(@Body() body: CreateUserDto, @Session() session: any) {
+  async createUser(@Body() body: CreateUserDto) {
     const user = await this.authService.signup(
       body.email,
       body.password,
       body.username,
     );
-    session.userId = user.id;
-    return user;
+    const token = await this.authService.generateJwt(user);
+    return { user, token };
   }
 
   @Post('/signin')
-  async signIn(@Body() body: any, @Session() session: any) {
+  async signIn(@Body() body: any) {
     const user = await this.authService.signin(body.email, body.password);
-    session.userId = user.id;
-    return user;
+    const token = await this.authService.generateJwt(user);
+    return { user, token };
   }
 
   @Post('/signout')
-  signOut(@Session() session: any) {
-    session.userId = null;
+  signOut() {
+    // No-op for JWT, client should just delete the token
+    return { message: 'Signed out' };
   }
 
   @Get('/whoami')
   @UseGuards(AuthGuard)
+  @Serialize(UserDto)
   whoAmI(@CurrentUser() user: User) {
     return user;
   }
 
   @Get('/:id')
+  @Serialize(UserDto)
   async findUser(@Param('id') id: string) {
     const user = await this.usersService.findOne(parseInt(id));
     if (!user) {
@@ -73,6 +70,7 @@ export class UsersController {
   }
 
   @Get()
+  @Serialize(UserDto)
   findAllUsers(@Query('email') email: string) {
     return this.usersService.find(email);
   }
@@ -87,9 +85,7 @@ export class UsersController {
     return this.usersService.update(parseInt(id), body);
   }
 
-  // https link -
   @Patch('/:id/role')
-  // @UseGuards(AuthGuard) TODO REMOVE COMMENT
   async makeAdmin(@Param('id') id: string, @Body() body: UpdateRoleDto) {
     return this.usersService.update(parseInt(id), body);
   }

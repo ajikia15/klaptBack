@@ -2,15 +2,26 @@ type: http_request
 model: http_request
 id: rq_tC8G9k6c4P
 createdAt: 2025-03-29T14:21:55.877966621
-updatedAt: 2025-03-29T14:23:10.211895338
+updatedAt: 2025-05-08T06:30:21.228384562
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_ZJryWRCAye
-authentication: {}
-authenticationType: null
+authentication:
+  disabled: true
+  secret: ''
+  secretBase64: false
+authenticationType: jwt
 body: {}
 bodyType: null
 description: ''
-headers: []
+headers:
+- enabled: true
+  name: Authorization
+  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiMUAxLmNvbSIsImFkbWluIjp0cnVlLCJ1c2VybmFtZSI6ImNoaWNrZW5qb2NrZXkiLCJpYXQiOjE3NDY2ODU4MDgsImV4cCI6MTc0NzI5MDYwOH0.L1uevBbS6M9OQM6vvwn3BA96tO3_FEEGPJhU00i7Fxc
+  id: R04EsXJe3a
+- enabled: true
+  name: ''
+  value: ''
+  id: nNPyXvF99g
 method: GET
 name: Who am I
 sortPriority: 2000.0

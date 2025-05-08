@@ -6,7 +6,6 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Laptop } from './laptops/laptop.entity';
 import { User } from './users/user.entity';
-import { CurrentUserMiddleware } from './users/middlewares/current-user.middleware';
 import { FavoritesModule } from './favorites/favorites.module';
 import { Favorite } from './favorites/favorite.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';

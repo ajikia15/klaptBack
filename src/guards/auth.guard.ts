@@ -1,8 +1,5 @@
-import { CanActivate, ExecutionContext } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { AuthGuard as NestAuthGuard } from '@nestjs/passport';
 
-export class AuthGuard implements CanActivate {
-  canActivate(context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
-    return request.session.userId;
-  }
-}
+@Injectable()
+export class AuthGuard extends NestAuthGuard('jwt') {}
