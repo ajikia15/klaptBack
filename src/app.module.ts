@@ -10,7 +10,6 @@ import { CurrentUserMiddleware } from './users/middlewares/current-user.middlewa
 import { FavoritesModule } from './favorites/favorites.module';
 import { Favorite } from './favorites/favorite.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-const cookieSession = require('cookie-session');
 
 @Module({
   imports: [
@@ -44,14 +43,5 @@ const cookieSession = require('cookie-session');
 })
 export class AppModule {
   constructor(private configService: ConfigService) {}
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(
-        cookieSession({
-          keys: [this.configService.get('COOKIE_KEY')],
-          maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        }),
-      )
-      .forRoutes('*');
-  }
+  configure(consumer: MiddlewareConsumer) {}
 }

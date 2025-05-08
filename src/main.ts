@@ -1,18 +1,22 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config'; // Import ConfigService
 const cookieSession = require('cookie-session');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const configService = app.get(ConfigService); // Get instance of ConfigService
+
   app.use(
     cookieSession({
-      keys: ['asdfasdfasdf'],
+      keys: [configService.get('COOKIE_KEY')], // Use ConfigService for keys
       //  7 days
       maxAge: 1000 * 60 * 60 * 24 * 7,
       sameSite: 'none',
       secure: true,
+      partitioned: true,
     }),
   );
 
