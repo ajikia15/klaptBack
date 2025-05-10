@@ -9,7 +9,7 @@
 ### 1. **User Authentication & Authorization**
 
 - **Secure Signup & Login:** Passwords are hashed with salt using Node's crypto module.
-- **Session Management:** Cookie-based sessions for persistent authentication.
+- **JWT Authentication:** Stateless authentication using JWT.
 - **Role-based Access:** Admins can manage users and laptops with elevated privileges.
 - **Current User Context:** Custom decorators and middleware make accessing the current user seamless in controllers.
 
