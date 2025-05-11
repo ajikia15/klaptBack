@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_njM8YEQMDZ
 createdAt: 2025-03-29T14:30:41.873881541
-updatedAt: 2025-04-25T07:24:15.870158300
+updatedAt: 2025-05-11T09:35:21.657191539
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_7dXTjsFa8Z
 authentication: {}
@@ -10,8 +10,7 @@ authenticationType: null
 body:
   text: |-
     {
-        "title": "asus",
-        "price": 20
+        "isCertified": true
     }
 bodyType: other
 description: ''
@@ -23,5 +22,5 @@ headers:
 method: PATCH
 name: Update laptop
 sortPriority: 7000.0
-url: http://localhost:3000/laptops/6
+url: http://localhost:3000/laptops/2
 urlParameters: []

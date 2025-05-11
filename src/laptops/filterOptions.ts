@@ -23,4 +23,5 @@ export interface FilterOptions {
     min: number;
     max: number;
   };
+  isCertifiedValues: { value: boolean; disabled: boolean }[]; // Added for isCertified filter options
 }

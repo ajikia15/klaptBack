@@ -11,6 +11,7 @@ import { FilterOptions } from './filterOptions';
 interface FilterField {
   resultField: string;
   filterField: string;
+  isBoolean?: boolean; // Add optional flag for boolean fields
 }
 
 @Injectable()
@@ -37,6 +38,11 @@ export class LaptopsService {
     { resultField: 'models', filterField: 'model' },
     { resultField: 'tags', filterField: 'tag' },
     { resultField: 'conditions', filterField: 'condition' },
+    {
+      resultField: 'isCertifiedValues',
+      filterField: 'isCertified',
+      isBoolean: true,
+    }, // Added for isCertified
   ];
 
   constructor(@InjectRepository(Laptop) private repo: Repository<Laptop>) {}
@@ -259,7 +265,22 @@ export class LaptopsService {
    */
   private async getAllFilterOptions(): Promise<any> {
     // Helper function to get distinct column values
-    const getDistinctValues = async (column: string): Promise<string[]> => {
+    const getDistinctValues = async (
+      column: string,
+      isBoolean = false,
+    ): Promise<any[]> => {
+      if (isBoolean) {
+        // For boolean fields, the distinct values are true and false
+        // We can check if there are any records with true and any with false
+        const trueCount = await this.repo.count({ where: { [column]: true } });
+        const falseCount = await this.repo.count({
+          where: { [column]: false },
+        });
+        const values = [];
+        if (trueCount > 0) values.push(true);
+        if (falseCount > 0) values.push(false);
+        return values;
+      }
       return this.repo
         .createQueryBuilder('laptop')
         .select(`DISTINCT laptop.${column}`, 'value')
@@ -269,12 +290,16 @@ export class LaptopsService {
         .then((results) => results.map((item) => item.value));
     };
 
+    const nonTagFieldsInMap = this.filterFieldMap.filter(
+      (f) => f.filterField !== 'tag',
+    );
+
     // Get all distinct values for each column
     const results = await Promise.all([
-      // Get values for each filter field
-      ...this.filterFieldMap
-        .filter(({ filterField }) => filterField !== 'tag') // Handle tags separately
-        .map(({ filterField }) => getDistinctValues(filterField)),
+      // Get values for each non-tag filter field
+      ...nonTagFieldsInMap.map(({ filterField, isBoolean }) =>
+        getDistinctValues(filterField, isBoolean),
+      ),
       // Special handling for tags array field
       this.getTagValues(),
     ]);
@@ -293,12 +318,23 @@ export class LaptopsService {
 
     // Map results to field names
     const options: any = {};
-    this.filterFieldMap.forEach(({ resultField, filterField }, index) => {
+
+    // Iterate over the original filterFieldMap to ensure all fields are considered for the options object
+    this.filterFieldMap.forEach(({ resultField, filterField }) => {
       if (filterField === 'tag') {
-        // Tags will be the last item in the results array
+        // 'tag' results are the last element in the 'results' array
+        // (because getTagValues() is the last promise in the Promise.all call above)
         options[resultField] = results[results.length - 1];
       } else {
-        options[resultField] = results[index];
+        // For non-tag fields, find their index based on the 'nonTagFieldsInMap'
+        // which directly corresponds to their position in the first part of the 'results' array.
+        const indexInNonTagResults = nonTagFieldsInMap.findIndex(
+          (f) => f.filterField === filterField,
+        );
+        if (indexInNonTagResults !== -1) {
+          // Should always be found if it's not 'tag'
+          options[resultField] = results[indexInNonTagResults];
+        }
       }
     });
 
@@ -347,30 +383,52 @@ export class LaptopsService {
     }
 
     // Apply all other filters
-    for (const { filterField } of this.filterFieldMap) {
+    for (const { filterField, isBoolean } of this.filterFieldMap) {
       // Special handling for tag field which is an array in the database
       if (filterField === 'tag') {
         this.applyTagFilter(query, filters.tag);
         continue;
       }
 
-      // Apply standard filters
-      this.applyArrayFilter(query, filterField, filters[filterField]);
+      // Apply standard filters (now includes boolean)
+      this.applyArrayFilter(
+        query,
+        filterField,
+        filters[filterField],
+        isBoolean,
+      );
     }
   }
 
   /**
-   * Apply standard array filter
+   * Apply standard array filter (now handles boolean)
    */
   private applyArrayFilter(
     query: SelectQueryBuilder<Laptop>,
     field: string,
-    values: (string | number)[],
+    values: (string | number | boolean)[], // Updated to include boolean
+    isBoolean = false,
   ): void {
     if (values && Array.isArray(values) && values.length > 0) {
-      query.andWhere(`laptop.${field} IN (:...${field}Values)`, {
-        [`${field}Values`]: values,
-      });
+      // For boolean fields, ensure values are actual booleans if they came as strings like "true"
+      // The DTO transformation should handle this, but as a safeguard:
+      const processedValues = isBoolean
+        ? values
+            .map((v) => {
+              if (typeof v === 'string') {
+                if (v.toLowerCase() === 'true') return true;
+                if (v.toLowerCase() === 'false') return false;
+              }
+              return v;
+            })
+            .filter((v) => typeof v === 'boolean')
+        : values;
+
+      if (processedValues.length > 0) {
+        query.andWhere(`laptop.${field} IN (:...${field}Values)`, {
+          [`${field}Values`]: processedValues,
+        });
+      }
     }
   }
 
