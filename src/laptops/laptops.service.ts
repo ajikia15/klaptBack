@@ -7,6 +7,7 @@ import { CreateLaptopDto } from './dtos/create-laptop.dto';
 import { User } from 'src/users/user.entity';
 import { SearchLaptopDto } from './dtos/search-laptop.dto';
 import { FilterOptions } from './filterOptions';
+import { DescriptionDto } from './dtos/description.dto';
 
 interface FilterField {
   resultField: string;
@@ -67,11 +68,11 @@ export class LaptopsService {
 
   async create(laptopDto: CreateLaptopDto, user: User) {
     const laptop = this.repo.create(laptopDto);
+
     laptop.user = user;
     if (!user.admin) laptop.status = 'pending';
     else laptop.status = 'approved';
     const savedLaptop = await this.repo.save(laptop);
-    console.log('Saved laptop:', savedLaptop);
     return savedLaptop;
   }
 

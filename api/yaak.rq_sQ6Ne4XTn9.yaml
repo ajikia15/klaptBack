@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_sQ6Ne4XTn9
 createdAt: 2025-03-29T14:38:55.190041277
-updatedAt: 2025-04-22T09:15:52.557754514
+updatedAt: 2025-05-11T11:08:14.290684848
 workspaceId: wk_Q9A29vyBmH
 folderId: fl_FycCr5Ruto
 authentication: {}
@@ -15,7 +15,7 @@ body:
         "brand": "MSI",
         "model": "GF63 Thin",
         "shortDesc": "RTX 4050 i5-12450H 16GB DDR4 512GB SSD 15.6 1920x1080 144Hz 2023",
-        "description": "Affordable gaming laptop with a lightweight design, decent gaming performance, and good thermal management",
+        "description": {"en" : "Affordable gaming laptop with a lightweight design, decent gaming performance, and good thermal management"},
         "year": 2023,
         "stockStatus": "in stock",
         "condition": "new",
@@ -45,7 +45,15 @@ headers:
 - enabled: true
   name: content-type
   value: application/json
-  id: null
+  id: HdNrgIRqtu
+- enabled: true
+  name: Authorization
+  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiMUAxLmNvbSIsImFkbWluIjp0cnVlLCJ1c2VybmFtZSI6ImNoaWNrZW5qb2NrZXkiLCJpYXQiOjE3NDY2ODU4MDgsImV4cCI6MTc0NzI5MDYwOH0.L1uevBbS6M9OQM6vvwn3BA96tO3_FEEGPJhU00i7Fxc
+  id: pGzccz9Jit
+- enabled: true
+  name: ''
+  value: ''
+  id: ncSNVNgRk0
 method: POST
 name: MSI GF63 Thin
 sortPriority: 0.0

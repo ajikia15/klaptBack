@@ -2,11 +2,21 @@ import {
   registerDecorator,
   ValidationOptions,
   ValidationArguments,
+  IsString,
+  IsOptional,
 } from 'class-validator';
 
 export class DescriptionDto {
+  @IsOptional()
+  @IsString()
   ka?: string;
+
+  @IsOptional()
+  @IsString()
   en?: string;
+
+  @IsOptional()
+  @IsString()
   ru?: string;
 }
 
