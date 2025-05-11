@@ -1,3 +1,5 @@
+import { DescriptionDto } from './description.dto';
+
 export type LaptopT = {
   id: number;
   title: string;
@@ -23,11 +25,12 @@ export type LaptopT = {
   refreshRate: string;
   weight?: string;
   year: number;
-  description: string;
+  description: DescriptionDto;
   images: string[];
   tag?: string[];
   condition: 'new' | 'like-new' | 'used' | 'damaged';
   stockStatus: 'reserved' | 'sold' | 'in stock';
   status: 'approved' | 'pending' | 'rejected' | 'archived';
   userId: number;
+  isCertified: boolean;
 };

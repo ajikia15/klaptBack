@@ -1,4 +1,5 @@
-import { Expose, Transform } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
+import { DescriptionDto } from './description.dto';
 
 export class LaptopDto {
   @Expose()
@@ -74,7 +75,8 @@ export class LaptopDto {
   year: number;
 
   @Expose()
-  description: string;
+  @Type(() => DescriptionDto)
+  description: DescriptionDto;
 
   @Expose()
   images: string[];
@@ -90,6 +92,9 @@ export class LaptopDto {
 
   @Expose()
   status: 'approved' | 'pending' | 'rejected' | 'archived';
+
+  @Expose()
+  isCertified: boolean;
 
   @Transform(({ obj }) => obj.user?.id)
   @Expose()

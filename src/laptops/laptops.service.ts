@@ -450,4 +450,68 @@ export class LaptopsService {
       pageCount: Math.ceil(total / limit),
     };
   }
+
+  // migration example if needed in future
+  // async migrateOldDescriptionsToEn(): Promise<{
+  //   migrated: number;
+  //   updated: number;
+  //   failed: number;
+  //   total: number;
+  // }> {
+  //   // Fetch raw data to avoid TypeORM trying to parse string as JSON prematurely
+  //   const rawLaptops = await this.repo.query(
+  //     'SELECT id, description FROM laptop',
+  //   );
+  //   let migratedCount = 0;
+  //   let updatedCount = 0;
+  //   let failedCount = 0;
+
+  //   for (const rawLaptop of rawLaptops) {
+  //     try {
+  //       const laptopId = rawLaptop.id;
+  //       const currentDescription = rawLaptop.description;
+
+  //       // Check if the description is a string (old format)
+  //       if (currentDescription && typeof currentDescription === 'string') {
+  //         // Ensure it's not already a JSON string that happens to be a simple string
+  //         // This is a basic check; more sophisticated checks might be needed if strings could look like JSON
+  //         try {
+  //           JSON.parse(currentDescription);
+  //           // If it parses, it might be an old JSON string or a new one already migrated.
+  //           // For simplicity, we assume if it's a string and parses, it might be an error or already handled.
+  //           // Let's be cautious and only migrate if it does NOT parse as JSON, meaning it's a plain string.
+  //         } catch (e) {
+  //           // It's a plain string, not a JSON string, so migrate it.
+  //           const newDescription = {
+  //             en: currentDescription,
+  //             ka: undefined,
+  //             ru: undefined,
+  //           };
+  //           await this.repo.update(laptopId, {
+  //             description: newDescription as any,
+  //           });
+  //           migratedCount++;
+  //           updatedCount++;
+  //           continue; // Move to the next laptop
+  //         }
+  //       }
+
+  //       // If currentDescription is already an object (new format or other JSON), we don't migrate it here.
+  //       // If currentDescription is null/undefined, we also don't touch it in this specific migration.
+  //       // If it was a string that successfully parsed as JSON, we also skip it based on the logic above.
+  //     } catch (error) {
+  //       console.error(
+  //         `Failed to migrate laptop with ID ${rawLaptop.id}:`,
+  //         error,
+  //       );
+  //       failedCount++;
+  //     }
+  //   }
+  //   return {
+  //     migrated: migratedCount,
+  //     updated: updatedCount,
+  //     failed: failedCount,
+  //     total: rawLaptops.length,
+  //   };
+  // }
 }

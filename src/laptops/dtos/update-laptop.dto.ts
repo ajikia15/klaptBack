@@ -5,7 +5,11 @@ import {
   IsEnum,
   IsArray,
   IsNotEmpty,
+  ValidateNested,
+  IsBoolean,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+import { DescriptionDto, IsAtLeastOneLanguageFilled } from './description.dto';
 
 export class UpdateLaptopDto {
   @IsOptional()
@@ -120,9 +124,10 @@ export class UpdateLaptopDto {
   weight?: string;
 
   @IsOptional()
-  @IsString()
-  @IsNotEmpty()
-  description?: string;
+  @ValidateNested()
+  @Type(() => DescriptionDto)
+  @IsAtLeastOneLanguageFilled()
+  description?: DescriptionDto;
 
   @IsOptional()
   @IsArray()
@@ -149,4 +154,8 @@ export class UpdateLaptopDto {
   @IsEnum(['approved', 'pending', 'rejected', 'archived'])
   @IsNotEmpty()
   status?: 'approved' | 'pending' | 'rejected' | 'archived';
+
+  @IsOptional()
+  @IsBoolean()
+  isCertified?: boolean;
 }

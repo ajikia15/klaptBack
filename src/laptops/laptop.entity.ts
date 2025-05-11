@@ -7,6 +7,7 @@ import {
   ManyToMany,
   ManyToOne,
 } from 'typeorm';
+import { DescriptionDto } from './dtos/description.dto';
 
 @Entity()
 export class Laptop {
@@ -15,6 +16,9 @@ export class Laptop {
 
   @Column({ default: 'pending' })
   status: 'approved' | 'pending' | 'rejected' | 'archived';
+
+  @Column({ default: false })
+  isCertified: boolean;
 
   @Column()
   title: string;
@@ -98,8 +102,8 @@ export class Laptop {
   @Column({ type: 'simple-array' })
   tag?: string[];
 
-  @Column({ type: 'text' })
-  description: string;
+  @Column({ type: 'simple-json', nullable: true })
+  description: DescriptionDto;
 
   @Column({ type: 'simple-array' })
   images: string[];
