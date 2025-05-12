@@ -20,7 +20,7 @@ async function bootstrap() {
       'http://localhost:5173',
       'http://192.168.1.235:5173',
       'https://kaidolaptops.netlify.app',
-      'https://www.dgpeaks.netlify.app',
+      'https://dgpeaks.netlify.app/',
     ],
     credentials: true,
   });
