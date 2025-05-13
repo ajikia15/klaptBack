@@ -18,6 +18,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ nullable: true })
+  googleId?: string;
+
   @OneToMany(() => Laptop, (laptop) => laptop.user)
   laptops: Laptop[];
 }

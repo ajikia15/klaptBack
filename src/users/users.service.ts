@@ -40,4 +40,18 @@ export class UsersService {
     }
     return this.repo.remove(user);
   }
+
+  async findOrCreateGoogleUser(profile: any) {
+    const email = profile.emails[0].value;
+    let user = (await this.repo.find({ where: { email } }))[0];
+    if (!user) {
+      user = this.repo.create({
+        email,
+        username: profile.displayName || email,
+        password: '', // No password for Google users
+      });
+      user = await this.repo.save(user);
+    }
+    return user;
+  }
 }

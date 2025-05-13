@@ -9,6 +9,8 @@ import {
   Query,
   NotFoundException,
   UseGuards,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -20,6 +22,7 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UpdateRoleDto } from './dtos/update-role.dto';
+import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class UsersController {
@@ -88,5 +91,19 @@ export class UsersController {
   @Patch('/:id/role')
   async makeAdmin(@Param('id') id: string, @Body() body: UpdateRoleDto) {
     return this.usersService.update(parseInt(id), body);
+  }
+
+  @Get('google')
+  @UseGuards(PassportAuthGuard('google'))
+  async googleAuth() {
+    // Redirects to Google
+  }
+
+  @Get('google/callback')
+  @UseGuards(PassportAuthGuard('google'))
+  async googleAuthRedirect(@Req() req, @Res() res) {
+    const token = await this.authService.generateJwt(req.user);
+    // For SPA: you may want to redirect with token in query, or just return JSON
+    return res.json({ user: req.user, token });
   }
 }
