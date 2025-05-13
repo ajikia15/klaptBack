@@ -67,14 +67,17 @@ export class UsersController {
   async googleAuth() {
     // Redirects to Google
   }
-
   @Get('/google/callback')
   @UseGuards(PassportAuthGuard('google'))
   async googleAuthRedirect(@Req() req, @Res() res) {
     const token = await this.authService.generateJwt(req.user);
-    console.log('gay');
-    // For SPA: you may want to redirect with token in query, or just return JSON
-    return res.json({ user: req.user, token });
+    // Encode user info as a JSON string and URI component
+    const user = JSON.stringify(req.user);
+    // Get frontend URL from environment variable or fall back to localhost
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    return res.redirect(
+      `${frontendUrl}/auth/google/callback?token=${token}&user=${encodeURIComponent(user)}`,
+    );
   }
 
   @Get('/:id')
