@@ -61,10 +61,6 @@ The laptop entity model captures detailed hardware specifications with 25+ field
 - class-validator for input sanitization
 - Custom authorization guards
 
-## Data Integration
-
-Includes a Python-based web scraping system (`laptopscrap.py`) that extracts pricing data from Georgian e-commerce sites (alta.ge, zoommer.ge, gaming-laptops.ge) to populate the marketplace with real market data.
-
 ## API Documentation
 
 The `api/` directory contains a complete Yaak workspace with 35+ documented API requests covering all endpoints, making it easy to understand the full API surface.
