@@ -1,82 +1,70 @@
-# Kaido: Laptop Marketplace API
+# DGPeaks Laptop Marketplace API
 
-**Kaido** is a feature-rich, modern NestJS API backend for managing laptop marketplace - [Kaido Laptops (front-end)](https://https://github.com/ajikia15/klaptFront). This project provides RESTful APIs for CRUD operations such as authentication, filtering and so on. Project uses [NestJS](https://nestjs.com/), [TypeORM](https://typeorm.io/), and [SQLite](https://www.sqlite.org/).
+_Work in progress_ - Backend API for a laptop marketplace platform being developed for [DGPeaks](https://dgpeaks.netlify.app/), a freelance project for a Georgian tourism company.
 
----
+This is the backend repository. The frontend can be found at [klaptFront](https://github.com/ajikia15/klaptFront).
 
-## 🚀 Features
+## Project Context
 
-### 1. **User Authentication & Authorization**
+This marketplace API is being developed as part of a real-world personal business project for DGPeaks, creating an e-commerce platform for laptop sales.
 
-- **Secure Signup & Login:** Passwords are hashed with salt using Node's crypto module.
-- **JWT Authentication:** Stateless authentication using JWT.
-- **Role-based Access:** Admins can manage users and laptops with elevated privileges.
-- **Current User Context:** Custom decorators and middleware make accessing the current user seamless in controllers.
+## Technical Architecture
 
-### 2. **Laptop Management**
+Built with NestJS and TypeScript, this API demonstrates several sophisticated backend patterns and features:
 
-- **CRUD Operations:** Create, read, update, and delete laptops with full validation.
-- **Ownership:** Each laptop is linked to its creator; only admins or owners can modify/delete.
-- **Approval Workflow:** Laptops can be approved, rejected, or archived by admins.
-- **The most detailed Laptop Model:** All the necessary fields for detailed information about laptops - GPU, CPU, VRAM, Refresh rate, etc.
+### Smart Dynamic Filtering System
 
-### 3. **Advanced Filtering & Search**
+The most technically interesting aspect is the intelligent filter compatibility system. The `/laptops/filters` endpoint doesn't just return static filter options - it analyzes the current filter selections and determines which additional filters would return valid results.
 
-- **Dynamic Filters:** Query laptops by brand, price, processor, RAM, storage, year, and more.
-- **Smart Filter Options:** The `/filters` endpoint returns only compatible filter options based on current selections and their combinations, making UI filter panels dynamic and user-friendly.
-- **Pagination:** All list endpoints support pagination.
+- **Filter Compatibility Engine**: For each filter option, the system runs a test query to determine if selecting that option would return any results given the current selections
+- **Real-time Option Disabling**: Incompatible filters are marked as disabled, preventing users from creating search queries with zero results
+- **Complex Filter Mapping**: A sophisticated mapping system handles 20+ different filter types including arrays, enums, and ranges
 
-### 4. **Favorites System**
-
-- **User Favorites:** Authenticated users can favorite/unfavorite laptops.
-- **Favorite Counts:** See how many users have favorited a laptop.
-- **Per-user Favorites:** Retrieve all laptops favorited by the current user.
-
-### 5. **Validation & Serialization**
-
-- **DTOs Everywhere:** All input and output is validated and serialized using DTOs and class-transformer.
-- **Automatic Data Shaping:** Only safe, relevant fields are exposed in API responses.
-
-### 6. **Developer Experience**
-
-- **TypeScript First:** Strong typing throughout the codebase.
-- **Modular Structure:** Clear separation of concerns with modules for users, laptops, and favorites.
-- **Environment Config:** Supports multiple environments via `.env` files and NestJS ConfigModule.
-
-### 7. **API Usability**
-
-- **HTTP Request Examples:** `.http` files for easy API testing with tools like VSCode REST Client or Insomnia.
-- **CORS Enabled:** Ready for frontend integration out of the box.
-- **Descriptive Errors:** Consistent error handling with meaningful messages.
-
----
-
-## 🛠️ Getting Started
-
-```bash
-npm install
-npm run start:dev
+```typescript
+// Example: When user selects "Intel" processors, only compatible RAM types are enabled
+private readonly filterFieldMap: FilterField[] = [
+  { resultField: 'brands', filterField: 'brand' },
+  { resultField: 'processorModels', filterField: 'processorModel' },
+  { resultField: 'ramTypes', filterField: 'ramType' },
+  // ... 17 more filter mappings
+];
 ```
 
-- The API runs on `http://localhost:3000` by default.
-- Use the provided `.http` files or your favorite API client to explore endpoints.
+### Comprehensive Entity Modeling
 
----
+The laptop entity model captures detailed hardware specifications with 25+ fields including GPU VRAM, refresh rates, processor threads, and storage configurations - far more detailed than typical e-commerce platforms.
 
-## 📚 Notable Endpoints
+### JWT-based Authentication with Guards
 
-- `POST /auth/signup` – Register a new user
-- `POST /auth/signin` – Login and start a session
-- `GET /auth/whoami` – Get the current logged-in user
-- `GET /laptops` – List all laptops (paginated)
-- `GET /laptops/search` – Advanced search with filters
-- `GET /laptops/filters` – Get dynamic filter options
-- `POST /laptops/` – Create a new laptop (authenticated)
-- `PATCH /laptops/:id` – Update a laptop (owner/admin)
-- `DELETE /laptops/:id` – Delete a laptop (owner/admin)
-- `POST /favorites` – Favorite a laptop
-- `GET /favorites` – List your favorites
+- **Passport JWT Strategy**: Stateless authentication with automatic user context injection
+- **Custom Guard System**: `@AuthGuard` and `@AdminGuard` decorators with role-based access
+- **Password Security**: Salt-based hashing using Node.js crypto primitives
 
-## 📄 License
+### Data Validation & Serialization Layer
 
-MIT
+- **DTO-driven Architecture**: Every endpoint uses DTOs for both input validation and output serialization
+- **Automatic Response Shaping**: Custom `@Serialize()` interceptor ensures only safe fields are exposed
+- **Comprehensive Validation**: Uses class-validator with custom enums and constraints
+
+## Tech Stack
+
+**Core Framework:**
+
+- NestJS (Express-based)
+- TypeScript
+- TypeORM
+- SQLite
+
+**Authentication & Security:**
+
+- Passport.js with JWT strategy
+- class-validator for input sanitization
+- Custom authorization guards
+
+## Data Integration
+
+Includes a Python-based web scraping system (`laptopscrap.py`) that extracts pricing data from Georgian e-commerce sites (alta.ge, zoommer.ge, gaming-laptops.ge) to populate the marketplace with real market data.
+
+## API Documentation
+
+The `api/` directory contains a complete Yaak workspace with 35+ documented API requests covering all endpoints, making it easy to understand the full API surface.
