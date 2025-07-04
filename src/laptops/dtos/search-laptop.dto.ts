@@ -7,6 +7,7 @@ import {
   Min,
   Max,
   IsArray,
+  IsBoolean, // Import IsBoolean
 } from 'class-validator';
 import {
   TransformToArray,
@@ -162,4 +163,21 @@ export class SearchLaptopDto {
   @IsArray()
   @IsString({ each: true })
   screenResolution?: string[];
+
+  @IsOptional()
+  @TransformToArray() // Assumes this converts query param "true,false" to ["true", "false"]
+  @Transform(({ value: stringArray }) => {
+    if (!Array.isArray(stringArray)) return stringArray; // Let validator catch if not array
+    return stringArray.map((str) => {
+      if (str === 'true') return true;
+      if (str === 'false') return false;
+      return str; // Pass through other strings for IsBoolean to invalidate
+    });
+  })
+  @IsArray()
+  @IsBoolean({
+    each: true,
+    message: 'isCertified must be an array of booleans (true or false values)',
+  })
+  isCertified?: boolean[];
 }

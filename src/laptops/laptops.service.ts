@@ -7,10 +7,12 @@ import { CreateLaptopDto } from './dtos/create-laptop.dto';
 import { User } from 'src/users/user.entity';
 import { SearchLaptopDto } from './dtos/search-laptop.dto';
 import { FilterOptions } from './filterOptions';
+import { DescriptionDto } from './dtos/description.dto';
 
 interface FilterField {
   resultField: string;
   filterField: string;
+  isBoolean?: boolean; // Add optional flag for boolean fields
 }
 
 @Injectable()
@@ -37,6 +39,11 @@ export class LaptopsService {
     { resultField: 'models', filterField: 'model' },
     { resultField: 'tags', filterField: 'tag' },
     { resultField: 'conditions', filterField: 'condition' },
+    {
+      resultField: 'isCertifiedValues',
+      filterField: 'isCertified',
+      isBoolean: true,
+    }, // Added for isCertified
   ];
 
   constructor(@InjectRepository(Laptop) private repo: Repository<Laptop>) {}
@@ -61,11 +68,11 @@ export class LaptopsService {
 
   async create(laptopDto: CreateLaptopDto, user: User) {
     const laptop = this.repo.create(laptopDto);
+
     laptop.user = user;
     if (!user.admin) laptop.status = 'pending';
     else laptop.status = 'approved';
     const savedLaptop = await this.repo.save(laptop);
-    console.log('Saved laptop:', savedLaptop);
     return savedLaptop;
   }
 
@@ -259,7 +266,22 @@ export class LaptopsService {
    */
   private async getAllFilterOptions(): Promise<any> {
     // Helper function to get distinct column values
-    const getDistinctValues = async (column: string): Promise<string[]> => {
+    const getDistinctValues = async (
+      column: string,
+      isBoolean = false,
+    ): Promise<any[]> => {
+      if (isBoolean) {
+        // For boolean fields, the distinct values are true and false
+        // We can check if there are any records with true and any with false
+        const trueCount = await this.repo.count({ where: { [column]: true } });
+        const falseCount = await this.repo.count({
+          where: { [column]: false },
+        });
+        const values = [];
+        if (trueCount > 0) values.push(true);
+        if (falseCount > 0) values.push(false);
+        return values;
+      }
       return this.repo
         .createQueryBuilder('laptop')
         .select(`DISTINCT laptop.${column}`, 'value')
@@ -269,12 +291,16 @@ export class LaptopsService {
         .then((results) => results.map((item) => item.value));
     };
 
+    const nonTagFieldsInMap = this.filterFieldMap.filter(
+      (f) => f.filterField !== 'tag',
+    );
+
     // Get all distinct values for each column
     const results = await Promise.all([
-      // Get values for each filter field
-      ...this.filterFieldMap
-        .filter(({ filterField }) => filterField !== 'tag') // Handle tags separately
-        .map(({ filterField }) => getDistinctValues(filterField)),
+      // Get values for each non-tag filter field
+      ...nonTagFieldsInMap.map(({ filterField, isBoolean }) =>
+        getDistinctValues(filterField, isBoolean),
+      ),
       // Special handling for tags array field
       this.getTagValues(),
     ]);
@@ -293,12 +319,23 @@ export class LaptopsService {
 
     // Map results to field names
     const options: any = {};
-    this.filterFieldMap.forEach(({ resultField, filterField }, index) => {
+
+    // Iterate over the original filterFieldMap to ensure all fields are considered for the options object
+    this.filterFieldMap.forEach(({ resultField, filterField }) => {
       if (filterField === 'tag') {
-        // Tags will be the last item in the results array
+        // 'tag' results are the last element in the 'results' array
+        // (because getTagValues() is the last promise in the Promise.all call above)
         options[resultField] = results[results.length - 1];
       } else {
-        options[resultField] = results[index];
+        // For non-tag fields, find their index based on the 'nonTagFieldsInMap'
+        // which directly corresponds to their position in the first part of the 'results' array.
+        const indexInNonTagResults = nonTagFieldsInMap.findIndex(
+          (f) => f.filterField === filterField,
+        );
+        if (indexInNonTagResults !== -1) {
+          // Should always be found if it's not 'tag'
+          options[resultField] = results[indexInNonTagResults];
+        }
       }
     });
 
@@ -347,30 +384,52 @@ export class LaptopsService {
     }
 
     // Apply all other filters
-    for (const { filterField } of this.filterFieldMap) {
+    for (const { filterField, isBoolean } of this.filterFieldMap) {
       // Special handling for tag field which is an array in the database
       if (filterField === 'tag') {
         this.applyTagFilter(query, filters.tag);
         continue;
       }
 
-      // Apply standard filters
-      this.applyArrayFilter(query, filterField, filters[filterField]);
+      // Apply standard filters (now includes boolean)
+      this.applyArrayFilter(
+        query,
+        filterField,
+        filters[filterField],
+        isBoolean,
+      );
     }
   }
 
   /**
-   * Apply standard array filter
+   * Apply standard array filter (now handles boolean)
    */
   private applyArrayFilter(
     query: SelectQueryBuilder<Laptop>,
     field: string,
-    values: (string | number)[],
+    values: (string | number | boolean)[], // Updated to include boolean
+    isBoolean = false,
   ): void {
     if (values && Array.isArray(values) && values.length > 0) {
-      query.andWhere(`laptop.${field} IN (:...${field}Values)`, {
-        [`${field}Values`]: values,
-      });
+      // For boolean fields, ensure values are actual booleans if they came as strings like "true"
+      // The DTO transformation should handle this, but as a safeguard:
+      const processedValues = isBoolean
+        ? values
+            .map((v) => {
+              if (typeof v === 'string') {
+                if (v.toLowerCase() === 'true') return true;
+                if (v.toLowerCase() === 'false') return false;
+              }
+              return v;
+            })
+            .filter((v) => typeof v === 'boolean')
+        : values;
+
+      if (processedValues.length > 0) {
+        query.andWhere(`laptop.${field} IN (:...${field}Values)`, {
+          [`${field}Values`]: processedValues,
+        });
+      }
     }
   }
 
@@ -450,4 +509,68 @@ export class LaptopsService {
       pageCount: Math.ceil(total / limit),
     };
   }
+
+  // migration example if needed in future
+  // async migrateOldDescriptionsToEn(): Promise<{
+  //   migrated: number;
+  //   updated: number;
+  //   failed: number;
+  //   total: number;
+  // }> {
+  //   // Fetch raw data to avoid TypeORM trying to parse string as JSON prematurely
+  //   const rawLaptops = await this.repo.query(
+  //     'SELECT id, description FROM laptop',
+  //   );
+  //   let migratedCount = 0;
+  //   let updatedCount = 0;
+  //   let failedCount = 0;
+
+  //   for (const rawLaptop of rawLaptops) {
+  //     try {
+  //       const laptopId = rawLaptop.id;
+  //       const currentDescription = rawLaptop.description;
+
+  //       // Check if the description is a string (old format)
+  //       if (currentDescription && typeof currentDescription === 'string') {
+  //         // Ensure it's not already a JSON string that happens to be a simple string
+  //         // This is a basic check; more sophisticated checks might be needed if strings could look like JSON
+  //         try {
+  //           JSON.parse(currentDescription);
+  //           // If it parses, it might be an old JSON string or a new one already migrated.
+  //           // For simplicity, we assume if it's a string and parses, it might be an error or already handled.
+  //           // Let's be cautious and only migrate if it does NOT parse as JSON, meaning it's a plain string.
+  //         } catch (e) {
+  //           // It's a plain string, not a JSON string, so migrate it.
+  //           const newDescription = {
+  //             en: currentDescription,
+  //             ka: undefined,
+  //             ru: undefined,
+  //           };
+  //           await this.repo.update(laptopId, {
+  //             description: newDescription as any,
+  //           });
+  //           migratedCount++;
+  //           updatedCount++;
+  //           continue; // Move to the next laptop
+  //         }
+  //       }
+
+  //       // If currentDescription is already an object (new format or other JSON), we don't migrate it here.
+  //       // If currentDescription is null/undefined, we also don't touch it in this specific migration.
+  //       // If it was a string that successfully parsed as JSON, we also skip it based on the logic above.
+  //     } catch (error) {
+  //       console.error(
+  //         `Failed to migrate laptop with ID ${rawLaptop.id}:`,
+  //         error,
+  //       );
+  //       failedCount++;
+  //     }
+  //   }
+  //   return {
+  //     migrated: migratedCount,
+  //     updated: updatedCount,
+  //     failed: failedCount,
+  //     total: rawLaptops.length,
+  //   };
+  // }
 }

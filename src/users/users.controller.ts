@@ -9,6 +9,8 @@ import {
   Query,
   NotFoundException,
   UseGuards,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -20,6 +22,7 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UpdateRoleDto } from './dtos/update-role.dto';
+import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class UsersController {
@@ -57,6 +60,24 @@ export class UsersController {
   @Serialize(UserDto)
   whoAmI(@CurrentUser() user: User) {
     return user;
+  }
+
+  @Get('/google')
+  @UseGuards(PassportAuthGuard('google'))
+  async googleAuth() {
+    // Redirects to Google
+  }
+  @Get('/google/callback')
+  @UseGuards(PassportAuthGuard('google'))
+  async googleAuthRedirect(@Req() req, @Res() res) {
+    const token = await this.authService.generateJwt(req.user);
+    // Encode user info as a JSON string and URI component
+    const user = JSON.stringify(req.user);
+    // Get frontend URL from environment variable or fall back to localhost
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    return res.redirect(
+      `${frontendUrl}/auth/google/callback?token=${token}&user=${encodeURIComponent(user)}`,
+    );
   }
 
   @Get('/:id')

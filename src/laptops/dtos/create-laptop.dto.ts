@@ -4,7 +4,11 @@ import {
   IsEnum,
   IsArray,
   IsOptional,
+  ValidateNested,
+  IsBoolean,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+import { DescriptionDto, IsAtLeastOneLanguageFilled } from './description.dto';
 
 export class CreateLaptopDto {
   @IsString()
@@ -80,8 +84,10 @@ export class CreateLaptopDto {
   @IsString()
   weight?: string;
 
-  @IsString()
-  description: string;
+  @ValidateNested()
+  @Type(() => DescriptionDto)
+  @IsAtLeastOneLanguageFilled()
+  description: DescriptionDto;
 
   @IsArray()
   @IsString({ each: true })
@@ -100,4 +106,8 @@ export class CreateLaptopDto {
 
   @IsEnum(['approved', 'pending', 'rejected', 'archived'])
   status: 'approved' | 'pending' | 'rejected' | 'archived' = 'pending';
+
+  @IsOptional()
+  @IsBoolean()
+  isCertified?: boolean;
 }
