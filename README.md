@@ -1,6 +1,6 @@
 # DGPeaks Laptop Marketplace API
 
-_Work in progress_ - Backend API for a laptop marketplace platform being developed for [DGPeaks](https://dgpeaks.netlify.app/), a freelance project for a Georgian tourism company.
+_Work in progress_ - Backend API for a laptop marketplace platform being developed for [DGPeaks](https://dgpeaks.netlify.app/), a personal business.
 
 This is the backend repository. The frontend can be found at [klaptFront](https://github.com/ajikia15/klaptFront).
 
